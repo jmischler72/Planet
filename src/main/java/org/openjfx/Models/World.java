@@ -6,19 +6,36 @@ import java.util.Random;
 
 public class World {
 
-    private File world_image;
+    private String type;
+    private File planet_file;
 
     public World() {
-        File[] files = new File[0];
+        File[] planets_type = new File[0];
         try {
-            files = (new File(getClass().getResource("Planets").toURI())).listFiles();
+            planets_type = (new File(getClass().getResource("Planets").toURI())).listFiles();
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+
         Random rand = new Random();
 
-        this.world_image = files[rand.nextInt(files.length)];
+        String[] path= planets_type[rand.nextInt(planets_type.length)].toString().split("\\\\");
+        this.type = path[path.length-1];
 
+        File[] planets_files = new File[0];
+        try {
+            planets_files = (new File(getClass().getResource("Planets/" + this.type).toURI())).listFiles();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        this.planet_file = planets_files[rand.nextInt(planets_files.length)];
+
+        System.out.println(planet_file);
+
+    }
+
+    public File getPlanet_file(){
+        return this.planet_file;
     }
 
 //    public void changeColor(){
