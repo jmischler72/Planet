@@ -5,7 +5,8 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import org.openjfx.Controllers.ControllerLevelSelector;
 import org.openjfx.Models.LevelButton;
-
+import org.openjfx.Models.LevelSelectorSubScene;
+import org.openjfx.Models.World;
 
 
 public class ViewLevelSelector extends Scene {
@@ -17,18 +18,19 @@ public class ViewLevelSelector extends Scene {
         this.viewManager = viewManager;
         controllerLevelSelector = new ControllerLevelSelector(viewManager);
 
-
-        LevelButton levelButton = new LevelButton(new Integer[]{20,20});
+        World world = new World();
+        LevelButton levelButton = new LevelButton(new Integer[]{20, 20});
         viewManager.getMainPane().getChildren().add(levelButton);
+        LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene();
+        viewManager.getMainPane().getChildren().add(levelSelectorSubScene);
         levelButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 controllerLevelSelector.setBackground();
+                levelSelectorSubScene.moveSubScene();
             }
         });
+
+
     }
-
-
-
-
 }
