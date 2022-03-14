@@ -6,8 +6,6 @@ import javafx.scene.Scene;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.Shadow;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -16,12 +14,9 @@ import org.openjfx.Controllers.ControllerLevelSelector;
 import org.openjfx.Models.LevelButton;
 import org.openjfx.Models.LevelSelectorSubScene;
 import org.openjfx.Models.World;
-import org.openjfx.Renderer.Noise;
-import org.openjfx.Renderer.SimplexNoise;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Random;
 
 
 public class ViewLevelSelector extends Scene {
