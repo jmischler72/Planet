@@ -2,6 +2,7 @@ package org.openjfx.Views;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.Shadow;
@@ -11,17 +12,25 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
 import org.openjfx.Controllers.ControllerLevelSelector;
+import org.openjfx.Models.Level;
 import org.openjfx.Models.LevelButton;
 import org.openjfx.Models.LevelSelectorSubScene;
 import org.openjfx.Models.World;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ViewLevelSelector extends Scene {
+
+    private static final int NB_LVL_AREA = 6;
     private ControllerLevelSelector controllerLevelSelector;
     private ViewManager viewManager;
+    private World world;
+    private List<Level> levels;
 
     public ViewLevelSelector(ViewManager viewManager) {
         super(viewManager.getMainPane(), viewManager.getSize()[0], viewManager.getSize()[1]);
@@ -30,7 +39,8 @@ public class ViewLevelSelector extends Scene {
         controllerLevelSelector.setBackground();
 
 
-        World world = new World();
+        world = new World();
+        levels = new ArrayList<>();
 
 
         Shadow shadow = new Shadow(BlurType.GAUSSIAN, Color.BLACK, 20);
@@ -58,18 +68,36 @@ public class ViewLevelSelector extends Scene {
         viewManager.getMainPane().getChildren().add(circle2);
 
 
-        LevelButton levelButton = new LevelButton(new Integer[]{20, 20});
+        LevelButton levelButton = new LevelButton(new int[]{20, 20});
         viewManager.getMainPane().getChildren().add(levelButton);
         LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene();
         viewManager.getMainPane().getChildren().add(levelSelectorSubScene);
-        levelButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
+        levelButton.setOnAction(actionEvent -> {
 
-                levelSelectorSubScene.moveSubScene();
-            }
+            levelSelectorSubScene.moveSubScene();
         });
-
-
+        createLevels();
     }
+
+    private void createLevels() {
+        try {
+            String[] positions = viewManager.getLevelsPositionsFor("DryTerran").split(",");
+            for (int i=0; i<NB_LVL_AREA; i++) {
+                Level level = new Level();
+                String[] buttonPosInString = positions[i].split(";");
+                LevelButton button = new LevelButton(
+                        new int[] {Integer.parseInt(buttonPosInString[0]), Integer.parseInt(buttonPosInString[1])}
+                );
+
+                button.setLevel(level);
+
+                viewManager.getMainPane().getChildren().add(button);
+                levels.add(level);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

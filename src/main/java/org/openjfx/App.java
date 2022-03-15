@@ -20,11 +20,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        stage = new Stage(StageStyle.DECORATED);
-        stage.getIcons().add(new Image(App.class.getResource("icon.jpg").toExternalForm()));
-        stage.setTitle("Planet ! :)");
-        stage.setResizable(false);
-        ViewManager viewManager = new ViewManager(stage);
+        ViewManager viewManager = new ViewManager();
+        stage = viewManager.getMainStage();
         stage.show();
     }
 

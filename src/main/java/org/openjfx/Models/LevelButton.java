@@ -3,6 +3,7 @@ package org.openjfx.Models;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 
@@ -14,9 +15,15 @@ public class LevelButton extends Button {
     private final String FONT = "";
     private final String BUTTON_PRESSED_STYLE = "-fx-background-color: transparent; -fx-background-image: url('" +getClass().getResource("lvl_button_pressed.png").toExternalForm()+ "')";
     private final String BUTTON_RELEASED_STYLE = "-fx-background-color: transparent; -fx-background-image: url('" +getClass().getResource("lvl_button_released.png").toExternalForm()+ "')";
+    private Level level;
+    private LevelInfosSubScene infos;
+    private Boolean isInfoOpened;
 
-    public LevelButton(Integer [] position) {
+    public LevelButton(int[] position) {
         super();
+        this.level = null;
+        this.isInfoOpened = false;
+        this.infos = new LevelInfosSubScene();
         setShape(new Circle(10));
         setPrefWidth(56);
         setPrefHeight(56);
@@ -51,6 +58,7 @@ public class LevelButton extends Button {
         setOnMousePressed(event -> {
             if(event.getButton().equals(MouseButton.PRIMARY)) {
                 setButtonPressedStyle();
+                showLevelInfos();
             }
         });
 
@@ -69,4 +77,22 @@ public class LevelButton extends Button {
         });
     }
 
+    public void setLevel(Level level) {
+        this.level = level;
+    }
+
+    public Level getLevel() {
+        return level;
+    }
+
+    private void showLevelInfos() {
+        if(isInfoOpened) {
+            this.getChildren().remove(1);
+            isInfoOpened = false;
+            return;
+        }
+
+        this.getChildren().add(infos);
+        isInfoOpened = true;
+    }
 }
