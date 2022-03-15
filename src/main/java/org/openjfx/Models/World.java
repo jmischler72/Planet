@@ -38,6 +38,7 @@ public class World {
         return this.planet_file;
     }
 
+
 //    public void changeColor(){
 //        for (int col = 0; col <  width; col++) {
 //            for (int row = 0; row < height; row++) {

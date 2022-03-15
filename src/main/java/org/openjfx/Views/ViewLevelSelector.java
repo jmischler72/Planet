@@ -2,21 +2,29 @@ package org.openjfx.Views;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.Shadow;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
 import org.openjfx.Controllers.ControllerLevelSelector;
-import org.openjfx.Models.LevelButton;
-import org.openjfx.Models.LevelSelectorSubScene;
+import org.openjfx.Models.Level;
+import org.openjfx.ViewElements.LevelSelector.LevelButton;
+import org.openjfx.ViewElements.LevelSelector.LevelSelectorSubScene;
 import org.openjfx.Models.World;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Random;
 
 
 public class ViewLevelSelector extends Scene {
@@ -26,50 +34,74 @@ public class ViewLevelSelector extends Scene {
     public ViewLevelSelector(ViewManager viewManager) {
         super(viewManager.getMainPane(), viewManager.getSize()[0], viewManager.getSize()[1]);
         this.viewManager = viewManager;
-        controllerLevelSelector = new ControllerLevelSelector(viewManager);
-        controllerLevelSelector.setBackground();
+
+        BackgroundImage background = new BackgroundImage(
+                new Image(getClass().getResource("space.jpg").toExternalForm(), viewManager.getSize()[0], viewManager.getSize()[1], false, true),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
+        viewManager.getMainPane().setBackground(new Background(background));
 
 
         World world = new World();
 
 
-        Shadow shadow = new Shadow(BlurType.GAUSSIAN, Color.BLACK, 20);
-        shadow.setHeight(80);
-        shadow.setWidth(80);
         Circle circle = new Circle();
         circle.setCenterX(viewManager.getSize()[0] / 2);
-        circle.setCenterY(viewManager.getSize()[1] / 2+10);
+        circle.setCenterY(viewManager.getSize()[1] / 2);
         circle.setRadius(viewManager.getSize()[1]*0.40);
-        circle.setEffect(shadow);
-        viewManager.getMainPane().getChildren().add(circle);
-
-        Circle circle2 = new Circle();
-        circle2.setCenterX(viewManager.getSize()[0] / 2);
-        circle2.setCenterY(viewManager.getSize()[1] / 2);
-        circle2.setRadius(viewManager.getSize()[1]*0.40);
         try {
-            circle2.setFill(new ImagePattern(
+            circle.setFill(new ImagePattern(
                     new Image(new FileInputStream(world.getPlanet_file())), 0, 0, 1, 1, true
 
             ));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        viewManager.getMainPane().getChildren().add(circle2);
 
 
-        LevelButton levelButton = new LevelButton(new Integer[]{20, 20});
-        viewManager.getMainPane().getChildren().add(levelButton);
-        LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene();
-        viewManager.getMainPane().getChildren().add(levelSelectorSubScene);
-        levelButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
+        Circle shadow = renderCircleShadow(circle, 80, new int[]{0,10});
+        this.addElement(shadow);
+        this.addElement(circle);
 
-                levelSelectorSubScene.moveSubScene();
-            }
-        });
+        for(int i=0; i< 1; i++){
+            Level level = new Level();
+            Random rand = new Random();
+            int [] position = new int[2];
 
+//            position[0] = rand.nextInt((int) circle2.getRadius()) + (int) circle2.getCenterX();
+            position[0] =(int) ( circle.getCenterX() -circle.getRadius() );
+            position[1] =(int) ( circle.getCenterY() -circle.getRadius() );
+//            position[1] = rand.nextInt((int) circle2.getRadius()) + (int) circle2.getCenterY();
 
+            LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene(position);
+            this.addElement(levelSelectorSubScene);
+
+            LevelButton levelButton = new LevelButton(position);
+            levelButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+
+                    levelSelectorSubScene.moveSubScene();
+                }
+            });
+
+            this.addElement(levelButton);
+        }
+
+    }
+
+    private Circle renderCircleShadow(Circle circle_to_shadow, int amount, int[] offset){
+        Shadow shadow = new Shadow(BlurType.GAUSSIAN, Color.WHITE, 10);
+        shadow.setHeight(amount);
+        shadow.setWidth(amount);
+        Circle circle = new Circle();
+        circle.setCenterX(circle_to_shadow.getCenterX() + offset[0]);
+        circle.setCenterY(circle_to_shadow.getCenterY() + offset[1]);
+        circle.setRadius(circle_to_shadow.getRadius());
+        circle.setEffect(shadow);
+        return circle;
+    }
+
+    private void addElement(Node element){
+        this.viewManager.getMainPane().getChildren().add(element);
     }
 }

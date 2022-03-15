@@ -1,4 +1,4 @@
-package org.openjfx.Models;
+package org.openjfx.ViewElements.LevelSelector;
 
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
@@ -15,7 +15,7 @@ public class LevelButton extends Button {
     private final String BUTTON_PRESSED_STYLE = "-fx-background-color: transparent; -fx-background-image: url('" +getClass().getResource("lvl_button_pressed.png").toExternalForm()+ "')";
     private final String BUTTON_RELEASED_STYLE = "-fx-background-color: transparent; -fx-background-image: url('" +getClass().getResource("lvl_button_released.png").toExternalForm()+ "')";
 
-    public LevelButton(Integer [] position) {
+    public LevelButton(int[] position) {
         super();
         setShape(new Circle(10));
         setPrefWidth(56);
