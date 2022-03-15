@@ -15,7 +15,7 @@ public class ControllerLevelSelector{
 
     public void setBackground() {
         BackgroundImage background = new BackgroundImage(
-                new Image(getClass().getResource("space.jpg").toExternalForm(), viewManager.getSize()[0], viewManager.getSize()[1], false, true),
+                new Image(getClass().getResource("space_final.jpg").toExternalForm(), viewManager.getSize()[0], viewManager.getSize()[1], false, true),
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
 
 

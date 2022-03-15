@@ -1,5 +1,6 @@
 package org.openjfx.Views;
 
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;

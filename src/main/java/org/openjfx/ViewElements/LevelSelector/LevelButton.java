@@ -1,4 +1,4 @@
-package org.openjfx.Models;
+package org.openjfx.ViewElements.LevelSelector;
 
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;

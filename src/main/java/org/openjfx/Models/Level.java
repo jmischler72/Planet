@@ -1,14 +1,23 @@
 package org.openjfx.Models;
 
-public class Level implements LevelInt{
+import java.util.Random;
 
-    private LevelInfosSubScene levelInfos;
+public class Level {
+    private String name;
+    private String description;
 
-    public Level() {
-        this.levelInfos = new LevelInfosSubScene();
+    public Level(){
+        Random rand = new Random();
+        name = Integer.toString(rand.nextInt(600));
+        description = Integer.toString(rand.nextInt(600));
     }
 
-    public LevelInfosSubScene getLevelInfos() {
-        return levelInfos;
+    public String getName() {
+        return name;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
 }
