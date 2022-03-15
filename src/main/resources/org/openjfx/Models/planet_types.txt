@@ -1,0 +1,5 @@
+DryTerran
+Galaxy
+Islands
+NoAtmosphere
+WetTerran

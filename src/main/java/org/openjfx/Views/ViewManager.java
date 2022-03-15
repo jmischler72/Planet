@@ -19,14 +19,11 @@ public class ViewManager {
     private Stage mainStage;
 
     public ViewManager(Stage stage){
-        mainPane = new AnchorPane();
-        mainScene = new ViewLevelSelector(this);
+        mainScene = new ViewLevelSelector(new AnchorPane(), HEIGHT,WIDTH, this);
         mainStage = stage;
         stage.setScene(mainScene);
 
     }
-
-
 
     public Stage getMainStage(){
         return mainStage;
@@ -36,5 +33,17 @@ public class ViewManager {
 
     public int[] getSize(){
         return new int[]{WIDTH,HEIGHT};
+    }
+
+    public void renderScene(Scene scene){
+        mainStage.setScene(scene);
+    }
+
+    public void reloadPane(){
+        this.mainPane = new AnchorPane();
+    }
+
+    public void renderCurrentScene() {
+        System.out.println(mainScene.getClass());
     }
 }
