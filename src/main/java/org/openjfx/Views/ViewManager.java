@@ -2,14 +2,10 @@ package org.openjfx.Views;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-
-import java.io.*;
-import java.util.Properties;
 
 /*
     ViewManager permet de gerer et stocker les infos concernant le stage ainsi que la scene active
@@ -21,47 +17,12 @@ public class ViewManager {
     private AnchorPane mainPane;
     private Scene mainScene;
     private Stage mainStage;
-    private static final String levelButtonPosFileName = "levelButtonPositions.properties";
 
-    public ViewManager(){
-        Stage stage = new Stage(StageStyle.DECORATED);
-        stage.getIcons().add(new Image(getClass().getResource("icon.jpg").toExternalForm()));
-        stage.setTitle("Planet ! :)");
-        stage.setResizable(false);
-
-        mainPane = new AnchorPane();
-        mainScene = new ViewLevelSelector(this);
-        stage.setScene(mainScene);
+    public ViewManager(Stage stage){
+        mainScene = new ViewLevelSelector(new AnchorPane(), HEIGHT,WIDTH, this);
         mainStage = stage;
-    }
+        stage.setScene(mainScene);
 
-    public void setsScene(Scene scene) {
-        this.mainStage.setScene(scene);
-    }
-
-    public String getLevelsPositionsFor(String type) throws IOException {
-        InputStream inputStream = null;
-        try {
-            Properties prop = new Properties();
-
-            inputStream = getClass().getResourceAsStream(levelButtonPosFileName);
-
-            if (inputStream != null) {
-                prop.load(inputStream);
-            } else {
-                throw new FileNotFoundException("property file '" + levelButtonPosFileName + "' not found in the classpath");
-            }
-
-            String posInString = prop.getProperty(type);
-            return posInString;
-
-        } catch (Exception e) {
-            System.out.println("Exception: " + e);
-        } finally {
-            inputStream.close();
-        }
-
-        return null;
     }
 
     public Stage getMainStage(){
@@ -72,5 +33,17 @@ public class ViewManager {
 
     public int[] getSize(){
         return new int[]{WIDTH,HEIGHT};
+    }
+
+    public void renderScene(Scene scene){
+        mainStage.setScene(scene);
+    }
+
+    public void reloadPane(){
+        this.mainPane = new AnchorPane();
+    }
+
+    public void renderCurrentScene() {
+        System.out.println(mainScene.getClass());
     }
 }
