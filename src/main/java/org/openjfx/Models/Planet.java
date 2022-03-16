@@ -1,20 +1,25 @@
 package org.openjfx.Models;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 
-public class World {
+public class Planet {
 
     private PlanetType type;
     private File planet_file;
+    private ArrayList<Level> levels = new ArrayList<Level>();
 
-    public World() {
+    public Planet() {
         generatePlanetType(new ArrayList<PlanetType>(){{add(PlanetType.Galaxy);}});
         fetchPlanetImage();
+
+        for(int i=0; i< 6; i++){
+            Level level = new Level(Integer.toString(i));
+            levels.add(level);
+        }
+
     }
 
     private void generatePlanetType(ArrayList<PlanetType> excludedTypes) {
@@ -30,23 +35,27 @@ public class World {
 
     private void fetchPlanetImage(){
 
-        if (this.type != null){
+        if (type != null){
             File[] planets_files = new File[0];
             try {
-                planets_files = (new File(getClass().getResource("Planets/" + this.type.toString()).toURI())).listFiles();
+                planets_files = (new File(getClass().getResource("Planets/" + type.toString()).toURI())).listFiles();
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
             Random rand = new Random();
-            this.planet_file = planets_files[rand.nextInt(planets_files.length)];
+            planet_file = planets_files[rand.nextInt(planets_files.length)];
 
         }else{
-            System.out.println("This world has no type");
+            System.out.println("This planet has no type");
         }
     }
 
     public File getPlanet_file(){
         return this.planet_file;
+    }
+
+    public ArrayList<Level> getLevels(){
+        return levels;
     }
 
 

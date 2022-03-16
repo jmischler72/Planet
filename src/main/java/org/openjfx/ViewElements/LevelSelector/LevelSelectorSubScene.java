@@ -13,37 +13,38 @@ import org.openjfx.Models.Level;
 
 public class LevelSelectorSubScene extends SubScene {
 
-    private boolean isHidden;
+    private static final int WIDTH = 300;
+    private static final int HEIGHT = 150;
 
-    public LevelSelectorSubScene(int[] position) {
+
+    public LevelSelectorSubScene(int buttonSize, Level level) {
         /*size*/
-        super(new AnchorPane(), 400, 250);
+        super(new AnchorPane(), WIDTH, HEIGHT);
         this.setFill(Color.BLUE);
         this.setOpacity(0);
+        this.setDisable(true);
 
 
-        BackgroundImage background = new BackgroundImage(
-                new Image(getClass().getResource("green_planet.png").toExternalForm(), 400, 250, false, true),
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
-        this.getPane().setBackground(new Background(background));
+//        BackgroundImage background = new BackgroundImage(
+//                new Image(getClass().getResource("green_planet.png").toExternalForm(), 400, 250, false, true),
+//                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
+//        this.getPane().setBackground(new Background(background));
 
 
-        Text text = new Text(100, 50, "text");
+        Text text = new Text(100, 50, level.getName());
         text.setFill(Color.NAVAJOWHITE);
 
         Rectangle agent = new Rectangle(200,10);
 
         StackPane stack = new StackPane();
         stack.getChildren().addAll(agent, text);
-        stack.setLayoutX(200);
+
 
         this.getPane().getChildren().add(stack);
 
-        isHidden = true;
-
         /*positions*/
-        setLayoutX(position[0]);
-        setLayoutY(position[1]);
+        setLayoutX(level.getPosition()[0]);
+        setLayoutY(level.getPosition()[1]);
 
     }
 
@@ -53,17 +54,14 @@ public class LevelSelectorSubScene extends SubScene {
         fade.setAutoReverse(true);
         fade.setNode(this);
 
-        if (isHidden) {
+        if (isDisable()) {
             fade.setFromValue(0);
-            fade.setToValue(10);
-
-            isHidden = false;
-
+            fade.setToValue(1);
+            this.setDisable(false);
         } else {
-            fade.setFromValue(10);
+            fade.setFromValue(1);
             fade.setToValue(0);
-
-            isHidden = true;
+            this.setDisable(true);
         }
         fade.play();
     }
