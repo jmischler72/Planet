@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 
 public class LevelButton extends Button {
 
+
     private final String FONT = "";
     private final String BUTTON_PRESSED_STYLE = "-fx-background-color: transparent; -fx-background-image: url('" +getClass().getResource("lvl_button_pressed.png").toExternalForm()+ "')";
     private final String BUTTON_RELEASED_STYLE = "-fx-background-color: transparent; -fx-background-image: url('" +getClass().getResource("lvl_button_released.png").toExternalForm()+ "')";
@@ -20,8 +21,8 @@ public class LevelButton extends Button {
         setShape(new Circle(10));
         setPrefWidth(56);
         setPrefHeight(56);
-        setLayoutX(position[0]);
-        setLayoutY(position[1]);
+        setLayoutX(position[0]-getPrefWidth()/2);
+        setLayoutY(position[1]-getPrefHeight()/2);
         setStyle(BUTTON_RELEASED_STYLE);
         initButtonListeners();
     }

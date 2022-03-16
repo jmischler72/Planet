@@ -22,7 +22,6 @@ public class ViewManager {
         mainScene = new ViewLevelSelector(new AnchorPane(), HEIGHT,WIDTH, this);
         mainStage = stage;
         stage.setScene(mainScene);
-
     }
 
     public Stage getMainStage(){
