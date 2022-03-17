@@ -16,7 +16,7 @@ public class ViewManager {
     private static final int WIDTH = 1500;
     private AnchorPane mainPane;
     private Scene mainScene;
-    private Stage mainStage;
+    private static Stage mainStage;
 
     public ViewManager(Stage stage){
         mainScene = new ViewLevelSelector(new AnchorPane(), HEIGHT,WIDTH, this);

@@ -4,7 +4,6 @@ import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -20,7 +19,6 @@ import javafx.scene.shape.Circle;
 
 import javafx.util.Duration;
 import org.openjfx.Controllers.ControllerLevelSelector;
-import org.openjfx.Controllers.GameController;
 import org.openjfx.Models.Level;
 import org.openjfx.ViewElements.LevelSelector.LevelButton;
 import org.openjfx.ViewElements.LevelSelector.LevelSelectorSubScene;
@@ -29,96 +27,107 @@ import org.openjfx.Models.Planet;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 import static javafx.util.Duration.millis;
-import static javafx.util.Duration.seconds;
 
 
 public class ViewLevelSelector extends Scene {
-    private ControllerLevelSelector controllerLevelSelector;
     private Pane pane;
     private Planet planet;
-    private static int count;
 
-    private ArrayList<Group> subscenesGroup = new ArrayList<Group>();
+    private ArrayList<LevelButton> buttonList  = new ArrayList<LevelButton>();
 
     public ViewLevelSelector(Pane pane, int width, int height, ViewManager viewManager) {
         super(pane, height, width);
         this.pane = pane;
-        count++;
-
 
         setBackground();
         planet = new Planet();
 
         Circle circlePlanet = rendercirclePlanet(planet);
         Circle shadow = renderCircleShadow(circlePlanet, 80, new int[]{0, 10});
-        renderShadowAnimation(circlePlanet,shadow);
+//        renderShadowAnimation(circlePlanet,shadow);
         this.addElement(shadow);
         this.addElement(circlePlanet);
 
-        LevelButton buttonrefresh = new LevelButton(new int[]{10, 10});
-        buttonrefresh.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-
-
-
-            }
-        });
-        this.addElement(buttonrefresh);
+        ArrayList<int[]> positions = new ArrayList<int[]>();
 
         for (Level level : planet.getLevels()) {
 
             Circle circleMarkers = new Circle(circlePlanet.getCenterX(), circlePlanet.getCenterY(), circlePlanet.getRadius() - 80);
-            level.setPosition(getRandomPositionInCircle(circleMarkers));
+            int[] position = getRandomPositionInCircle(circleMarkers);
+
+            boolean close = true;
+            do {
+                close = false;
+                for (int[] pos : positions) {
+                    if (arePositionsClose(pos, position, 40)) {
+                        position = getRandomPositionInCircle(circleMarkers);
+                        close = true;
+                    }
+                }
+            } while (close);
+
+            level.setPosition(position);
+            positions.add(position);
 
             Group levelGroup = new Group();
 
             LevelButton levelButton = new LevelButton(level.getPosition());
             LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene((int) levelButton.getPrefWidth(), level);
-            subscenesGroup.add(levelGroup);
+            buttonList.add(levelButton);
             levelButton.setOnAction((event) -> {    // lambda expression
                 if (levelSelectorSubScene.isDisable()) {
-                    hideAllGroupExceptOne(levelGroup);
+                    animationButtons(levelButton, false);
                 } else {
-                    showAllGroup();
-
+                    animationButtons(levelButton, true);
                 }
                 levelSelectorSubScene.moveSubScene();
             });
-            levelGroup.getChildren().add(levelSelectorSubScene);
-            levelGroup.getChildren().add(levelButton);
 
-            addElement(levelGroup);
+            addElement(levelSelectorSubScene);
+            addElement(levelButton);
+
+
         }
     }
 
-    private void hideAllGroupExceptOne(Group excludedSubScene) {
-        for (Group subScene : subscenesGroup) {
-            if (subScene != excludedSubScene) {
-                FadeTransition fade = new FadeTransition();
-                fade.setDuration(Duration.seconds(0.1));
-                fade.setAutoReverse(true);
-                fade.setFromValue(1);
-                fade.setToValue(0);
-                subScene.setDisable(true);
-                fade.setNode(subScene);
+    private void animationButtons(LevelButton activeButton, boolean opened) {
+
+        for (LevelButton button : buttonList) {
+            FadeTransition fade = new FadeTransition();
+            fade.setDuration(Duration.seconds(0.1));
+            fade.setAutoReverse(true);
+            if (button != activeButton) {
+                if(!opened){
+                    fade.setFromValue(1);
+                    fade.setToValue(0);
+                    button.setDisable(true);
+                }else{
+                    fade.setFromValue(0);
+                    fade.setToValue(1);
+                    button.setDisable(false);
+                }
+                fade.setNode(button);
                 fade.play();
             }
         }
 
     }
 
-    private void showAllGroup() {
-        for (Group subScene : subscenesGroup) {
-            subScene.setDisable(false);
-            subScene.setOpacity(1);
+    private void showAllButtonsExcep() {
+        for (LevelButton button : buttonList) {
+            FadeTransition fade = new FadeTransition();
+            fade.setDuration(Duration.seconds(0.1));
+            fade.setAutoReverse(true);
+            fade.setFromValue(0);
+            fade.setToValue(1);
+            button.setDisable(false);
+            fade.setNode(button);
+            fade.play();
         }
     }
-
 
     private void setBackground() {
         BackgroundImage background = new BackgroundImage(
@@ -127,15 +136,22 @@ public class ViewLevelSelector extends Scene {
         pane.setBackground(new Background(background));
     }
 
-    private boolean arePositionsClose(int[] position1, int[] position2) {
-        return true;
+    private boolean arePositionsClose(int[] position1, int[] position2, int radius) {
+        if (Math.abs(position1[0] - position2[0]) < radius) {
+            System.out.println(Math.abs(position1[0]) - Math.abs(position2[0]));
+            return true;
+        }
+        if (Math.abs(position1[1] - position2[1]) < radius) {
+            return true;
+        }
+
+        return false;
 
     }
 
     private void renderShadowAnimation(Circle planet, Circle shadow) {
         final Timeline timeline = new Timeline(new KeyFrame(Duration.ZERO, new EventHandler() {
             int movingStep = 0;
-
 
             @Override
             public void handle(Event event) {
@@ -144,15 +160,13 @@ public class ViewLevelSelector extends Scene {
 
                 double angleAlpha = movingStep * (Math.PI / 30);
 
-
-
                 // p(x) = x(0) + r * sin(a)
                 // p(y) = y(y) - r * cos(a)
 
                 TranslateTransition move = new TranslateTransition();
                 move.setNode(shadow);
                 move.setToX(10 * Math.sin(angleAlpha));
-                move.setToY(10* Math.cos(angleAlpha));
+                move.setToY(10 * Math.cos(angleAlpha));
                 move.setDuration(millis(500));
                 move.playFromStart();
 
@@ -164,12 +178,8 @@ public class ViewLevelSelector extends Scene {
         }), new KeyFrame(millis(500)));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
-        System.out.println(1);
-        if (count>2){
-            timeline.stop();
-        }
-    }
 
+    }
 
 
     private int[] getRandomPositionInCircle(Circle circle) {

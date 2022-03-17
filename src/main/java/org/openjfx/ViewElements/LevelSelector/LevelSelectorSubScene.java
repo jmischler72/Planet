@@ -1,7 +1,9 @@
 package org.openjfx.ViewElements.LevelSelector;
 
 import javafx.animation.FadeTransition;
+import javafx.scene.Node;
 import javafx.scene.SubScene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -20,6 +22,11 @@ public class LevelSelectorSubScene extends SubScene {
     public LevelSelectorSubScene(int buttonSize, Level level) {
         /*size*/
         super(new AnchorPane(), WIDTH, HEIGHT);
+
+        /*positions*/
+        setLayoutX(level.getPosition()[0]);
+        setLayoutY(level.getPosition()[1]);
+
         this.setFill(Color.BLUE);
         this.setOpacity(0);
         this.setDisable(true);
@@ -34,17 +41,18 @@ public class LevelSelectorSubScene extends SubScene {
         Text text = new Text(100, 50, level.getName());
         text.setFill(Color.NAVAJOWHITE);
 
-        Rectangle agent = new Rectangle(200,10);
+        Rectangle cadre = new Rectangle(200,20);
 
         StackPane stack = new StackPane();
-        stack.getChildren().addAll(agent, text);
+        stack.getChildren().addAll(cadre, text);
 
+        Button play = new Button("Play");
+        System.out.println(play.getWidth());
+        play.setLayoutY(HEIGHT-35);
 
-        this.getPane().getChildren().add(stack);
+        addElement(stack);
+        addElement(play);
 
-        /*positions*/
-        setLayoutX(level.getPosition()[0]);
-        setLayoutY(level.getPosition()[1]);
 
     }
 
@@ -66,8 +74,9 @@ public class LevelSelectorSubScene extends SubScene {
         fade.play();
     }
 
-    public AnchorPane getPane() {
-        return (AnchorPane) this.getRoot();
+    public void addElement(Node element) {
+        AnchorPane root = (AnchorPane) this.getRoot();
+        root.getChildren().add(element);
     }
 
 }
