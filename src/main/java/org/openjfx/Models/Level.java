@@ -5,15 +5,15 @@ import java.util.Random;
 public class Level {
     private String name;
     private String description;
-    private int[] position;
+    private double[] position;
+    private PlanetType planetType;
 
-    public Level(String name){
-        this.name = name;
-    }
-    public Level(String name, String description){
+    public Level(String name, String description, PlanetType planetType){
         this.name = name;
         this.description = description;
+        this.planetType = planetType;
     }
+
 
     public String getName() {
         return name;
@@ -23,11 +23,11 @@ public class Level {
         return description;
     }
 
-    public int[] getPosition(){
+    public double[] getPosition(){
         return position;
     }
 
-    public void setPosition(int[] position){
+    public void setPosition(double[] position){
         this.position = position;
     }
 

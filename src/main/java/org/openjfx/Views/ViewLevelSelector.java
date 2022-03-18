@@ -1,14 +1,10 @@
 package org.openjfx.Views;
 
-import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.scene.CacheHint;
 import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.Shadow;
 import javafx.scene.image.Image;
@@ -18,9 +14,8 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
 import javafx.util.Duration;
-import org.openjfx.Controllers.ControllerLevelSelector;
 import org.openjfx.Models.Level;
-import org.openjfx.ViewElements.LevelSelector.LevelButton;
+import org.openjfx.ViewElements.LevelSelector.ButtonAnimation;
 import org.openjfx.ViewElements.LevelSelector.LevelSelectorSubScene;
 import org.openjfx.Models.Planet;
 
@@ -32,36 +27,40 @@ import java.util.Random;
 import static javafx.util.Duration.millis;
 
 
-public class ViewLevelSelector extends Scene {
-    private Pane pane;
+public class ViewLevelSelector extends View {
     private Planet planet;
+    private ArrayList<ButtonAnimation> buttonList  = new ArrayList<ButtonAnimation>();
 
-    private ArrayList<LevelButton> buttonList  = new ArrayList<LevelButton>();
-
-    public ViewLevelSelector(Pane pane, int width, int height, ViewManager viewManager) {
-        super(pane, height, width);
-        this.pane = pane;
-
-        setBackground();
+    public ViewLevelSelector(Pane pane, ViewManager viewManager) {
+        super(pane, viewManager);
+        setBackground("space.jpg");
+//        backgroundAnimation();
         planet = new Planet();
 
-        Circle circlePlanet = rendercirclePlanet(planet);
-        Circle shadow = renderCircleShadow(circlePlanet, 80, new int[]{0, 10});
-//        renderShadowAnimation(circlePlanet,shadow);
-        this.addElement(shadow);
-        this.addElement(circlePlanet);
+        Circle circlePlanet = renderCirclePlanet(planet);
+        Circle shadow = renderCircleShadow(circlePlanet, 80, new int[]{0, 0});
+        renderShadowAnimation(circlePlanet,shadow);
+        addElement(shadow);
+        addElement(circlePlanet);
+//
+//        LevelButton refresh = new LevelButton(new int[]{20,20});
+//        refresh.setOnAction((event) -> {    // lambda expression
+//            viewManager.renderScene( new ViewLevelSelector( new AnchorPane(),viewManager));
+//        });
 
-        ArrayList<int[]> positions = new ArrayList<int[]>();
+//        addElement(refresh);
+
+        ArrayList<double[]> positions = new ArrayList<double[]>();
 
         for (Level level : planet.getLevels()) {
 
             Circle circleMarkers = new Circle(circlePlanet.getCenterX(), circlePlanet.getCenterY(), circlePlanet.getRadius() - 80);
-            int[] position = getRandomPositionInCircle(circleMarkers);
+            double[] position = getRandomPositionInCircle(circleMarkers);
 
             boolean close = true;
             do {
                 close = false;
-                for (int[] pos : positions) {
+                for (double[] pos : positions) {
                     if (arePositionsClose(pos, position, 40)) {
                         position = getRandomPositionInCircle(circleMarkers);
                         close = true;
@@ -74,7 +73,7 @@ public class ViewLevelSelector extends Scene {
 
             Group levelGroup = new Group();
 
-            LevelButton levelButton = new LevelButton(level.getPosition());
+            ButtonAnimation levelButton = new ButtonAnimation(level.getPosition(),new double[]{56,56}, new Circle(10), "lvl_button.png");
             LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene((int) levelButton.getPrefWidth(), level);
             buttonList.add(levelButton);
             levelButton.setOnAction((event) -> {    // lambda expression
@@ -93,9 +92,9 @@ public class ViewLevelSelector extends Scene {
         }
     }
 
-    private void animationButtons(LevelButton activeButton, boolean opened) {
+    private void animationButtons(ButtonAnimation activeButton, boolean opened) {
 
-        for (LevelButton button : buttonList) {
+        for (ButtonAnimation button : buttonList) {
             FadeTransition fade = new FadeTransition();
             fade.setDuration(Duration.seconds(0.1));
             fade.setAutoReverse(true);
@@ -116,38 +115,19 @@ public class ViewLevelSelector extends Scene {
 
     }
 
-    private void showAllButtonsExcep() {
-        for (LevelButton button : buttonList) {
-            FadeTransition fade = new FadeTransition();
-            fade.setDuration(Duration.seconds(0.1));
-            fade.setAutoReverse(true);
-            fade.setFromValue(0);
-            fade.setToValue(1);
-            button.setDisable(false);
-            fade.setNode(button);
-            fade.play();
-        }
-    }
 
-    private void setBackground() {
-        BackgroundImage background = new BackgroundImage(
-                new Image(getClass().getResource("space.jpg").toExternalForm(), pane.getWidth(), pane.getHeight(), false, true),
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
-        pane.setBackground(new Background(background));
-    }
-
-    private boolean arePositionsClose(int[] position1, int[] position2, int radius) {
+    private boolean arePositionsClose(double[] position1, double[] position2, int radius) {
         if (Math.abs(position1[0] - position2[0]) < radius) {
-            System.out.println(Math.abs(position1[0]) - Math.abs(position2[0]));
             return true;
         }
         if (Math.abs(position1[1] - position2[1]) < radius) {
             return true;
         }
-
         return false;
 
     }
+
+    /* Animation lag sur certains pc donc a voir pour l'ajouter */
 
     private void renderShadowAnimation(Circle planet, Circle shadow) {
         final Timeline timeline = new Timeline(new KeyFrame(Duration.ZERO, new EventHandler() {
@@ -155,9 +135,8 @@ public class ViewLevelSelector extends Scene {
 
             @Override
             public void handle(Event event) {
-                movingStep++;
                 System.out.println(movingStep);
-
+                movingStep++;
                 double angleAlpha = movingStep * (Math.PI / 30);
 
                 // p(x) = x(0) + r * sin(a)
@@ -178,31 +157,32 @@ public class ViewLevelSelector extends Scene {
         }), new KeyFrame(millis(500)));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+        addAnimation(timeline);
 
     }
 
 
-    private int[] getRandomPositionInCircle(Circle circle) {
+    private double[] getRandomPositionInCircle(Circle circle) {
         Random rand = new Random();
-        int[] position = new int[2];
+        double[] position = new double[2];
 
-        int randomX = (int) (rand.nextInt((int) (circle.getRadius() * 2)) - circle.getRadius());
-        position[0] = (int) (circle.getCenterX() + randomX);
+        double randomX = (rand.nextInt((int) (circle.getRadius() * 2)) - circle.getRadius());
+        position[0] = circle.getCenterX() + randomX;
 
         double cosX = (randomX / (circle.getRadius()));
-        double boundY = Math.sin(Math.acos(cosX)) * circle.getRadius();
+        double boundY = Math.round(Math.sin(Math.acos(cosX)) * circle.getRadius());
 
-        double randomY = (rand.nextInt((int) (boundY) * 2) - boundY);
-        position[1] = (int) (circle.getCenterY() + randomY);
+        double randomY = (rand.nextInt((int) (boundY) * 2 + 1) - boundY);
+        position[1] = circle.getCenterY() + randomY;
 
         return position;
     }
 
-    private Circle rendercirclePlanet(Planet planet) {
+    private Circle renderCirclePlanet(Planet planet) {
         Circle circle = new Circle();
-        circle.setCenterX(pane.getWidth() / 2);
-        circle.setCenterY(pane.getHeight() / 2);
-        circle.setRadius(pane.getHeight() * 0.40);
+        circle.setCenterX(getPane().getWidth() / 2);
+        circle.setCenterY(getPane().getHeight() / 2);
+        circle.setRadius(getPane().getHeight() * 0.40);
         try {
             circle.setFill(new ImagePattern(
                     new Image(new FileInputStream(planet.getPlanet_file())), 0, 0, 1, 1, true
@@ -223,10 +203,9 @@ public class ViewLevelSelector extends Scene {
         circle.setCenterY(circle_to_shadow.getCenterY() + offset[1]);
         circle.setRadius(circle_to_shadow.getRadius());
         circle.setEffect(shadow);
+        circle.setCache(true);
+        circle.setCacheHint(CacheHint.SPEED);
         return circle;
     }
 
-    private void addElement(Node element) {
-        pane.getChildren().add(element);
-    }
 }

@@ -16,7 +16,7 @@ public class Planet {
         fetchPlanetImage();
 
         for(int i=0; i< 6; i++){
-            Level level = new Level(Integer.toString(i));
+            Level level = new Level(Integer.toString(i),"rand", type);
             levels.add(level);
         }
 
@@ -26,10 +26,8 @@ public class Planet {
         PlanetType[] planetTypes = PlanetType.values();
 
         Random rand = new Random();
-
         do{
             type = planetTypes[rand.nextInt(planetTypes.length)];
-            System.out.println(type);
         }while(excludedTypes.contains(type));
     }
 
