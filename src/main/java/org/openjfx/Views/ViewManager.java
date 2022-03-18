@@ -15,13 +15,13 @@ public class ViewManager {
     private static final int HEIGHT = 900;
     private static final int WIDTH = 1500;
     private AnchorPane mainPane;
-    private Scene mainScene;
+    private View activeScene;
     private static Stage mainStage;
 
     public ViewManager(Stage stage){
-        mainScene = new ViewLevelSelector(new AnchorPane(), HEIGHT,WIDTH, this);
+        activeScene = new ViewLevelSelector(new AnchorPane(), this);
         mainStage = stage;
-        stage.setScene(mainScene);
+        stage.setScene(activeScene);
     }
 
     public Stage getMainStage(){
@@ -34,7 +34,9 @@ public class ViewManager {
         return new int[]{WIDTH,HEIGHT};
     }
 
-    public void renderScene(Scene scene){
+    public void renderScene(View scene){
+        activeScene.stopAnimations();
+        activeScene = scene;
         mainStage.setScene(scene);
     }
 
@@ -42,7 +44,4 @@ public class ViewManager {
         this.mainPane = new AnchorPane();
     }
 
-    public void renderCurrentScene() {
-        System.out.println(mainScene.getClass());
-    }
 }
