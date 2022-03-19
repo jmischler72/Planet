@@ -1,6 +1,7 @@
 package org.openjfx.ViewElements.LevelSelector;
 
 import javafx.animation.FadeTransition;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.SubScene;
 import javafx.scene.control.Button;
@@ -18,6 +19,8 @@ public class LevelSelectorSubScene extends SubScene {
 
     private static final int WIDTH = 300;
     private static final int HEIGHT = 150;
+
+    private Button button;
 
 
     public LevelSelectorSubScene(int buttonSize, Level level) {
@@ -39,7 +42,6 @@ public class LevelSelectorSubScene extends SubScene {
 
         StackPane stack = new StackPane();
         stack.getChildren().addAll(cadre, text);
-        System.out.println(cadre.getWidth());
         stack.setLayoutX(WIDTH/2-cadre.getWidth()/2);
         stack.setLayoutY(23);
 
@@ -50,23 +52,22 @@ public class LevelSelectorSubScene extends SubScene {
         AnchorPane infosRoot = (AnchorPane) this.getRoot();
         infosRoot.setBackground(new Background(background));
 
-        Button b = new Button();
-        b.setPrefWidth(80);
-        b.setPrefHeight(30);
-        b.setLayoutX(WIDTH/2 - b.getPrefWidth()/2);
-        b.setLayoutY(HEIGHT - 60);
-
         double[] position = new double[]{WIDTH/2 , HEIGHT - 60};
 
-        ButtonAnimation b2 = new ButtonAnimation(position, new double[]{80,30}, null, "Infos_subscene_assets/fight_button.png");
+        ButtonAnimation b = new ButtonAnimation(position, new double[]{80,30}, null, "Infos_subscene_assets/fight_button.png");
 
-        b.setOnAction((event) -> {
-            System.out.println("f");
-
-        });
+        button = b;
 
         addElement(stack);
-        addElement(b2);
+        addElement(b);
+    }
+
+    public void setButtonAction(EventHandler eventHandler) {
+        button.setOnAction(eventHandler);
+    }
+
+    public Button getButton() {
+        return button;
     }
 
     public void moveSubScene() {
