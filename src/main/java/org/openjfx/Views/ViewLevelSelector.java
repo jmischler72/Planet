@@ -5,6 +5,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
+import javafx.scene.control.Button;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.Shadow;
 import javafx.scene.image.Image;
@@ -76,6 +77,7 @@ public class ViewLevelSelector extends View {
             ButtonAnimation levelButton = new ButtonAnimation(level.getPosition(),new double[]{56,56}, new Circle(10), "lvl_button.png");
             LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene((int) levelButton.getPrefWidth(), level);
             buttonList.add(levelButton);
+
             levelButton.setOnAction((event) -> {    // lambda expression
                 if (levelSelectorSubScene.isDisable()) {
                     animationButtons(levelButton, false);
@@ -85,10 +87,15 @@ public class ViewLevelSelector extends View {
                 levelSelectorSubScene.moveSubScene();
             });
 
+            Button playButton = levelSelectorSubScene.getButton();
+            playButton.setOnAction((playEvent) -> {
+                viewManager.renderScene(
+                        new ViewLevel(new Pane(), viewManager)
+                );
+            });
+
             addElement(levelSelectorSubScene);
             addElement(levelButton);
-
-
         }
     }
 

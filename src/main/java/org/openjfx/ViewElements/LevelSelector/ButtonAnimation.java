@@ -31,7 +31,6 @@ public class ButtonAnimation extends Button {
                 image,
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
         setBackground(new Background(background));
-
     }
 
     private void initButtonListeners() {
