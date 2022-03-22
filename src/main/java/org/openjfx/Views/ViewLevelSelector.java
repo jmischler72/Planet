@@ -16,8 +16,8 @@ import javafx.scene.shape.Circle;
 
 import javafx.util.Duration;
 import org.openjfx.Models.Level;
-import org.openjfx.ViewElements.LevelSelector.ButtonAnimation;
-import org.openjfx.ViewElements.LevelSelector.LevelSelectorSubScene;
+import org.openjfx.Models.LevelType;
+import org.openjfx.ViewElements.LevelSelector.*;
 import org.openjfx.Models.Planet;
 
 import java.io.FileInputStream;
@@ -31,6 +31,7 @@ import static javafx.util.Duration.millis;
 public class ViewLevelSelector extends View {
     private Planet planet;
     private ArrayList<ButtonAnimation> buttonList  = new ArrayList<ButtonAnimation>();
+    private ArrayList<ViewLevel> levels = new ArrayList<ViewLevel>();
 
     public ViewLevelSelector(Pane pane, ViewManager viewManager) {
         super(pane, viewManager);
@@ -43,6 +44,7 @@ public class ViewLevelSelector extends View {
         renderShadowAnimation(circlePlanet,shadow);
         addElement(shadow);
         addElement(circlePlanet);
+        createButtons(circlePlanet);
 //
 //        LevelButton refresh = new LevelButton(new int[]{20,20});
 //        refresh.setOnAction((event) -> {    // lambda expression
@@ -50,10 +52,12 @@ public class ViewLevelSelector extends View {
 //        });
 
 //        addElement(refresh);
+    }
 
+    private void createButtons(Circle circlePlanet) {
         ArrayList<double[]> positions = new ArrayList<double[]>();
 
-        for (Level level : planet.getLevels()) {
+        for (int i = 0; i < 6; i++) {
 
             Circle circleMarkers = new Circle(circlePlanet.getCenterX(), circlePlanet.getCenterY(), circlePlanet.getRadius() - 80);
             double[] position = getRandomPositionInCircle(circleMarkers);
@@ -69,14 +73,13 @@ public class ViewLevelSelector extends View {
                 }
             } while (close);
 
-            level.setPosition(position);
             positions.add(position);
 
             Group levelGroup = new Group();
 
-            ButtonAnimation levelButton = new ButtonAnimation(level.getPosition(),new double[]{56,56}, new Circle(10), "lvl_button.png");
-            LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene((int) levelButton.getPrefWidth(), level);
-            buttonList.add(levelButton);
+            ViewLevel viewLevel = new ViewLevel(new Pane(), viewManager, planet.getType(), i+1);
+            ButtonAnimation levelButton = new ButtonAnimation(position,new double[]{56,56}, new Circle(10), "lvl_button.png");
+            LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene((int) levelButton.getPrefWidth(), position, viewLevel.getLevel());
 
             levelButton.setOnAction((event) -> {    // lambda expression
                 if (levelSelectorSubScene.isDisable()) {
@@ -89,13 +92,13 @@ public class ViewLevelSelector extends View {
 
             Button playButton = levelSelectorSubScene.getButton();
             playButton.setOnAction((playEvent) -> {
-                viewManager.renderScene(
-                        new ViewLevel(new Pane(), viewManager)
-                );
+                viewManager.renderScene(viewLevel);
             });
 
             addElement(levelSelectorSubScene);
             addElement(levelButton);
+            levels.add(viewLevel);
+            buttonList.add(levelButton);
         }
     }
 
@@ -214,5 +217,4 @@ public class ViewLevelSelector extends View {
         circle.setCacheHint(CacheHint.SPEED);
         return circle;
     }
-
 }

@@ -23,17 +23,18 @@ public class LevelSelectorSubScene extends SubScene {
     private Button button;
 
 
-    public LevelSelectorSubScene(int buttonSize, Level level) {
+    public LevelSelectorSubScene(int buttonSize, double[] position, Level level) {
         /*size*/
         super(new AnchorPane(), WIDTH, HEIGHT);
 
         /*positions*/
-        setLayoutX(level.getPosition()[0]);
-        setLayoutY(level.getPosition()[1]);
+        setLayoutX(position[0]);
+        setLayoutY(position[1]);
 
         this.setOpacity(0);
         this.setDisable(true);
 
+        System.out.println(level.getName());
         Text text = new Text(100, 50, level.getName());
         text.setFill(Color.WHITE);
         text.setFont(new Font(15));
@@ -52,9 +53,9 @@ public class LevelSelectorSubScene extends SubScene {
         AnchorPane infosRoot = (AnchorPane) this.getRoot();
         infosRoot.setBackground(new Background(background));
 
-        double[] position = new double[]{WIDTH/2 , HEIGHT - 60};
+        double[] buttonPosition = new double[]{WIDTH/2 , HEIGHT - 60};
 
-        ButtonAnimation b = new ButtonAnimation(position, new double[]{80,30}, null, "Infos_subscene_assets/fight_button.png");
+        ButtonAnimation b = new ButtonAnimation(buttonPosition, new double[]{80,30}, null, "Infos_subscene_assets/fight_button.png");
 
         button = b;
 

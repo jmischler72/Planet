@@ -23,7 +23,7 @@ public class View extends Scene {
 
     private ArrayList<Animation> animations = new ArrayList<Animation>();
     private Pane pane;
-    private ViewManager viewManager;
+    ViewManager viewManager;
 
 
     public View(Pane pane, ViewManager viewManager) {

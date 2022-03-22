@@ -3,17 +3,13 @@ package org.openjfx.Models;
 import java.util.Random;
 
 public class Level {
-    private String name;
-    private String description;
-    private double[] position;
+    protected String name;
+    protected String description;
     private PlanetType planetType;
 
-    public Level(String name, String description, PlanetType planetType){
-        this.name = name;
-        this.description = description;
+    public Level(PlanetType planetType){
         this.planetType = planetType;
     }
-
 
     public String getName() {
         return name;
@@ -22,15 +18,4 @@ public class Level {
     public String getDescription() {
         return description;
     }
-
-    public double[] getPosition(){
-        return position;
-    }
-
-    public void setPosition(double[] position){
-        this.position = position;
-    }
-
-
-
 }

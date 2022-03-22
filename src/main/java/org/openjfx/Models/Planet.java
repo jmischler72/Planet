@@ -9,17 +9,10 @@ public class Planet {
 
     private PlanetType type;
     private File planet_file;
-    private ArrayList<Level> levels = new ArrayList<Level>();
 
     public Planet() {
         generatePlanetType(new ArrayList<PlanetType>(){{add(PlanetType.Galaxy);}});
         fetchPlanetImage();
-
-        for(int i=0; i< 6; i++){
-            Level level = new Level(Integer.toString(i),"rand", type);
-            levels.add(level);
-        }
-
     }
 
     private void generatePlanetType(ArrayList<PlanetType> excludedTypes) {
@@ -52,12 +45,11 @@ public class Planet {
         return this.planet_file;
     }
 
-    public ArrayList<Level> getLevels(){
-        return levels;
+    public PlanetType getType() {
+        return type;
     }
 
-
-//    public void changeColor(){
+    //    public void changeColor(){
 //        for (int col = 0; col <  width; col++) {
 //            for (int row = 0; row < height; row++) {
 //                Color color = picture.get(col, row);

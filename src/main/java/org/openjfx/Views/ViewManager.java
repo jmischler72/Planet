@@ -28,11 +28,11 @@ public class ViewManager {
     private View activeScene;
     private static Stage mainStage;
 
-    public ViewManager(Stage stage){
+    public ViewManager(){
         mainPane = new AnchorPane();
         activeScene = new ViewLevelSelector(mainPane, this);
-        mainStage = stage;
-        stage.setScene(activeScene);
+        mainStage = new Stage();
+        mainStage.setScene(activeScene);
     }
 
     public Stage getMainStage(){
