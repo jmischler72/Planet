@@ -1,4 +1,6 @@
-package org.openjfx.Models;
+package org.openjfx.Models.Level;
+
+import org.openjfx.Models.PlanetType;
 
 public class LevelShop extends Level{
 

@@ -19,6 +19,6 @@ public class ControllerLevelSelector{
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
 
 
-        viewManager.getMainPane().setBackground(new Background(background));
+        viewManager.getActivePane().setBackground(new Background(background));
     }
 }

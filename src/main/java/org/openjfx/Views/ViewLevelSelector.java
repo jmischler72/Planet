@@ -5,6 +5,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.Shadow;
@@ -15,8 +16,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
 import javafx.util.Duration;
-import org.openjfx.Models.Level;
-import org.openjfx.Models.LevelType;
+import org.openjfx.Models.Level.Level;
 import org.openjfx.ViewElements.LevelSelector.*;
 import org.openjfx.Models.Planet;
 
@@ -31,7 +31,6 @@ import static javafx.util.Duration.millis;
 public class ViewLevelSelector extends View {
     private Planet planet;
     private ArrayList<ButtonAnimation> buttonList  = new ArrayList<ButtonAnimation>();
-    private ArrayList<ViewLevel> levels = new ArrayList<ViewLevel>();
 
     public ViewLevelSelector(Pane pane, ViewManager viewManager) {
         super(pane, viewManager);
@@ -57,7 +56,7 @@ public class ViewLevelSelector extends View {
     private void createButtons(Circle circlePlanet) {
         ArrayList<double[]> positions = new ArrayList<double[]>();
 
-        for (int i = 0; i < 6; i++) {
+        for (Level level : planet.getLevels()) {
 
             Circle circleMarkers = new Circle(circlePlanet.getCenterX(), circlePlanet.getCenterY(), circlePlanet.getRadius() - 80);
             double[] position = getRandomPositionInCircle(circleMarkers);
@@ -73,11 +72,11 @@ public class ViewLevelSelector extends View {
                 }
             } while (close);
 
+            level.setPosition(position);
+
             positions.add(position);
 
-            Group levelGroup = new Group();
-
-            ViewLevel viewLevel = new ViewLevel(new Pane(), viewManager, planet.getType(), i+1);
+            ViewLevel viewLevel = new ViewLevel(new Pane(), viewManager, level);
             ButtonAnimation levelButton = new ButtonAnimation(position,new double[]{56,56}, new Circle(10), "lvl_button.png");
             LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene((int) levelButton.getPrefWidth(), position, viewLevel.getLevel());
 
@@ -92,12 +91,12 @@ public class ViewLevelSelector extends View {
 
             Button playButton = levelSelectorSubScene.getButton();
             playButton.setOnAction((playEvent) -> {
-                viewManager.renderScene(viewLevel);
+                Scene levelScene = new ViewLevel(new AnchorPane(), viewManager, level);
+                viewManager.renderScene(new ViewTransition(new AnchorPane(), viewManager, levelScene));
             });
 
             addElement(levelSelectorSubScene);
             addElement(levelButton);
-            levels.add(viewLevel);
             buttonList.add(levelButton);
         }
     }

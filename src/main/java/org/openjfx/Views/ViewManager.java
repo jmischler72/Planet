@@ -24,13 +24,11 @@ public class ViewManager {
 
     private static final int HEIGHT = 900;
     private static final int WIDTH = 1500;
-    private AnchorPane mainPane;
     private View activeScene;
     private static Stage mainStage;
 
     public ViewManager(){
-        mainPane = new AnchorPane();
-        activeScene = new ViewLevelSelector(mainPane, this);
+        activeScene = new ViewLevelSelector(new AnchorPane(), this);
         mainStage = new Stage();
         mainStage.setScene(activeScene);
     }
@@ -39,7 +37,7 @@ public class ViewManager {
         return mainStage;
     }
 
-    public Pane getMainPane(){ return mainPane;}
+    public Pane getActivePane(){ return activeScene.getPane();}
 
     public View getActiveScene() {
         return activeScene;
@@ -49,14 +47,11 @@ public class ViewManager {
         return new int[]{WIDTH,HEIGHT};
     }
 
-    public void renderScene(View scene){
+    public void renderScene(Scene scene){
         activeScene.stopAnimations();
-        renderTransition(scene);
+        mainStage.setScene(scene);
     }
 
-    public void reloadPane(){
-        this.mainPane = new AnchorPane();
-    }
 
     private void renderTransition(View nextScene) {
         FadeTransition fadeUp = new FadeTransition();

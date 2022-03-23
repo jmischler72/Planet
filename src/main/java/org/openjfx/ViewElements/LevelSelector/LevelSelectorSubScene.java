@@ -8,12 +8,11 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import org.openjfx.Models.Level;
+import org.openjfx.Models.Level.Level;
 
 public class LevelSelectorSubScene extends SubScene {
 

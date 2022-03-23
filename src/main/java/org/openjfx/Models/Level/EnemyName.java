@@ -1,4 +1,4 @@
-package org.openjfx.Models;
+package org.openjfx.Models.Level;
 
 import java.util.Random;
 
