@@ -15,10 +15,8 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
 import javafx.util.Duration;
-import org.openjfx.Models.Level;
-import org.openjfx.Models.LevelType;
+import org.openjfx.Models.*;
 import org.openjfx.ViewElements.LevelSelector.*;
-import org.openjfx.Models.Planet;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -76,9 +74,31 @@ public class ViewLevelSelector extends View {
             positions.add(position);
 
             Group levelGroup = new Group();
+            LevelType levelType = null;
 
-            ViewLevel viewLevel = new ViewLevel(new Pane(), viewManager, planet.getType(), i+1);
-            ButtonAnimation levelButton = new ButtonAnimation(position,new double[]{56,56}, new Circle(10), "lvl_button.png");
+            if((i+1)%5 == 0) levelType = LevelType.Shop;
+            else if((i+1)%6 == 0) levelType = LevelType.Boss;
+            else levelType = LevelType.Enemy;
+
+            String imageName;
+            switch (levelType) {
+                case Boss: imageName =
+                        "lvl_button_boss.png";
+                    break;
+                case Shop: imageName =
+                        "lvl_button_shop.png";
+                    break;
+                case Enemy: imageName =
+                        "lvl_button.png";
+                    break;
+                default:
+                    imageName = "";
+                    System.out.println("Level type not found");
+            }
+
+
+            ViewLevel viewLevel = new ViewLevel(new Pane(), viewManager, planet.getType(), levelType);
+            ButtonAnimation levelButton = new ButtonAnimation(position,new double[]{56,56}, new Circle(10), imageName);
             LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene((int) levelButton.getPrefWidth(), position, viewLevel.getLevel());
 
             levelButton.setOnAction((event) -> {    // lambda expression

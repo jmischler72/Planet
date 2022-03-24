@@ -5,6 +5,7 @@ public class LevelEnemy extends Level{
     public LevelEnemy(PlanetType planetType) {
         super(planetType);
         generateName();
+        type = LevelType.Enemy;
     }
 
     private void generateName() {

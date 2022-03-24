@@ -5,6 +5,7 @@ import java.util.Random;
 public class Level {
     protected String name;
     protected String description;
+    protected LevelType type;
     private PlanetType planetType;
 
     public Level(PlanetType planetType){
@@ -17,5 +18,9 @@ public class Level {
 
     public String getDescription() {
         return description;
+    }
+
+    public LevelType getType() {
+        return type;
     }
 }

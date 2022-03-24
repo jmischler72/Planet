@@ -7,25 +7,19 @@ public class ViewLevel extends View{
 
     private Level level;
 
-    public ViewLevel(Pane pane, ViewManager viewManager, PlanetType planetType, int levelCounter) {
-        super(pane, viewManager);
-        setBackground("random_background.jpg");
-
-        if(levelCounter%5 == 0) level = new LevelBoss(planetType);
-        else if(levelCounter%6 == 0) level = new LevelShop(planetType);
-        else level = new LevelEnemy(planetType);
-
-
-    }
-
     public ViewLevel(Pane pane, ViewManager viewManager, PlanetType planetType, LevelType levelType) {
         super(pane, viewManager);
         setBackground("random_background.jpg");
 
         switch (levelType) {
-            case Enemy: level = new LevelEnemy(planetType);
-            case Boss: level = new LevelBoss(planetType);
+            case Enemy: level =
+                    new LevelEnemy(planetType);
+                break;
+            case Boss: level =
+                    new LevelBoss(planetType);
+                break;
             case Shop: level = new LevelShop(planetType);
+                break;
         }
 
     }

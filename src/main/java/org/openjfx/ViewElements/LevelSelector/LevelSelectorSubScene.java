@@ -14,6 +14,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.openjfx.Models.Level;
+import org.openjfx.Models.LevelType;
 
 public class LevelSelectorSubScene extends SubScene {
 
@@ -34,7 +35,6 @@ public class LevelSelectorSubScene extends SubScene {
         this.setOpacity(0);
         this.setDisable(true);
 
-        System.out.println(level.getName());
         Text text = new Text(100, 50, level.getName());
         text.setFill(Color.WHITE);
         text.setFont(new Font(15));
@@ -55,16 +55,17 @@ public class LevelSelectorSubScene extends SubScene {
 
         double[] buttonPosition = new double[]{WIDTH/2 , HEIGHT - 60};
 
-        ButtonAnimation b = new ButtonAnimation(buttonPosition, new double[]{80,30}, null, "Infos_subscene_assets/fight_button.png");
+        Button b;
+        if(level.getType() != LevelType.Shop) {
+            b = new ButtonAnimation(buttonPosition, new double[]{80,40}, null, "Infos_subscene_assets/fight_button.png");
+        }else {
+            b = new ButtonShop(buttonPosition, new double[]{80, 40}, null, "Infos_subscene_assets/shop_button_close.png");
+        }
 
         button = b;
 
         addElement(stack);
         addElement(b);
-    }
-
-    public void setButtonAction(EventHandler eventHandler) {
-        button.setOnAction(eventHandler);
     }
 
     public Button getButton() {

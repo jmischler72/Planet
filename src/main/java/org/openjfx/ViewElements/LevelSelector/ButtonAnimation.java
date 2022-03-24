@@ -11,6 +11,7 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.shape.Shape;
+import org.openjfx.Models.LevelType;
 
 public class ButtonAnimation extends Button {
 
