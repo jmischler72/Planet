@@ -2,9 +2,7 @@ package org.openjfx.Views;
 
 import javafx.animation.FadeTransition;
 import javafx.concurrent.Task;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
@@ -12,25 +10,27 @@ import javafx.util.Duration;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class ViewTransition extends View{
+public class ViewTransition extends View {
 
-    Scene nextScene;
+    View nextView;
+    Pane activePane;
 
-    public ViewTransition(Pane pane, ViewManager viewManager, Scene nextScene) {
+    public ViewTransition(Pane pane, ViewManager viewManager, View nextView, Pane activePane) {
         super(pane, viewManager);
+        this.nextView = nextView;
+        this.activePane = activePane;
         render();
-
     }
 
-    public void render(){
-        this.nextScene = nextScene;
+    private void render(){
+
         FadeTransition fadeUp = new FadeTransition();
-        fadeUp.setNode(viewManager.getActivePane());
+        fadeUp.setNode(activePane);
         fadeUp.setDuration(Duration.seconds(1.5));
         fadeUp.setFromValue(1);
         fadeUp.setToValue(0);
 
-        View transitionScene = new View(new AnchorPane(), viewManager);
+        View transitionScene = this;
         transitionScene.setBackground("white_back.jpg");
         Label levelName = new Label("TRANSITION");
         try {
@@ -47,11 +47,11 @@ public class ViewTransition extends View{
         transitionScene.addElement(levelName);
 
         fadeUp.setOnFinished((event) -> {
-            viewManager.renderScene(transitionScene);
+            viewManager.renderView(transitionScene);
 
 
             delay(2000, () -> {
-                viewManager.renderScene(nextScene);
+                viewManager.renderView(nextView);
 
                 FadeTransition fadeDown = new FadeTransition();
                 fadeDown.setNode(viewManager.getActivePane());

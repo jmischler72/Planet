@@ -4,7 +4,6 @@ import javafx.animation.*;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.CacheHint;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.effect.BlurType;
@@ -47,7 +46,7 @@ public class ViewLevelSelector extends View {
 //
 //        LevelButton refresh = new LevelButton(new int[]{20,20});
 //        refresh.setOnAction((event) -> {    // lambda expression
-//            viewManager.renderScene( new ViewLevelSelector( new AnchorPane(),viewManager));
+//            viewManager.renderView( new ViewLevelSelector( new AnchorPane(),viewManager));
 //        });
 
 //        addElement(refresh);
@@ -91,8 +90,9 @@ public class ViewLevelSelector extends View {
 
             Button playButton = levelSelectorSubScene.getButton();
             playButton.setOnAction((playEvent) -> {
-                Scene levelScene = new ViewLevel(new AnchorPane(), viewManager, level);
-                viewManager.renderScene(new ViewTransition(new AnchorPane(), viewManager, levelScene));
+                View levelView = new ViewLevel(new AnchorPane(), viewManager, level);
+                ViewTransition viewTransition = new ViewTransition(new AnchorPane(), viewManager, levelView, viewManager.getActivePane());
+                viewManager.renderView(viewTransition);
             });
 
             addElement(levelSelectorSubScene);

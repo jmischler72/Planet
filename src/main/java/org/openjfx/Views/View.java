@@ -1,23 +1,12 @@
 package org.openjfx.Views;
 
 import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.scene.CacheHint;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.transform.Rotate;
-import javafx.util.Duration;
 
 import java.util.ArrayList;
-
-import static javafx.util.Duration.millis;
 
 public class View extends Scene {
 
@@ -46,7 +35,6 @@ public class View extends Scene {
     public Pane getPane(){
         return pane;
     }
-
     public ArrayList<Animation> getAnimations(){
         return animations;
     }
@@ -60,9 +48,4 @@ public class View extends Scene {
             animation.stop();
         }
     }
-
-
-
-
-
 }
