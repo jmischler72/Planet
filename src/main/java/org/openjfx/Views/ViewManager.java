@@ -13,6 +13,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.openjfx.Models.Game;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -22,17 +23,20 @@ import java.io.FileNotFoundException;
  */
 public class ViewManager {
 
-    private static final int HEIGHT = 900;
+    private static final int HEIGHT =   900;
     private static final int WIDTH = 1500;
     private AnchorPane mainPane;
     private View activeScene;
     private static Stage mainStage;
+    private Game game;
 
     public ViewManager(){
         mainPane = new AnchorPane();
         activeScene = new ViewLevelSelector(mainPane, this);
         mainStage = new Stage();
+        mainStage.setResizable(false);
         mainStage.setScene(activeScene);
+        game = new Game();
     }
 
     public Stage getMainStage(){
@@ -85,7 +89,7 @@ public class ViewManager {
             activeScene = transitionScene;
             mainStage.setScene(transitionScene);
 
-            delay(2000, () -> {
+            delay(1000, () -> {
                 activeScene = nextScene;
                 mainStage.setScene(nextScene);
 

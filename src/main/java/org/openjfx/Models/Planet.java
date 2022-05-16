@@ -9,6 +9,8 @@ public class Planet {
 
     private PlanetType type;
     private File planet_file;
+    private Level currentLevel;
+    private int levelsDone;
 
     public Planet() {
         generatePlanetType(new ArrayList<PlanetType>(){{add(PlanetType.Galaxy);}});
@@ -47,6 +49,10 @@ public class Planet {
 
     public PlanetType getType() {
         return type;
+    }
+
+    public void setCurrentLevel(Level currentLevel) {
+        this.currentLevel = currentLevel;
     }
 
     //    public void changeColor(){

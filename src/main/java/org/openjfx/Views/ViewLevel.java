@@ -5,23 +5,10 @@ import org.openjfx.Models.*;
 
 public class ViewLevel extends View{
 
-    private Level level;
+    protected Level level;
 
-    public ViewLevel(Pane pane, ViewManager viewManager, PlanetType planetType, LevelType levelType) {
+    public ViewLevel(Pane pane, ViewManager viewManager, PlanetType planetType) {
         super(pane, viewManager);
-        setBackground("random_background.jpg");
-
-        switch (levelType) {
-            case Enemy: level =
-                    new LevelEnemy(planetType);
-                break;
-            case Boss: level =
-                    new LevelBoss(planetType);
-                break;
-            case Shop: level = new LevelShop(planetType);
-                break;
-        }
-
     }
 
     public Level getLevel() {

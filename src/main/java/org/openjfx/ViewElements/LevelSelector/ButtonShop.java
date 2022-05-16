@@ -7,8 +7,9 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.shape.Shape;
+import org.openjfx.ViewElements.ButtonAnimation;
 
-public class ButtonShop extends ButtonAnimation{
+public class ButtonShop extends ButtonAnimation {
 
     public ButtonShop(double[] position, double[] size, Shape shape, String imageName) {
         super(position, size, shape, imageName);

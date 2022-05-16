@@ -1,20 +1,19 @@
 package org.openjfx.ViewElements.LevelSelector;
 
 import javafx.animation.FadeTransition;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.SubScene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.openjfx.Models.Level;
 import org.openjfx.Models.LevelType;
+import org.openjfx.ViewElements.ButtonAnimation;
 
 public class LevelSelectorSubScene extends SubScene {
 
@@ -57,9 +56,9 @@ public class LevelSelectorSubScene extends SubScene {
 
         Button b;
         if(level.getType() != LevelType.Shop) {
-            b = new ButtonAnimation(buttonPosition, new double[]{80,40}, null, "Infos_subscene_assets/fight_button.png");
+            b = new ButtonAnimation(buttonPosition, new double[]{80,40}, null, "LevelSelector/Infos_subscene_assets/fight_button.png");
         }else {
-            b = new ButtonShop(buttonPosition, new double[]{80, 40}, null, "Infos_subscene_assets/shop_button_close.png");
+            b = new ButtonShop(buttonPosition, new double[]{80, 40}, null, "LevelSelector/Infos_subscene_assets/shop_button_close.png");
         }
 
         button = b;

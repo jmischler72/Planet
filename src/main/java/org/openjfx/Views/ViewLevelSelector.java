@@ -16,6 +16,7 @@ import javafx.scene.shape.Circle;
 
 import javafx.util.Duration;
 import org.openjfx.Models.*;
+import org.openjfx.ViewElements.ButtonAnimation;
 import org.openjfx.ViewElements.LevelSelector.*;
 
 import java.io.FileInputStream;
@@ -81,23 +82,26 @@ public class ViewLevelSelector extends View {
             else levelType = LevelType.Enemy;
 
             String imageName;
+            ViewLevel viewLevel;
             switch (levelType) {
-                case Boss: imageName =
-                        "lvl_button_boss.png";
+                case Boss:
+                    imageName = "LevelSelector/lvl_button_boss.png";
+                    viewLevel = new ViewLevelBoss(new Pane(), viewManager, planet.getType());
                     break;
-                case Shop: imageName =
-                        "lvl_button_shop.png";
+                case Shop:
+                    imageName = "LevelSelector/lvl_button_shop.png";
+                    viewLevel = new ViewLevelShop(new Pane(), viewManager, planet.getType());
                     break;
-                case Enemy: imageName =
-                        "lvl_button.png";
+                case Enemy:
+                    imageName = "LevelSelector/lvl_button.png";
+                    viewLevel = new ViewLevelEnemy(new Pane(), viewManager, planet.getType());
                     break;
                 default:
                     imageName = "";
+                    viewLevel = new ViewLevel(new Pane(), viewManager, planet.getType());
                     System.out.println("Level type not found");
             }
 
-
-            ViewLevel viewLevel = new ViewLevel(new Pane(), viewManager, planet.getType(), levelType);
             ButtonAnimation levelButton = new ButtonAnimation(position,new double[]{56,56}, new Circle(10), imageName);
             LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene((int) levelButton.getPrefWidth(), position, viewLevel.getLevel());
 
@@ -113,6 +117,7 @@ public class ViewLevelSelector extends View {
             Button playButton = levelSelectorSubScene.getButton();
             playButton.setOnAction((playEvent) -> {
                 viewManager.renderScene(viewLevel);
+                planet.setCurrentLevel(viewLevel.getLevel());
             });
 
             addElement(levelSelectorSubScene);
