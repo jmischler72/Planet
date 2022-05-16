@@ -1,8 +1,13 @@
 package org.openjfx.Models.Level;
 
+import org.openjfx.Models.Enemy.Enemy;
 import org.openjfx.Models.PlanetType;
 
+import java.util.ArrayList;
+
 public class LevelEnemy extends Level{
+
+    private ArrayList<Enemy> enemy;
 
     public LevelEnemy(PlanetType planetType) {
         super(planetType);
@@ -10,6 +15,10 @@ public class LevelEnemy extends Level{
     }
 
     private void generateName() {
-        while (name == null) name = EnemyName.getRandomName().name();
+
+        while (name == null){
+            name = EnemyName.getRandomName().name();
+
+        }
     }
 }

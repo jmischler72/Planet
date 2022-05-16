@@ -16,7 +16,7 @@ public class ViewManager {
     private static Stage mainStage;
 
     public ViewManager(){
-        activeView = new ViewLevelSelector(new AnchorPane(), this);
+        activeView = new ViewLevelSelector(new Pane(), this);
         mainStage = new Stage();
         mainStage.setScene(activeView);
     }

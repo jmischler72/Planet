@@ -1,8 +1,13 @@
 package org.openjfx.Controllers;
 
-public class GameController {
+import javafx.scene.layout.AnchorPane;
+import org.openjfx.Views.ViewLevelSelector;
+import org.openjfx.Views.ViewManager;
 
-    public GameController(){
+public class GameController {
+    private ViewManager viewManager;
+
+    public GameController(ViewManager viewManager){
 
 
 

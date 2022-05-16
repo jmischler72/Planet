@@ -75,9 +75,8 @@ public class ViewLevelSelector extends View {
 
             positions.add(position);
 
-            ViewLevel viewLevel = new ViewLevel(new Pane(), viewManager, level);
             ButtonAnimation levelButton = new ButtonAnimation(position,new double[]{56,56}, new Circle(10), "lvl_button.png");
-            LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene((int) levelButton.getPrefWidth(), position, viewLevel.getLevel());
+            LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene((int) levelButton.getPrefWidth(), position, level);
 
             levelButton.setOnAction((event) -> {    // lambda expression
                 if (levelSelectorSubScene.isDisable()) {
@@ -90,8 +89,8 @@ public class ViewLevelSelector extends View {
 
             Button playButton = levelSelectorSubScene.getButton();
             playButton.setOnAction((playEvent) -> {
-                View levelView = new ViewLevel(new AnchorPane(), viewManager, level);
-                ViewTransition viewTransition = new ViewTransition(new AnchorPane(), viewManager, levelView, viewManager.getActivePane());
+                View levelView = new ViewLevelEnemy(new AnchorPane(), viewManager, level);
+                ViewTransition viewTransition = new ViewTransition(new AnchorPane(), viewManager, levelView, level);
                 viewManager.renderView(viewTransition);
             });
 
