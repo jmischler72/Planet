@@ -89,7 +89,7 @@ public class ViewLevelSelector extends View {
 
             Button playButton = levelSelectorSubScene.getButton();
             playButton.setOnAction((playEvent) -> {
-                View levelView = new ViewLevelEnemy(new AnchorPane(), viewManager, level);
+                ViewLevelEnemy levelView = new ViewLevelEnemy(new AnchorPane(), viewManager, level);
                 ViewTransition viewTransition = new ViewTransition(new AnchorPane(), viewManager, levelView, level);
                 viewManager.renderView(viewTransition);
             });
@@ -122,7 +122,6 @@ public class ViewLevelSelector extends View {
         }
 
     }
-
 
     private boolean arePositionsClose(double[] position1, double[] position2, int radius) {
         if (Math.abs(position1[0] - position2[0]) < radius) {
@@ -168,7 +167,6 @@ public class ViewLevelSelector extends View {
         addAnimation(timeline);
 
     }
-
 
     private double[] getRandomPositionInCircle(Circle circle) {
         Random rand = new Random();

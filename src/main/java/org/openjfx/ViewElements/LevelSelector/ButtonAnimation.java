@@ -45,7 +45,6 @@ public class ButtonAnimation extends Button {
             if (event.getButton().equals(MouseButton.PRIMARY)) {
                 colorAdjust.setBrightness(0);
                 setEffect(colorAdjust);
-
             }
         });
 

@@ -25,7 +25,6 @@ public class ViewTransition extends View {
     }
 
     private void render() {
-
         this.setBackgroundColor(Color.WHITE);
 
         Label levelName = new Label(level.getName());
@@ -41,8 +40,6 @@ public class ViewTransition extends View {
 
         levelName.setLayoutX(viewManager.getSize()[0] / 2 - levelName.getPrefWidth() / 2);
         levelName.setLayoutY(viewManager.getSize()[1] / 2 - levelName.getPrefHeight() / 2);
-
-
 
         this.addElement(levelName);
 
