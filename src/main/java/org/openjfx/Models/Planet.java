@@ -1,5 +1,6 @@
 package org.openjfx.Models;
 
+import org.openjfx.Models.Enemy.Enemy;
 import org.openjfx.Models.Level.Level;
 import org.openjfx.Models.Level.LevelEnemy;
 
@@ -19,7 +20,8 @@ public class Planet {
         fetchPlanetImage();
 
         for(int i=0; i< 6; i++){
-            Level level = new LevelEnemy(type);
+            Enemy enemy = new Enemy();
+            Level level = new LevelEnemy(enemy);
             levels.add(level);
         }
 

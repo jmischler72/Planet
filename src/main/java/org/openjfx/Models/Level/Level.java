@@ -8,10 +8,11 @@ public class Level {
     protected String name;
     protected String description;
     private double[] position;
-    private PlanetType planetType;
+    protected LevelType type;
 
-    public Level(PlanetType planetType){
-        this.planetType = planetType;
+    public Level(String name, LevelType type){
+        this.name = name;
+        this.type = type;
     }
 
     public String getName() {

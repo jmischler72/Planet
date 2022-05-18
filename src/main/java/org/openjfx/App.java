@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.openjfx.Models.Game;
 import org.openjfx.Views.ViewLevelSelector;
 import org.openjfx.Views.ViewManager;
 
@@ -22,7 +23,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        ViewManager viewManager = new ViewManager();
+        Game game = new Game();
+        ViewManager viewManager = new ViewManager(game);
         stage = viewManager.getMainStage();
         stage.show();
     }

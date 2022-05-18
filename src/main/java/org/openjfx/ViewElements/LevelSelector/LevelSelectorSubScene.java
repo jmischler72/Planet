@@ -54,7 +54,7 @@ public class LevelSelectorSubScene extends SubScene {
 
         double[] buttonPosition = new double[]{WIDTH/2 , HEIGHT - 60};
 
-        ButtonAnimation b = new ButtonAnimation(buttonPosition, new double[]{80,30}, null, "Infos_subscene_assets/fight_button.png");
+        ButtonSelector b = new ButtonSelector(buttonPosition, new double[]{80,30}, null, "Infos_subscene_assets/fight_button.png");
 
         button = b;
 

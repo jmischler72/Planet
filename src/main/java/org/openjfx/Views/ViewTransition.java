@@ -17,10 +17,10 @@ public class ViewTransition extends View {
     View nextView;
     Level level;
 
-    public ViewTransition(Pane pane, ViewManager viewManager, View nextView, Level level) {
+    public ViewTransition(Pane pane, ViewManager viewManager, View nextView) {
         super(pane, viewManager);
         this.nextView = nextView;
-        this.level = level;
+        this.level = viewManager.getGame().getCurrentLevel();
         render();
     }
 

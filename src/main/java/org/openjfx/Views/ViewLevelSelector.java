@@ -4,7 +4,6 @@ import javafx.animation.*;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.CacheHint;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.Shadow;
@@ -29,27 +28,19 @@ import static javafx.util.Duration.millis;
 
 public class ViewLevelSelector extends View {
     private Planet planet;
-    private ArrayList<ButtonAnimation> buttonList  = new ArrayList<ButtonAnimation>();
+    private ArrayList<ButtonSelector> buttonList  = new ArrayList<ButtonSelector>();
 
     public ViewLevelSelector(Pane pane, ViewManager viewManager) {
         super(pane, viewManager);
         setBackground("space.jpg");
-//        backgroundAnimation();
-        planet = new Planet();
+        planet = viewManager.getGame().getCurrentPlanet();
 
         Circle circlePlanet = renderCirclePlanet(planet);
         Circle shadow = renderCircleShadow(circlePlanet, 80, new int[]{0, 0});
-        renderShadowAnimation(circlePlanet,shadow);
+        renderShadowAnimation(shadow);
         addElement(shadow);
         addElement(circlePlanet);
         createButtons(circlePlanet);
-//
-//        LevelButton refresh = new LevelButton(new int[]{20,20});
-//        refresh.setOnAction((event) -> {    // lambda expression
-//            viewManager.renderView( new ViewLevelSelector( new AnchorPane(),viewManager));
-//        });
-
-//        addElement(refresh);
     }
 
     private void createButtons(Circle circlePlanet) {
@@ -75,7 +66,7 @@ public class ViewLevelSelector extends View {
 
             positions.add(position);
 
-            ButtonAnimation levelButton = new ButtonAnimation(position,new double[]{56,56}, new Circle(10), "lvl_button.png");
+            ButtonSelector levelButton = new ButtonSelector(position,new double[]{56,56}, new Circle(10), "lvl_button.png");
             LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene((int) levelButton.getPrefWidth(), position, level);
 
             levelButton.setOnAction((event) -> {    // lambda expression
@@ -89,8 +80,9 @@ public class ViewLevelSelector extends View {
 
             Button playButton = levelSelectorSubScene.getButton();
             playButton.setOnAction((playEvent) -> {
-                ViewLevelEnemy levelView = new ViewLevelEnemy(new AnchorPane(), viewManager, level);
-                ViewTransition viewTransition = new ViewTransition(new AnchorPane(), viewManager, levelView, level);
+                viewManager.getGame().setCurrentLevel(level);
+                ViewLevelEnemy levelView = new ViewLevelEnemy(new AnchorPane(), viewManager);
+                ViewTransition viewTransition = new ViewTransition(new AnchorPane(), viewManager, levelView);
                 viewManager.renderView(viewTransition);
             });
 
@@ -100,9 +92,9 @@ public class ViewLevelSelector extends View {
         }
     }
 
-    private void animationButtons(ButtonAnimation activeButton, boolean opened) {
+    private void animationButtons(ButtonSelector activeButton, boolean opened) {
 
-        for (ButtonAnimation button : buttonList) {
+        for (ButtonSelector button : buttonList) {
             FadeTransition fade = new FadeTransition();
             fade.setDuration(Duration.seconds(0.1));
             fade.setAutoReverse(true);
@@ -136,13 +128,12 @@ public class ViewLevelSelector extends View {
 
     /* Animation lag sur certains pc donc a voir pour l'ajouter */
 
-    private void renderShadowAnimation(Circle planet, Circle shadow) {
+    private void renderShadowAnimation(Circle shadow) {
         final Timeline timeline = new Timeline(new KeyFrame(Duration.ZERO, new EventHandler() {
             int movingStep = 0;
 
             @Override
             public void handle(Event event) {
-                System.out.println(movingStep);
                 movingStep++;
                 double angleAlpha = movingStep * (Math.PI / 30);
 
