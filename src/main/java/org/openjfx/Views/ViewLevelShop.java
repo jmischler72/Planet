@@ -5,21 +5,23 @@ import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import org.openjfx.Models.*;
+import org.openjfx.Models.Personnage.Player;
 import org.openjfx.ViewElements.ButtonAnimation;
 import org.openjfx.ViewElements.LevelShop.ItemIcon;
 
 import java.util.ArrayList;
 
-public class ViewLevelShop extends ViewLevel{
+public class ViewLevelShop extends View{
 
     private static final int ITEM_AREA_SIZE = 640;
     private static final int ICON_SIZE = 140;
     private ArrayList<ItemIcon> icons = new ArrayList<>();
+    private LevelShop level;
 
     public ViewLevelShop(Pane pane, ViewManager viewManager, PlanetType planetType) {
-        super(pane, viewManager, planetType);
+        super(pane, viewManager);
         setBackground("shop_background.png");
-        level = new LevelShop(planetType);
+        this.level = new LevelShop(planetType);
         createIcons();
     }
 
@@ -43,8 +45,13 @@ public class ViewLevelShop extends ViewLevel{
     private void setIconAction() {
         for (ItemIcon item : icons) {
             item.setOnAction((event) -> {
-
+                Player player = viewManager.getGame().getPlayer();
+                level.buyItem();
             });
         }
+    }
+
+    public LevelShop getLevel() {
+        return level;
     }
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public abstract class Player extends Personnage{
+
     private List<Item> Stuff;
 
     protected int nbPotionVie;

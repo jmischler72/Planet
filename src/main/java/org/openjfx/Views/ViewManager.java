@@ -117,4 +117,8 @@ public class ViewManager {
         sleeper.setOnSucceeded(event -> continuation.run());
         new Thread(sleeper).start();
     }
+
+    public Game getGame() {
+        return game;
+    }
 }

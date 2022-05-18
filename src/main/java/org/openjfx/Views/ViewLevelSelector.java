@@ -30,7 +30,7 @@ import static javafx.util.Duration.millis;
 public class ViewLevelSelector extends View {
     private Planet planet;
     private ArrayList<ButtonAnimation> buttonList  = new ArrayList<ButtonAnimation>();
-    private ArrayList<ViewLevel> levels = new ArrayList<ViewLevel>();
+    private ArrayList<View> levels = new ArrayList<>();
 
     public ViewLevelSelector(Pane pane, ViewManager viewManager) {
         super(pane, viewManager);
@@ -82,30 +82,34 @@ public class ViewLevelSelector extends View {
             else levelType = LevelType.Enemy;
 
             String imageName;
-            ViewLevel viewLevel;
+            LevelSelectorSubScene levelSelectorSubScene;
+            ButtonAnimation levelButton;
+            /*
             switch (levelType) {
                 case Boss:
                     imageName = "LevelSelector/lvl_button_boss.png";
-                    viewLevel = new ViewLevelBoss(new Pane(), viewManager, planet.getType());
+                    ViewLevelBoss viewLevelBoss = new ViewLevelBoss(new Pane(), viewManager, planet.getType());
+                    levelButton = new ButtonAnimation(position,new double[]{56,56}, new Circle(10), imageName);
+                    levelSelectorSubScene = new LevelSelectorSubScene((int) levelButton.getPrefWidth(), position, viewLevelBoss.getLevel());
                     break;
                 case Shop:
                     imageName = "LevelSelector/lvl_button_shop.png";
-                    viewLevel = new ViewLevelShop(new Pane(), viewManager, planet.getType());
+                    ViewLevelShop viewLevelShop = new ViewLevelShop(new Pane(), viewManager, planet.getType());
+                    levelButton = new ButtonAnimation(position,new double[]{56,56}, new Circle(10), imageName);
+                    levelSelectorSubScene = new LevelSelectorSubScene((int) levelButton.getPrefWidth(), position, viewLevelShop.getLevel());
                     break;
                 case Enemy:
                     imageName = "LevelSelector/lvl_button.png";
-                    viewLevel = new ViewLevelEnemy(new Pane(), viewManager, planet.getType());
+                    ViewLevelEnemy viewLevelEnemy = new ViewLevelEnemy(new Pane(), viewManager, planet.getType());
+                    levelButton = new ButtonAnimation(position,new double[]{56,56}, new Circle(10), imageName);
+                    levelSelectorSubScene = new LevelSelectorSubScene((int) levelButton.getPrefWidth(), position, viewLevelEnemy.getLevel());
                     break;
                 default:
                     imageName = "";
-                    viewLevel = new ViewLevel(new Pane(), viewManager, planet.getType());
                     System.out.println("Level type not found");
             }
 
-            ButtonAnimation levelButton = new ButtonAnimation(position,new double[]{56,56}, new Circle(10), imageName);
-            LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene((int) levelButton.getPrefWidth(), position, viewLevel.getLevel());
-
-            levelButton.setOnAction((event) -> {    // lambda expression
+            levelButton.setOnAction((event) -> {
                 if (levelSelectorSubScene.isDisable()) {
                     animationButtons(levelButton, false);
                 } else {
@@ -123,7 +127,7 @@ public class ViewLevelSelector extends View {
             addElement(levelSelectorSubScene);
             addElement(levelButton);
             levels.add(viewLevel);
-            buttonList.add(levelButton);
+            buttonList.add(levelButton);*/
         }
     }
 

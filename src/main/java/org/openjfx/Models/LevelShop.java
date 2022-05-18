@@ -24,4 +24,7 @@ public class LevelShop extends Level{
     public ArrayList<Item> getItems() {
         return items;
     }
+    public boolean buyItem() {
+        return  true;
+    }
 }
