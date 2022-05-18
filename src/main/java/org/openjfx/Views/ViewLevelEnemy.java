@@ -8,10 +8,16 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
+import org.openjfx.Models.Enemy.Enemy;
+import org.openjfx.Models.Level.Level;
+import org.openjfx.Models.Level.LevelEnemy;
 import org.openjfx.ViewElements.LevelEnemy.ButtonMenu;
 
 import java.util.Random;
@@ -22,17 +28,13 @@ public class ViewLevelEnemy extends View{
     private static final int WIDTH_ENEMY = 100;
     private static final int HEIGHT_ENEMY = 200;
 
-    private int X_ENEMY = viewManager.getSize()[0]/2+100;
+    private int X_ENEMY = viewManager.getSize()[0]/2;
     private int Y_ENEMY = viewManager.getSize()[1]/2-150;
 
 
     public ViewLevelEnemy(Pane pane, ViewManager viewManager) {
         super(pane, viewManager);
         setBackground("random_background.jpg");
-
-
-
-
 
 
         ButtonMenu b = new ButtonMenu( new double[]{80,viewManager.getSize()[1]-60}, new double[]{100,50}, null, "test");
@@ -51,20 +53,37 @@ public class ViewLevelEnemy extends View{
             viewManager.renderView(viewTransition);
         });
         addElement(b2);
+        LevelEnemy levelEnemy = (LevelEnemy) viewManager.getGame().getCurrentLevel();
 
-        Rectangle rectangle = animationEnemy(new double[]{X_ENEMY-100,Y_ENEMY});
-        Rectangle rectangle2 = animationEnemy(new double[]{X_ENEMY+100,Y_ENEMY});
-        renderEnemyAnimation(rectangle);
-        renderEnemyAnimation(rectangle2);
-        addElement(rectangle);
-        addElement(rectangle2);
+        for (int i = 0; i < levelEnemy.getEnemies().size(); i++) {
+            Rectangle rectangle = new Rectangle(WIDTH_ENEMY,HEIGHT_ENEMY);
+            rectangle.setX(X_ENEMY+i*(WIDTH_ENEMY+100));
+            rectangle.setY(Y_ENEMY);
+            Text text = new Text(100, 50, levelEnemy.getEnemies().get(i).getName());
+            text.setFill(Color.WHITE);
+            text.setFont(new Font(15));
+            text.setX(X_ENEMY+i*(WIDTH_ENEMY+100));
+            text.setY(Y_ENEMY-100);
+            renderEnemyAnimation(rectangle);
+            addElement(rectangle);
+            addElement(text);
+        }
+
+
+
+
+
+
+//
+//        Rectangle rectangle2 = animationEnemy(new double[]{X_ENEMY+100,Y_ENEMY});
+//        renderEnemyAnimation(rectangle);
+//        renderEnemyAnimation(rectangle2);
+//        addElement(rectangle);
+//        addElement(rectangle2);
     }
 
     public Rectangle animationEnemy(double[] position ){
         Rectangle rectangle = new Rectangle(WIDTH_ENEMY,HEIGHT_ENEMY);
-        rectangle.setX(position[0]);
-        rectangle.setY(position[1]);
-
         return rectangle;
     }
 
@@ -103,9 +122,9 @@ public class ViewLevelEnemy extends View{
 
                 TranslateTransition move = new TranslateTransition();
                 move.setNode(rectangle);
-                move.setToX(30 * Math.sin(angleAlpha));
-                move.setToY(30 * Math.cos(angleAlpha));
-                move.setDuration(millis(20));
+                move.setToX(20 * Math.sin(angleAlpha));
+                move.setToY(20 * Math.cos(angleAlpha));
+                move.setDuration(millis(50));
                 move.playFromStart();
 
                 // Reset after one orbit.
@@ -113,7 +132,7 @@ public class ViewLevelEnemy extends View{
                     movingStep = 0;
                 }
             }
-        }), new KeyFrame(millis(20)));
+        }), new KeyFrame(millis(50)));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
 

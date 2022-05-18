@@ -30,4 +30,8 @@ public class Level {
     public void setPosition(double[] position){
         this.position = position;
     }
+
+    protected void setName(String name){
+        this.name = name;
+    };
 }
