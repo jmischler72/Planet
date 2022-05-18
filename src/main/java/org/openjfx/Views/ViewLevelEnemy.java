@@ -42,6 +42,16 @@ public class ViewLevelEnemy extends View{
         });
         addElement(b);
 
+        ButtonMenu b2 = new ButtonMenu( new double[]{200,viewManager.getSize()[1]-60}, new double[]{100,50}, null, "quit");
+
+        b2.setOnAction((playEvent) -> {
+            viewManager.getGame().setCurrentLevel(null);
+            ViewLevelSelector levelView = new ViewLevelSelector(new AnchorPane(), viewManager);
+            ViewTransition viewTransition = new ViewTransition(new AnchorPane(), viewManager, levelView, "Select");
+            viewManager.renderView(viewTransition);
+        });
+        addElement(b2);
+
         Rectangle rectangle = animationEnemy(new double[]{X_ENEMY-100,Y_ENEMY});
         Rectangle rectangle2 = animationEnemy(new double[]{X_ENEMY+100,Y_ENEMY});
         renderEnemyAnimation(rectangle);

@@ -11,6 +11,7 @@ import java.util.Random;
 
 public class Planet {
 
+    private double size = 0;
     private PlanetType type;
     private File planet_file;
     private ArrayList<Level> levels = new ArrayList<Level>();
@@ -59,6 +60,14 @@ public class Planet {
 
     public ArrayList<Level> getLevels(){
         return levels;
+    }
+
+    public double getSize() {
+        return size;
+    }
+
+    public void setSize(double size) {
+        this.size = size;
     }
 
 

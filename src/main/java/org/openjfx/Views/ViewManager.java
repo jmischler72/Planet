@@ -21,9 +21,8 @@ public class ViewManager {
 
     public ViewManager(Game game ){
         this.game = game;
-        Enemy enemy = new Enemy();
-        game.setCurrentLevel(new LevelEnemy(enemy));
-        activeView = new ViewLevelEnemy(new Pane(), this);
+
+        activeView = new ViewLevelSelector(new Pane(), this);
         mainStage = new Stage();
         mainStage.setScene(activeView);
     }

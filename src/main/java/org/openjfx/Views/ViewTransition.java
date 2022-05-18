@@ -15,19 +15,20 @@ import java.io.FileNotFoundException;
 public class ViewTransition extends View {
 
     View nextView;
-    Level level;
+    String text;
 
-    public ViewTransition(Pane pane, ViewManager viewManager, View nextView) {
+    public ViewTransition(Pane pane, ViewManager viewManager, View nextView, String text) {
         super(pane, viewManager);
         this.nextView = nextView;
-        this.level = viewManager.getGame().getCurrentLevel();
+        this.text = text;
         render();
     }
 
     private void render() {
         this.setBackgroundColor(Color.WHITE);
 
-        Label levelName = new Label(level.getName());
+
+        Label levelName = new Label(text);
 
         try {
             levelName.setFont(Font.loadFont(new FileInputStream("src/main/resources/org/openjfx/Views/Fonts/Frozito_font.ttf"), 64));

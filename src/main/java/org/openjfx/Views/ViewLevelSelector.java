@@ -49,25 +49,27 @@ public class ViewLevelSelector extends View {
         for (Level level : planet.getLevels()) {
 
             Circle circleMarkers = new Circle(circlePlanet.getCenterX(), circlePlanet.getCenterY(), circlePlanet.getRadius() - 80);
-            double[] position = getRandomPositionInCircle(circleMarkers);
+            if (level.getPosition() ==null){
+                double[] position = getRandomPositionInCircle(circleMarkers);
 
-            boolean close = true;
-            do {
-                close = false;
-                for (double[] pos : positions) {
-                    if (arePositionsClose(pos, position, 40)) {
-                        position = getRandomPositionInCircle(circleMarkers);
-                        close = true;
+                boolean close = true;
+                do {
+                    close = false;
+                    for (double[] pos : positions) {
+                        if (arePositionsClose(pos, position, 40)) {
+                            position = getRandomPositionInCircle(circleMarkers);
+                            close = true;
+                        }
                     }
-                }
-            } while (close);
+                } while (close);
 
-            level.setPosition(position);
+                level.setPosition(position);
 
-            positions.add(position);
+                positions.add(position);
+            }
 
-            ButtonSelector levelButton = new ButtonSelector(position,new double[]{56,56}, new Circle(10), "lvl_button.png");
-            LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene((int) levelButton.getPrefWidth(), position, level);
+            ButtonSelector levelButton = new ButtonSelector(level.getPosition(),new double[]{56,56}, new Circle(10), "lvl_button.png");
+            LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene((int) levelButton.getPrefWidth(), level.getPosition(), level);
 
             levelButton.setOnAction((event) -> {    // lambda expression
                 if (levelSelectorSubScene.isDisable()) {
@@ -82,7 +84,7 @@ public class ViewLevelSelector extends View {
             playButton.setOnAction((playEvent) -> {
                 viewManager.getGame().setCurrentLevel(level);
                 ViewLevelEnemy levelView = new ViewLevelEnemy(new AnchorPane(), viewManager);
-                ViewTransition viewTransition = new ViewTransition(new AnchorPane(), viewManager, levelView);
+                ViewTransition viewTransition = new ViewTransition(new AnchorPane(), viewManager, levelView, level.getName());
                 viewManager.renderView(viewTransition);
             });
 
@@ -179,7 +181,14 @@ public class ViewLevelSelector extends View {
         Circle circle = new Circle();
         circle.setCenterX(getPane().getWidth() / 2);
         circle.setCenterY(getPane().getHeight() / 2);
-        circle.setRadius(getPane().getHeight() * 0.40);
+        if(planet.getSize() == 0){
+            Random random = new Random();
+            double size_planet = 0.30 + (double)random.nextInt(40-27)/100;
+            planet.setSize(size_planet);
+        }
+        System.out.println(planet.getSize());
+
+        circle.setRadius(getPane().getHeight() * planet.getSize());
         try {
             circle.setFill(new ImagePattern(
                     new Image(new FileInputStream(planet.getPlanet_file())), 0, 0, 1, 1, true
