@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.openjfx.Models.Game;
 import org.openjfx.Views.ViewManager;
 
 import java.io.IOException;
@@ -20,7 +21,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        ViewManager viewManager = new ViewManager();
+        Game game = new Game();
+        ViewManager viewManager = new ViewManager(game);
         stage = viewManager.getMainStage();
         stage.show();
     }

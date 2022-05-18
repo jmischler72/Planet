@@ -30,13 +30,13 @@ public class ViewManager {
     private static Stage mainStage;
     private Game game;
 
-    public ViewManager(){
+    public ViewManager(Game game){
         mainPane = new AnchorPane();
         activeScene = new ViewLevelSelector(mainPane, this);
         mainStage = new Stage();
         mainStage.setResizable(false);
         mainStage.setScene(activeScene);
-        game = new Game();
+        this.game = game;
     }
 
     public Stage getMainStage(){

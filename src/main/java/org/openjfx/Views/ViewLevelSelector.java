@@ -35,7 +35,6 @@ public class ViewLevelSelector extends View {
     public ViewLevelSelector(Pane pane, ViewManager viewManager) {
         super(pane, viewManager);
         setBackground("space.jpg");
-//        backgroundAnimation();
         planet = new Planet();
 
         Circle circlePlanet = renderCirclePlanet(planet);
