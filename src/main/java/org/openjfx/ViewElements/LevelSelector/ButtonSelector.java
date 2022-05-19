@@ -10,6 +10,7 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.shape.Shape;
+import org.openjfx.Models.Level.LevelType;
 import org.openjfx.ViewElements.ButtonAnimation;
 
 public class ButtonSelector extends ButtonAnimation {
@@ -19,14 +20,36 @@ public class ButtonSelector extends ButtonAnimation {
     public ButtonSelector(double[] position, double[]size, Shape shape, String imageName) {
         super(position, size, shape);
 
+        createBackground(imageName);
+    }
 
+    public ButtonSelector(double[] position, double[]size, Shape shape, LevelType type) {
+        super(position, size, shape);
+
+        String imageName;
+        switch (type) {
+            case Boss:
+                imageName = "lvl_button_boss.png";
+                break;
+            case Shop:
+                imageName = "lvl_button_shop.png";
+                break;
+            case Enemy:
+                imageName = "lvl_button.png";
+                break;
+            default:
+                imageName = "";
+                System.out.println("Level type not found");
+        }
+            
+        createBackground(imageName);
+    }
+
+    private void createBackground(String imageName) {
         Image image = new Image(getClass().getResource(imageName).toExternalForm());
         BackgroundImage background = new BackgroundImage(
                 image,
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
         setBackground(new Background(background));
     }
-
-
-
 }

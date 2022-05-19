@@ -1,8 +1,8 @@
 package org.openjfx.Models;
 
+import org.openjfx.Models.Enemy.Boss;
 import org.openjfx.Models.Enemy.Enemy;
-import org.openjfx.Models.Level.Level;
-import org.openjfx.Models.Level.LevelEnemy;
+import org.openjfx.Models.Level.*;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -21,8 +21,32 @@ public class Planet {
         fetchPlanetImage();
 
         for(int i=0; i< 6; i++){
-            Enemy enemy = new Enemy();
-            Level level = new LevelEnemy(enemy);
+
+            LevelType levelType;
+            Level level;
+
+            if((i+1)%5 == 0) levelType = LevelType.Shop;
+            else if((i+1)%6 == 0) levelType = LevelType.Boss;
+            else levelType = LevelType.Enemy;
+
+            switch (levelType) {
+                case Boss:
+                    Boss boss = new Boss();
+                    level = new LevelBoss(boss);
+                    break;
+                case Shop:
+                    level = new LevelShop();
+                    break;
+                case Enemy:
+                    Enemy enemy = new Enemy();
+                    level = new LevelEnemy(enemy);
+                    break;
+                default:
+                    Enemy defaultEnnemy = new Enemy();
+                    level = new LevelEnemy(defaultEnnemy);
+                    System.out.println("Level type not found");
+            }
+
             levels.add(level);
         }
 
