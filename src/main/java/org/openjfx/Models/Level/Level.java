@@ -22,7 +22,7 @@ public class Level {
     public String getDescription() {
         return description;
     }
-
+  
     public double[] getPosition(){
         return position;
     }
@@ -33,5 +33,9 @@ public class Level {
 
     public LevelType getType() {
         return type;
+    }
+  
+    protected void setName(String name){
+        this.name = name;
     }
 }

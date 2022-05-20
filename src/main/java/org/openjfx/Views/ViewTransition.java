@@ -2,6 +2,7 @@ package org.openjfx.Views;
 
 import javafx.animation.FadeTransition;
 import javafx.concurrent.Task;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -26,8 +27,6 @@ public class ViewTransition extends View {
 
     private void render() {
         this.setBackgroundColor(Color.WHITE);
-
-
         Label levelName = new Label(text);
 
         try {
@@ -36,13 +35,9 @@ public class ViewTransition extends View {
             e.printStackTrace();
         }
 
-        levelName.setPrefWidth(450);
-        levelName.setPrefHeight(50);
+        addElement(levelName);
 
-        levelName.setLayoutX(viewManager.getSize()[0] / 2 - levelName.getPrefWidth() / 2);
-        levelName.setLayoutY(viewManager.getSize()[1] / 2 - levelName.getPrefHeight() / 2);
 
-        this.addElement(levelName);
 
         viewManager.renderView(this);
 
