@@ -8,15 +8,12 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import org.openjfx.Models.Enemy.Enemy;
-import org.openjfx.Models.Level.Level;
 import org.openjfx.Models.Level.LevelEnemy;
 import org.openjfx.ViewElements.LevelEnemy.ButtonMenu;
 

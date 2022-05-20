@@ -1,4 +1,4 @@
-package org.openjfx.Models.Enemy;
+package org.openjfx.Models.Personage.Enemy;
 
 import java.util.Random;
 

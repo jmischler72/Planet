@@ -1,9 +1,9 @@
-package org.openjfx.Models.Enemy;
+package org.openjfx.Models.Personage.Enemy;
 
-public class Boss extends Enemy{
+public class Enemy {
     private String name;
 
-    public Boss(){
+    public Enemy(){
         name = generateName();
     }
 

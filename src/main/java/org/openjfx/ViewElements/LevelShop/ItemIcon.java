@@ -1,20 +1,18 @@
-package org.openjfx.Models.Level;
+package org.openjfx.ViewElements.LevelShop;
 
-import javafx.scene.control.Button;
 import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Shape;
-import org.openjfx.Models.Level.Item;
-import org.openjfx.Models.Level.ShopItems;
+import org.openjfx.Models.Shop.Item;
+import org.openjfx.Models.Shop.ShopItems;
 import org.openjfx.ViewElements.ButtonAnimation;
 
 public class ItemIcon extends ButtonAnimation {
 
     private ColorAdjust colorAdjust = new ColorAdjust();
-    private Item item;
+    private final Item item;
     //private ItemDescriptionSubScene descriptionSubScene;
 
     public ItemIcon(double[] position, double[]size, Shape shape, ShopItems itemName) {
@@ -58,5 +56,9 @@ public class ItemIcon extends ButtonAnimation {
             setEffect(null);
             this.getChildren().remove(descriptionSubScene);
         });*/
+    }
+
+    public Item getItem() {
+        return item;
     }
 }

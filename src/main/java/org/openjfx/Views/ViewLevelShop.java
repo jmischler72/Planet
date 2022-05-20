@@ -1,13 +1,18 @@
 package org.openjfx.Views;
 
-import javafx.scene.image.Image;
+import javafx.geometry.Pos;
+import javafx.scene.SubScene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Circle;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import org.openjfx.Models.*;
-import org.openjfx.Models.Level.Item;
-import org.openjfx.Models.Level.ItemIcon;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import org.openjfx.Models.Shop.Item;
+import org.openjfx.ViewElements.LevelShop.ItemIcon;
 import org.openjfx.Models.Level.LevelShop;
+import org.openjfx.Models.Personage.Player;
+import org.openjfx.ViewElements.LevelEnemy.ButtonMenu;
 
 import java.util.ArrayList;
 
@@ -17,23 +22,76 @@ public class ViewLevelShop extends View{
     private static final int ICON_SIZE = 140;
     private ArrayList<ItemIcon> icons = new ArrayList<>();
     private LevelShop level;
+    private ArrayList<Item> equipedItems = new ArrayList<>();
 
     public ViewLevelShop(Pane pane, ViewManager viewManager) {
         super(pane, viewManager);
         setBackground("shop_background.png");
         this.level = new LevelShop();
         createIcons();
+
+        ButtonMenu b2 = new ButtonMenu( new double[]{200,viewManager.getSize()[1]-60}, new double[]{100,50}, null, "quit");
+        b2.setOnAction((playEvent) -> {
+            viewManager.getGame().setCurrentLevel(null);
+            ViewLevelSelector levelView = new ViewLevelSelector(new AnchorPane(), viewManager);
+            ViewTransition viewTransition = new ViewTransition(new AnchorPane(), viewManager, levelView, "Select");
+            viewManager.renderView(viewTransition);
+        });
+        addElement(b2);
+
+        StackPane goldsStack = new StackPane();
+        Label golds = new Label(String.valueOf(viewManager.getGame().getPlayer().getGold()));
+        golds.setFont(new Font(30));
+
+        goldsStack.getChildren().add(golds);
+        goldsStack.setLayoutX(viewManager.getSize()[0] - 200);
+        goldsStack.setLayoutY(viewManager.getSize()[1] - 60);
+        addElement(goldsStack);
+
+        ButtonMenu b3 = new ButtonMenu( new double[]{viewManager.getSize()[0] - 100,viewManager.getSize()[1]-60}, new double[]{100,50}, null, "+ 100 g");
+        b3.setOnAction((playEvent) -> {
+            viewManager.getGame().getPlayer().addGolds(100);
+            refresh();
+        });
+        addElement(b3);
+
+        setIconAction();
+        fetchPlayerItems();
+        createItemEquipedRectangle();
     }
 
-    private void createRectangle() {
-        Rectangle rectangle = new Rectangle(ITEM_AREA_SIZE, ITEM_AREA_SIZE);
-        rectangle.setLayoutX(132);
-        rectangle.setLayoutY(132);
-        addElement(rectangle);
+    public void fetchPlayerItems() {
+        equipedItems = viewManager.getGame().getPlayer().getItems();
+    }
+
+    public void refresh() {
+        viewManager.renderView(new ViewLevelShop(new AnchorPane(), viewManager));
+    }
+
+    public void createItemEquipedRectangle() {
+        Rectangle s = new Rectangle(400, 500, Color.LIGHTGRAY);
+        StackPane stack = new StackPane();
+
+        Text title = new Text("Equipement actuel : ");
+        title.setFont(new Font(30));
+        stack.setAlignment(title, Pos.TOP_CENTER);
+
+        String t = "";
+        for(Item i : equipedItems) {
+            t += i.getName() + "\n";
+        }
+
+        Text text = new Text(t);
+        text.setFont(new Font(20));
+
+        stack.getChildren().addAll(s, title, text);
+        stack.setLayoutX(viewManager.getSize()[0] - 500);
+        stack.setLayoutY(viewManager.getSize()[1] - 700);
+        addElement(stack);
     }
 
     private void createIcons() {
-        ArrayList<Item> items = ((LevelShop) level).getItems();
+        ArrayList<Item> items = level.getItems();
         for(int i = 0; i < items.size(); i++) {
             double[] position = new double[] {(216 + i*(ICON_SIZE + 46)), 216};
             ItemIcon icon = new ItemIcon(position, new double[] {ICON_SIZE, ICON_SIZE}, new Rectangle(ICON_SIZE, ICON_SIZE), items.get(i).getName());
@@ -46,7 +104,13 @@ public class ViewLevelShop extends View{
         for (ItemIcon item : icons) {
             item.setOnAction((event) -> {
                 Player player = viewManager.getGame().getPlayer();
-                level.buyItem();
+                Boolean isSuccess = player.buy(item.getItem());
+                if(!isSuccess) {
+                    System.out.println("Vous n'avez pas assez d'argent !");
+                    return;
+                }
+
+                refresh();
             });
         }
     }

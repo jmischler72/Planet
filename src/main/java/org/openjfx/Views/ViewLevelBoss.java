@@ -1,7 +1,7 @@
 package org.openjfx.Views;
 
 import javafx.scene.layout.Pane;
-import org.openjfx.Models.Enemy.Boss;
+import org.openjfx.Models.Personage.Enemy.Boss;
 import org.openjfx.Models.Level.LevelBoss;
 
 public class ViewLevelBoss extends View {

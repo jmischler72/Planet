@@ -1,4 +1,4 @@
-package org.openjfx.Models.Weapon;
+package org.openjfx.Models.Shop;
 
 public class Weapon {
     private int damage;

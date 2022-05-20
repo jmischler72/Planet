@@ -1,7 +1,6 @@
 package org.openjfx.Models.Level;
 
-import org.openjfx.Models.Enemy.Enemy;
-import org.openjfx.Models.PlanetType;
+import org.openjfx.Models.Personage.Enemy.Enemy;
 
 import java.util.ArrayList;
 import java.util.Random;

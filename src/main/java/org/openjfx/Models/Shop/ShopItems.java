@@ -1,4 +1,4 @@
-package org.openjfx.Models.Level;
+package org.openjfx.Models.Shop;
 
 public enum ShopItems {
     Sword,

@@ -1,9 +1,5 @@
 package org.openjfx.Models.Level;
 
-import org.openjfx.Models.PlanetType;
-
-import java.util.Random;
-
 public class Level {
     protected String name;
     protected String description;
