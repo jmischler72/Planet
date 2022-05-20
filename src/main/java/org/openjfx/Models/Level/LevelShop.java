@@ -2,9 +2,27 @@ package org.openjfx.Models.Level;
 
 import org.openjfx.Models.PlanetType;
 
-public class LevelShop extends Level{
+import java.util.ArrayList;
 
-    public LevelShop(PlanetType planetType) {
-        super("Marchand quelconque", LevelType.Shop);
+public class LevelShop extends Level {
+
+    private ArrayList<Item> items = new ArrayList<Item>();
+
+    public LevelShop() {
+        super("Marchand", LevelType.Shop);
+        fetchItems();
+    }
+
+    private void fetchItems() {
+        for(ShopItems item:ShopItems.values()) {
+            items.add(new Item(item));
+        }
+    }
+
+    public ArrayList<Item> getItems() {
+        return items;
+    }
+    public boolean buyItem() {
+        return  true;
     }
 }

@@ -68,7 +68,7 @@ public class ViewLevelSelector extends View {
                 positions.add(position);
             }
 
-            ButtonSelector levelButton = new ButtonSelector(level.getPosition(),new double[]{56,56}, new Circle(10), "lvl_button.png");
+            ButtonSelector levelButton = new ButtonSelector(level.getPosition(),new double[]{56,56}, new Circle(10), level.getType());
             LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene((int) levelButton.getPrefWidth(), level.getPosition(), level);
 
             levelButton.setOnAction((event) -> {    // lambda expression
@@ -83,8 +83,23 @@ public class ViewLevelSelector extends View {
             Button playButton = levelSelectorSubScene.getButton();
             playButton.setOnAction((playEvent) -> {
                 viewManager.getGame().setCurrentLevel(level);
-                ViewLevelEnemy levelView = new ViewLevelEnemy(new AnchorPane(), viewManager);
-                ViewTransition viewTransition = new ViewTransition(new AnchorPane(), viewManager, levelView, level.getName());
+
+                ViewTransition viewTransition = null;
+                switch (level.getType()) {
+                    case Boss:
+                        ViewLevelBoss levelViewBoss = new ViewLevelBoss(new AnchorPane(), viewManager);
+                        viewTransition = new ViewTransition(new AnchorPane(), viewManager, levelViewBoss, level.getName());
+                        break;
+                    case Shop:
+                        ViewLevelShop levelViewShop = new ViewLevelShop(new AnchorPane(), viewManager);
+                        viewTransition = new ViewTransition(new AnchorPane(), viewManager, levelViewShop, level.getName());
+                        break;
+                    case Enemy:
+                        ViewLevelEnemy levelViewEnnemy = new ViewLevelEnemy(new AnchorPane(), viewManager);
+                        viewTransition = new ViewTransition(new AnchorPane(), viewManager, levelViewEnnemy, level.getName());
+                        break;
+                }
+
                 viewManager.renderView(viewTransition);
             });
 

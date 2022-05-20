@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.SubScene;
 import javafx.scene.control.Button;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -13,6 +14,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.openjfx.Models.Level.Level;
+import org.openjfx.Models.Level.LevelType;
 
 public class LevelSelectorSubScene extends SubScene {
 
@@ -54,16 +56,40 @@ public class LevelSelectorSubScene extends SubScene {
 
         double[] buttonPosition = new double[]{WIDTH/2 , HEIGHT - 60};
 
-        ButtonSelector b = new ButtonSelector(buttonPosition, new double[]{80,30}, null, "Infos_subscene_assets/fight_button.png");
-
+        ButtonSelector b = createButton(level, buttonPosition);
         button = b;
 
         addElement(stack);
         addElement(b);
     }
 
-    public void setButtonAction(EventHandler eventHandler) {
-        button.setOnAction(eventHandler);
+    private ButtonSelector createButton(Level level, double[] buttonPosition) {
+
+        if(level.getType() == LevelType.Shop) {
+            ButtonSelector b = new ButtonSelector(buttonPosition, new double[]{80,40}, null, "Infos_subscene_assets/shop_button_close.png");
+
+            b.setOnMouseEntered(event -> {
+                b.setEffect(new DropShadow());
+                Image image = new Image(getClass().getResource("Infos_subscene_assets/shop_button_open.png").toExternalForm());
+                BackgroundImage background = new BackgroundImage(
+                        image,
+                        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
+                b.setBackground(new Background(background));
+            });
+
+            b.setOnMouseExited(event -> {
+                b.setEffect(null);
+                Image image = new Image(getClass().getResource("Infos_subscene_assets/shop_button_close.png").toExternalForm());
+                BackgroundImage background = new BackgroundImage(
+                        image,
+                        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
+                b.setBackground(new Background(background));
+            });
+
+            return b;
+        }
+
+        return new ButtonSelector(buttonPosition, new double[]{80,40}, null, "Infos_subscene_assets/fight_button.png");
     }
 
     public Button getButton() {
