@@ -1,25 +1,29 @@
 package org.openjfx.ViewElements.LevelShop;
 
+import javafx.scene.Node;
+import javafx.scene.SubScene;
+import javafx.scene.control.Tooltip;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.util.Duration;
 import org.openjfx.Models.Shop.Item;
 import org.openjfx.Models.Shop.ShopItems;
 import org.openjfx.ViewElements.ButtonAnimation;
 
 public class ItemIcon extends ButtonAnimation {
 
-    private ColorAdjust colorAdjust = new ColorAdjust();
     private final Item item;
-    //private ItemDescriptionSubScene descriptionSubScene;
+    private Tooltip description;
 
     public ItemIcon(double[] position, double[]size, Shape shape, ShopItems itemName) {
         super(position, size, shape);
 
         item = new Item(itemName);
-        initButtonListeners();
         Image image = new Image(ItemIcon.class.getResource("item_border.png").toExternalForm());
         BackgroundImage background = new BackgroundImage(
                 image,
@@ -27,38 +31,23 @@ public class ItemIcon extends ButtonAnimation {
         setBackground(new Background(background));
         setText(item.getName().toString());
 
-        //descriptionSubScene = new ItemDescriptionSubScene(this, item);
+        createTooltip();
     }
 
-    private void initButtonListeners() {
-        setOnMousePressed(event -> {
-            if (event.getButton().equals(MouseButton.PRIMARY)) {
-                colorAdjust.setBrightness(-0.5);
-                setEffect(colorAdjust);
-            }
-        });
-
-        setOnMouseReleased(event -> {
-            if (event.getButton().equals(MouseButton.PRIMARY)) {
-                colorAdjust.setBrightness(0);
-                setEffect(colorAdjust);
-
-            }
-        });
-
-        /*
-        setOnMouseEntered(event -> {
-            setEffect(new DropShadow());
-            this.getChildren().add(descriptionSubScene);
-        });
-
-        setOnMouseExited(event -> {
-            setEffect(null);
-            this.getChildren().remove(descriptionSubScene);
-        });*/
+    private void createTooltip() {
+        description = new Tooltip();
+        description.setOpacity(0.7);
+        description.setShowDelay(new Duration(0.6));
+        description.setHideDelay(new Duration(0.8));
+        description.setPrefSize(200, 100);
+        setTooltip(description);
     }
 
     public Item getItem() {
         return item;
+    }
+
+    public Tooltip getDescription() {
+        return description;
     }
 }

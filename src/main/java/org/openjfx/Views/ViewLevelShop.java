@@ -2,12 +2,15 @@ package org.openjfx.Views;
 
 import javafx.geometry.Pos;
 import javafx.scene.SubScene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.stage.Popup;
 import org.openjfx.Models.Shop.Item;
 import org.openjfx.ViewElements.LevelShop.ItemIcon;
 import org.openjfx.Models.Level.LevelShop;
@@ -58,6 +61,16 @@ public class ViewLevelShop extends View{
         setIconAction();
         fetchPlayerItems();
         createItemEquipedRectangle();
+        setItemToolTipData();
+    }
+
+    protected void setItemToolTipData() {
+        for(ItemIcon item : icons) {
+            String t =
+                    "Nom :" + item.getItem().getName() +
+                    "\nCout : " + item.getItem().getCost();
+            item.getDescription().setText(t);
+        }
     }
 
     public void fetchPlayerItems() {
