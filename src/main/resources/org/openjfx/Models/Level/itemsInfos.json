@@ -1,13 +1,19 @@
 {
-  "Epée rouillée": {
-    "Cost" : 20,
-    "Damage": 10,
-    "Critical": 0
+  "Armors": {
+
   },
 
-  "Baton d'apprenti": {
-    "Cost" : 20,
-    "Power": 10,
-    "Critical": 0
+  "Weapons": {
+    "Epée rouillée": {
+      "Cost" : 20,
+      "Damage": 10,
+      "Critical": 0
+    },
+
+    "Baton d'apprenti": {
+      "Cost" : 20,
+      "Damage": 10,
+      "Critical": 0
+    }
   }
 }

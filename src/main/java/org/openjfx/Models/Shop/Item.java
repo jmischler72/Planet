@@ -1,20 +1,20 @@
 package org.openjfx.Models.Shop;
 
-public class Item {
+public abstract class Item {
 
-    private ShopItems name;
-    private int cost;
+    private String name;
+    private long cost;
 
-    public Item(ShopItems itemName) {
+    public Item(String itemName, long cost) {
         name = itemName;
-        cost = 200;
+        this.cost = cost;
     }
 
-    public ShopItems getName() {
+    public String getName() {
         return name;
     }
 
-    public int getCost() {
+    public long getCost() {
         return cost;
     }
 }

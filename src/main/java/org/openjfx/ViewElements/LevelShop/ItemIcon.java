@@ -20,10 +20,10 @@ public class ItemIcon extends ButtonAnimation {
     private final Item item;
     private Tooltip description;
 
-    public ItemIcon(double[] position, double[]size, Shape shape, ShopItems itemName) {
+    public ItemIcon(double[] position, double[]size, Shape shape, Item item) {
         super(position, size, shape);
 
-        item = new Item(itemName);
+        this.item = item;
         Image image = new Image(ItemIcon.class.getResource("item_border.png").toExternalForm());
         BackgroundImage background = new BackgroundImage(
                 image,

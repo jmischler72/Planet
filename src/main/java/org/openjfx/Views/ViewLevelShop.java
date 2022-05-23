@@ -1,11 +1,14 @@
 package org.openjfx.Views;
 
+import javafx.concurrent.Task;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.SubScene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -107,7 +110,7 @@ public class ViewLevelShop extends View{
         ArrayList<Item> items = level.getItems();
         for(int i = 0; i < items.size(); i++) {
             double[] position = new double[] {(216 + i*(ICON_SIZE + 46)), 216};
-            ItemIcon icon = new ItemIcon(position, new double[] {ICON_SIZE, ICON_SIZE}, new Rectangle(ICON_SIZE, ICON_SIZE), items.get(i).getName());
+            ItemIcon icon = new ItemIcon(position, new double[] {ICON_SIZE, ICON_SIZE}, new Rectangle(ICON_SIZE, ICON_SIZE), items.get(i));
             icons.add(icon);
             addElement(icon);
         }
@@ -119,7 +122,19 @@ public class ViewLevelShop extends View{
                 Player player = viewManager.getGame().getPlayer();
                 Boolean isSuccess = player.buy(item.getItem());
                 if(!isSuccess) {
-                    System.out.println("Vous n'avez pas assez d'argent !");
+                    Label label = new Label("Vous n'avez pas assez d'argent !");
+                    label.setFont(new Font(15));
+                    Popup popup = new Popup();
+                    label.setBackground(new Background(
+                            new BackgroundFill(Color.RED, new CornerRadii(20), Insets.EMPTY)
+                    ));
+                    popup.getContent().add(label);
+                    label.setMinWidth(97);
+                    label.setMinHeight(63);
+                    popup.show(viewManager.getMainStage());
+                    delay(1000, () -> {
+                        popup.hide();
+                    });
                     return;
                 }
 
@@ -130,5 +145,18 @@ public class ViewLevelShop extends View{
 
     public LevelShop getLevel() {
         return level;
+    }
+
+    public static void delay(long millis, Runnable continuation) {
+        Task<Void> sleeper = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try { Thread.sleep(millis); }
+                catch (InterruptedException e) { }
+                return null;
+            }
+        };
+        sleeper.setOnSucceeded(event -> continuation.run());
+        new Thread(sleeper).start();
     }
 }

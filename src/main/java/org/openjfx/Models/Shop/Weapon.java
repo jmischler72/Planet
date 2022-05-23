@@ -1,14 +1,14 @@
 package org.openjfx.Models.Shop;
 
-public class Weapon {
-    private int damage;
+public class Weapon extends Item{
+    private long damage;
 
-    public Weapon(int damage){
+    public Weapon(long damage, String itemName, long cost){
+        super(itemName, cost);
         this.damage = damage;
-
     }
 
-    public int getDamage() {
+    public long getDamage() {
         return damage;
     }
 
