@@ -12,7 +12,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 import org.openjfx.Models.Shop.Item;
-import org.openjfx.Models.Shop.ShopItems;
 import org.openjfx.ViewElements.ButtonAnimation;
 
 public class ItemIcon extends ButtonAnimation {

@@ -14,12 +14,17 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Popup;
+import org.openjfx.Models.Shop.Armor;
 import org.openjfx.Models.Shop.Item;
+import org.openjfx.Models.Shop.Weapon;
 import org.openjfx.ViewElements.LevelShop.ItemIcon;
 import org.openjfx.Models.Level.LevelShop;
 import org.openjfx.Models.Personage.Player;
 import org.openjfx.ViewElements.LevelEnemy.ButtonMenu;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 public class ViewLevelShop extends View{
@@ -34,6 +39,7 @@ public class ViewLevelShop extends View{
         super(pane, viewManager);
         setBackground("shop_background.png");
         this.level = new LevelShop();
+        fetchPlayerItems();
         createIcons();
 
         ButtonMenu b2 = new ButtonMenu( new double[]{200,viewManager.getSize()[1]-60}, new double[]{100,50}, null, "quit");
@@ -62,16 +68,27 @@ public class ViewLevelShop extends View{
         addElement(b3);
 
         setIconAction();
-        fetchPlayerItems();
         createItemEquipedRectangle();
         setItemToolTipData();
     }
 
     protected void setItemToolTipData() {
         for(ItemIcon item : icons) {
-            String t =
-                    "Nom :" + item.getItem().getName() +
-                    "\nCout : " + item.getItem().getCost();
+            String t = "";
+            switch (item.getItem().getType()) {
+                case Weapon:
+                    Weapon w = (Weapon) item.getItem();
+                    t = "Nom :" + w.getName() +
+                            "\nDegats :" + w.getDamage() +
+                            "\nCout : " + w.getCost();
+                    break;
+                case Armor:
+                    Armor a = (Armor) item.getItem();
+                    t = "Nom :" + a.getName() +
+                            "\nCout : " + a.getCost();
+                    break;
+            }
+
             item.getDescription().setText(t);
         }
     }
@@ -109,6 +126,9 @@ public class ViewLevelShop extends View{
     private void createIcons() {
         ArrayList<Item> items = level.getItems();
         for(int i = 0; i < items.size(); i++) {
+            Item item = items.get(i);
+            if(equipedItems.stream().anyMatch(e -> e.getId() == item.getId())) continue;
+
             double[] position = new double[] {(216 + i*(ICON_SIZE + 46)), 216};
             ItemIcon icon = new ItemIcon(position, new double[] {ICON_SIZE, ICON_SIZE}, new Rectangle(ICON_SIZE, ICON_SIZE), items.get(i));
             icons.add(icon);

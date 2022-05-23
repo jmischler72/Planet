@@ -41,7 +41,7 @@ public class LevelShop extends Level {
             Map.Entry weapon = weaponItr.next();
             JSONObject values = (JSONObject) weapon.getValue();
             items.add(
-                    new Weapon((long) values.get("Damage"), (String) weapon.getKey(), (long) values.get("Cost"))
+                    new Weapon((long) values.get("Damage"), (String) weapon.getKey(), (long) values.get("Cost"), (long) values.get("ID"))
             );
         }
 

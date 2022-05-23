@@ -5,12 +5,14 @@
 
   "Weapons": {
     "Epée rouillée": {
+      "ID": 1,
       "Cost" : 20,
       "Damage": 10,
       "Critical": 0
     },
 
     "Baton d'apprenti": {
+      "ID": 2,
       "Cost" : 20,
       "Damage": 10,
       "Critical": 0
