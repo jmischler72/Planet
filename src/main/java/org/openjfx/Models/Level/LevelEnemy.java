@@ -1,6 +1,8 @@
 package org.openjfx.Models.Level;
 
+import org.openjfx.Models.Enemy.Alien;
 import org.openjfx.Models.Enemy.Enemy;
+import org.openjfx.Models.Enemy.Octopus;
 import org.openjfx.Models.PlanetType;
 
 import java.util.ArrayList;
@@ -10,7 +12,7 @@ public class LevelEnemy extends Level{
 
     private ArrayList<Enemy> enemies;
 
-    public LevelEnemy(Enemy enemy) {
+    public LevelEnemy() {
         super("Enemy", LevelType.Enemy);
         enemies = new ArrayList<Enemy>();
         generateEnemies();
@@ -22,7 +24,14 @@ public class LevelEnemy extends Level{
         Random random = new Random();
         for(int i = 0; i< random.nextInt(3)+1; i++ ){
             System.out.println(i);
-            enemies.add(new Enemy());
+            switch (random.nextInt(2)){
+                case 0:
+                    enemies.add(new Alien());
+                    break;
+                case 1:
+                    enemies.add(new Octopus());
+                    break;
+            }
         }
     }
 

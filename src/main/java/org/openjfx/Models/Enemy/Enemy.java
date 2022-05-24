@@ -3,16 +3,19 @@ package org.openjfx.Models.Enemy;
 public class Enemy {
     private String name;
 
-    public Enemy(){
-        name = generateName();
-    }
+    private EnemyType type;
 
-    private String generateName() {
-        return EnemyName.getRandomName().name();
-
+    public Enemy(String name, EnemyType type){
+        this.name = name;
+        this.type = type;
     }
 
     public String getName() {
         return name;
     }
+
+    public EnemyType getType() {
+        return type;
+    }
+
 }

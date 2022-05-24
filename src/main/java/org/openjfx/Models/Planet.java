@@ -38,12 +38,10 @@ public class Planet {
                     level = new LevelShop();
                     break;
                 case Enemy:
-                    Enemy enemy = new Enemy();
-                    level = new LevelEnemy(enemy);
+                    level = new LevelEnemy();
                     break;
                 default:
-                    Enemy defaultEnnemy = new Enemy();
-                    level = new LevelEnemy(defaultEnnemy);
+                    level = null;
                     System.out.println("Level type not found");
             }
 

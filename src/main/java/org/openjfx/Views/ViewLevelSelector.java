@@ -85,20 +85,21 @@ public class ViewLevelSelector extends View {
                 viewManager.getGame().setCurrentLevel(level);
 
                 ViewTransition viewTransition = null;
+                View levelView = null;
                 switch (level.getType()) {
                     case Boss:
-                        ViewLevelBoss levelViewBoss = new ViewLevelBoss(new AnchorPane(), viewManager);
-                        viewTransition = new ViewTransition(new AnchorPane(), viewManager, levelViewBoss, level.getName());
+                        levelView = new ViewLevelBoss(new AnchorPane(), viewManager);
                         break;
                     case Shop:
-                        ViewLevelShop levelViewShop = new ViewLevelShop(new AnchorPane(), viewManager);
-                        viewTransition = new ViewTransition(new AnchorPane(), viewManager, levelViewShop, level.getName());
+                        levelView = new ViewLevelShop(new AnchorPane(), viewManager);
                         break;
                     case Enemy:
-                        ViewLevelEnemy levelViewEnnemy = new ViewLevelEnemy(new AnchorPane(), viewManager);
-                        viewTransition = new ViewTransition(new AnchorPane(), viewManager, levelViewEnnemy, level.getName());
+                        levelView = new ViewLevelEnemy(new AnchorPane(), viewManager);
                         break;
                 }
+
+                viewTransition = new ViewTransition(new AnchorPane(), viewManager, levelView, level.getName());
+
 
                 viewManager.renderView(viewTransition);
             });

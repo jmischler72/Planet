@@ -4,6 +4,10 @@ import javafx.animation.FadeTransition;
 import javafx.concurrent.Task;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -26,8 +30,10 @@ public class ViewTransition extends View {
     }
 
     private void render() {
-        this.setBackgroundColor(Color.WHITE);
+        this.setBackgroundColor(Color.BLACK);
+
         Label levelName = new Label(text);
+        levelName.setTextFill(Color.LIGHTYELLOW);
 
         try {
             levelName.setFont(Font.loadFont(new FileInputStream("src/main/resources/org/openjfx/Views/Fonts/Frozito_font.ttf"), 64));
