@@ -6,12 +6,16 @@ public abstract class Item {
     private String name;
     private long cost;
     private ItemType type;
+    private long pv;
+    private long resource;
 
-    public Item(String itemName, long cost, ItemType type, long id) {
+    public Item(String itemName, long cost, ItemType type, long id, long pv, long resource) {
         this.id = id;
         name = itemName;
         this.cost = cost;
         this.type = type;
+        this.pv = pv;
+        this.resource = resource;
     }
 
     public long getId() {
@@ -28,5 +32,13 @@ public abstract class Item {
 
     public ItemType getType() {
         return type;
+    }
+
+    public long getPv() {
+        return pv;
+    }
+
+    public long getResource() {
+        return resource;
     }
 }

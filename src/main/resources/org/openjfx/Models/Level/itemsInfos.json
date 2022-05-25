@@ -1,21 +1,119 @@
 {
   "Armors": {
-
+    "Casque en cuir": {
+      "ID": 0,
+      "PV": 10,
+      "Resource": 10,
+      "Cost": 20,
+      "Armor": 10,
+      "Esquive": 0
+    },
+    "Plastron en bois": {
+      "ID": 1,
+      "PV": 10,
+      "Resource": 10,
+      "Cost": 20,
+      "Armor": 10,
+      "Esquive": 0
+    }
   },
 
   "Weapons": {
     "Epée rouillée": {
-      "ID": 1,
-      "Cost" : 20,
+      "ID": 100,
+      "PV": 10,
+      "Resource": 10,
+      "Cost": 20,
       "Damage": 10,
-      "Critical": 0
+      "Critique": 0
     },
-
     "Baton d'apprenti": {
-      "ID": 2,
-      "Cost" : 20,
+      "ID": 101,
+      "PV": 10,
+      "Resource": 10,
+      "Cost": 20,
       "Damage": 10,
-      "Critical": 0
+      "Critique": 0
+    },
+    "Massue": {
+      "ID": 102,
+      "PV": 10,
+      "Resource": 10,
+      "Cost": 30,
+      "Damage": 20,
+      "Critique": 0
+    },
+    "Fourche": {
+      "ID": 103,
+      "PV": 10,
+      "Resource": 10,
+      "Cost": 30,
+      "Damage": 20,
+      "Critique": 0
+    },
+    "Massue1": {
+      "ID": 104,
+      "PV": 10,
+      "Resource": 10,
+      "Cost": 30,
+      "Damage": 20,
+      "Critique": 0
+    },
+    "Massue3": {
+      "ID": 105,
+      "PV": 10,
+      "Resource": 10,
+      "Cost": 30,
+      "Damage": 20,
+      "Critique": 0
+    },
+    "Massue7": {
+      "ID": 106,
+      "PV": 10,
+      "Resource": 10,
+      "Cost": 30,
+      "Damage": 20,
+      "Critique": 0
+    },
+    "Massue5": {
+      "ID": 107,
+      "PV": 10,
+      "Resource": 10,
+      "Cost": 30,
+      "Damage": 20,
+      "Critique": 0
+    },
+    "Massue9": {
+      "ID": 108,
+      "PV": 10,
+      "Resource": 10,
+      "Cost": 30,
+      "Damage": 20,
+      "Critique": 0
+    },
+    "Gros baton": {
+      "ID": 102,
+      "PV": 10,
+      "Resource": 10,
+      "Cost": 30,
+      "Damage": 20,
+      "Critique": 0
+    },
+    "Gourdin": {
+      "ID": 102,
+      "PV": 10,
+      "Resource": 10,
+      "Cost": 30,
+      "Damage": 20,
+      "Critique": 0
+    },
+    "Boum": {
+      "ID": 102,
+      "PV": 10,
+      "Resource": 10,
+      "Cost": 30,
+      "Damage": 20,
+      "Critique": 0
     }
   }
 }

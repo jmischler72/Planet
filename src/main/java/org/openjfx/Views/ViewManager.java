@@ -18,11 +18,11 @@ public class ViewManager {
 
     public ViewManager(Game game ){
         this.game = game;
-//       game.setCurrentLevel(new LevelShop());
+        game.setCurrentLevel(new LevelShop());
 
-//       activeView = new ViewLevelShop(new Pane(), this);
+        activeView = new ViewLevelShop(new Pane(), this);
 
-        activeView = new ViewLevelSelector(new Pane(), this);
+        //activeView = new ViewLevelSelector(new Pane(), this);
         mainStage = new Stage();
         mainStage.setScene(activeView);
     }

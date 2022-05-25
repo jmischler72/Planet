@@ -1,17 +1,17 @@
 package org.openjfx.Models.Level;
 
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.openjfx.Models.Shop.Armor;
 import org.openjfx.Models.Shop.Item;
+import org.openjfx.Models.Shop.Weapon;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
-
-import org.json.simple.*;
-import org.openjfx.Models.Shop.Weapon;
 
 public class LevelShop extends Level {
 
@@ -41,7 +41,13 @@ public class LevelShop extends Level {
             Map.Entry weapon = weaponItr.next();
             JSONObject values = (JSONObject) weapon.getValue();
             items.add(
-                    new Weapon((long) values.get("Damage"), (String) weapon.getKey(), (long) values.get("Cost"), (long) values.get("ID"))
+                    new Weapon((long) values.get("Damage"),
+                            (String) weapon.getKey(),//Name
+                            (long) values.get("Cost"),
+                            (long) values.get("ID"),
+                            (long) values.get("PV"),
+                            (long) values.get("Critique"),
+                            (long) values.get("Resource"))
             );
         }
 
@@ -51,10 +57,15 @@ public class LevelShop extends Level {
         while (armorItr.hasNext()) {
             Map.Entry armor = armorItr.next();
             JSONObject values = (JSONObject) armor.getValue();
-            /*
             items.add(
-                    new Weapon((long) values.get("Damage"), (String) weapon.getKey(), (long) values.get("Cost"))
-            );*/
+                    new Armor((String) armor.getKey(),//Name
+                            (long) values.get("Cost"),
+                            (long) values.get("ID"),
+                            (long) values.get("PV"),
+                            (long) values.get("Armor"),
+                            (long) values.get("Esquive"),
+                            (long) values.get("Resource"))
+            );
         }
     }
 

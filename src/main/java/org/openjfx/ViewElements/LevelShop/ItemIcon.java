@@ -1,14 +1,11 @@
 package org.openjfx.ViewElements.LevelShop;
 
-import javafx.scene.Node;
-import javafx.scene.SubScene;
 import javafx.scene.control.Tooltip;
-import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseButton;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 import org.openjfx.Models.Shop.Item;
@@ -28,7 +25,7 @@ public class ItemIcon extends ButtonAnimation {
                 image,
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, null);
         setBackground(new Background(background));
-        setText(item.getName().toString());
+        setText(item.getName());
 
         createTooltip();
     }
