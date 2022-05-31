@@ -13,7 +13,7 @@ import javafx.scene.shape.Shape;
 
 public class ButtonAnimation extends Button {
 
-    private ColorAdjust colorAdjust = new ColorAdjust();
+    private final ColorAdjust colorAdjust = new ColorAdjust();
 
     public ButtonAnimation(double[] position, double[]size, Shape shape) {
         super();

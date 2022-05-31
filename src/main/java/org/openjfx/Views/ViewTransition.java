@@ -2,6 +2,7 @@ package org.openjfx.Views;
 
 import javafx.animation.FadeTransition;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -20,16 +21,21 @@ import java.io.FileNotFoundException;
 public class ViewTransition extends View {
 
     View nextView;
+    View lastView;
+
     String text;
 
-    public ViewTransition(Pane pane, ViewManager viewManager, View nextView, String text) {
-        super(pane, viewManager);
+    public ViewTransition(Pane pane,View lastView, View nextView, String text) {
+        super(pane);
         this.nextView = nextView;
+        this.lastView = lastView;
         this.text = text;
         render();
     }
 
     private void render() {
+
+
         this.setBackgroundColor(Color.BLACK);
 
         Label levelName = new Label(text);
@@ -43,20 +49,25 @@ public class ViewTransition extends View {
 
         addElement(levelName);
 
+        lastView.renderView(this);
+//
+//        FadeTransition fadeUp = new FadeTransition();
+//        fadeUp.setNode(this.getPane());
+//        fadeUp.setDuration(Duration.seconds(1.5));
+//        fadeUp.setFromValue(0);
+//        fadeUp.setToValue(1);
+//        fadeUp.play();
 
 
-        viewManager.renderView(this);
-
-
-        delay(2000, () -> {
-            viewManager.renderView(nextView);
-
+        delay(1000, () -> {
+            renderView(nextView);
             FadeTransition fadeDown = new FadeTransition();
-            fadeDown.setNode(viewManager.getActivePane());
+            fadeDown.setNode(nextView.getPane());
             fadeDown.setDuration(Duration.seconds(1.5));
             fadeDown.setFromValue(0);
             fadeDown.setToValue(1);
             fadeDown.play();
+
         });
     }
 
