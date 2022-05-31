@@ -14,6 +14,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
 import javafx.util.Duration;
+import org.openjfx.Models.Game;
 import org.openjfx.Models.Level.Level;
 import org.openjfx.ViewElements.LevelSelector.*;
 import org.openjfx.Models.Planet;
@@ -28,16 +29,21 @@ import static javafx.util.Duration.millis;
 
 public class ViewLevelSelector extends View {
     private Planet planet;
+
+    private Game game;
     private ArrayList<ButtonSelector> buttonList  = new ArrayList<ButtonSelector>();
 
-    public ViewLevelSelector(Pane pane, ViewManager viewManager) {
-        super(pane, viewManager);
+    public ViewLevelSelector(Pane pane, Game game) {
+        super(pane);
         setBackground("space.jpg");
-        planet = viewManager.getGame().getCurrentPlanet();
+        this.game = game;
+        this.planet = game.getCurrentPlanet();
 
         Circle circlePlanet = renderCirclePlanet(planet);
         Circle shadow = renderCircleShadow(circlePlanet, 80, new int[]{0, 0});
         renderShadowAnimation(shadow);
+
+
         addElement(shadow);
         addElement(circlePlanet);
         createButtons(circlePlanet);
@@ -72,36 +78,28 @@ public class ViewLevelSelector extends View {
             LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene((int) levelButton.getPrefWidth(), level.getPosition(), level);
 
             levelButton.setOnAction((event) -> {    // lambda expression
-                if (levelSelectorSubScene.isDisable()) {
-                    animationButtons(levelButton, false);
-                } else {
-                    animationButtons(levelButton, true);
-                }
+                animationButtons(levelButton, !levelSelectorSubScene.isDisable());
                 levelSelectorSubScene.moveSubScene();
             });
 
             Button playButton = levelSelectorSubScene.getButton();
             playButton.setOnAction((playEvent) -> {
-                viewManager.getGame().setCurrentLevel(level);
-
-                ViewTransition viewTransition = null;
+                game.setCurrentLevel(level);
                 View levelView = null;
                 switch (level.getType()) {
                     case Boss:
-                        levelView = new ViewLevelBoss(new AnchorPane(), viewManager);
+                        levelView = new ViewLevelBoss(new AnchorPane(), game);
                         break;
                     case Shop:
-                        levelView = new ViewLevelShop(new AnchorPane(), viewManager);
+                        levelView = new ViewLevelShop(new AnchorPane(), game);
                         break;
                     case Enemy:
-                        levelView = new ViewLevelEnemy(new AnchorPane(), viewManager);
+                        levelView = new ViewLevelEnemy(new AnchorPane(), game);
                         break;
                 }
 
-                viewTransition = new ViewTransition(new AnchorPane(), viewManager, levelView, level.getName());
+                ViewTransition viewTransition = new ViewTransition(new AnchorPane(),this, levelView, level.getName());
 
-
-                viewManager.renderView(viewTransition);
             });
 
             addElement(levelSelectorSubScene);
@@ -137,10 +135,7 @@ public class ViewLevelSelector extends View {
         if (Math.abs(position1[0] - position2[0]) < radius) {
             return true;
         }
-        if (Math.abs(position1[1] - position2[1]) < radius) {
-            return true;
-        }
-        return false;
+        return Math.abs(position1[1] - position2[1]) < radius;
 
     }
 

@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class LevelEnemy extends Level{
 
-    private ArrayList<Enemy> enemies;
+    private final ArrayList<Enemy> enemies;
 
     public LevelEnemy() {
         super("Enemy", LevelType.Enemy);

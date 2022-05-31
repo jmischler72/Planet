@@ -1,9 +1,9 @@
 package org.openjfx.Models.Enemy;
 
 public class Enemy {
-    private String name;
+    private final String name;
 
-    private EnemyType type;
+    private final EnemyType type;
 
     public Enemy(String name, EnemyType type){
         this.name = name;

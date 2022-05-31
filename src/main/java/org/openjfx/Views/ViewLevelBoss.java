@@ -2,13 +2,16 @@ package org.openjfx.Views;
 
 import javafx.scene.layout.Pane;
 import org.openjfx.Models.Enemy.Boss;
+import org.openjfx.Models.Game;
 import org.openjfx.Models.Level.LevelBoss;
 
 public class ViewLevelBoss extends View {
-    private LevelBoss level;
+    private final LevelBoss level;
+    private Game game;
 
-    public ViewLevelBoss(Pane pane, ViewManager viewManager) {
-        super(pane, viewManager);
+    public ViewLevelBoss(Pane pane, Game game) {
+        super(pane);
+        this.game = game;
         level = new LevelBoss(new Boss());
     }
 

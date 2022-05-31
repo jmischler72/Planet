@@ -5,6 +5,6 @@ import java.util.Random;
 public enum EnemyType {
     alien,
     octopus,
-    boss;
+    boss
 
 }

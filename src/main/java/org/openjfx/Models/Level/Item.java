@@ -2,7 +2,7 @@ package org.openjfx.Models.Level;
 
 public class Item {
 
-    private ShopItems name;
+    private final ShopItems name;
     private int damage;
 
     public Item(ShopItems itemName) {
