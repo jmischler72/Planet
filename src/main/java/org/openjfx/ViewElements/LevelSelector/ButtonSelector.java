@@ -15,7 +15,7 @@ import org.openjfx.ViewElements.ButtonAnimation;
 
 public class ButtonSelector extends ButtonAnimation {
 
-    private ColorAdjust colorAdjust = new ColorAdjust();
+    private final ColorAdjust colorAdjust = new ColorAdjust();
 
     public ButtonSelector(double[] position, double[]size, Shape shape, String imageName) {
         super(position, size, shape);

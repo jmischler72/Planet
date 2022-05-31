@@ -13,8 +13,8 @@ import org.openjfx.ViewElements.ButtonAnimation;
 
 public class ItemIcon extends ButtonAnimation {
 
-    private ColorAdjust colorAdjust = new ColorAdjust();
-    private Item item;
+    private final ColorAdjust colorAdjust = new ColorAdjust();
+    private final Item item;
     //private ItemDescriptionSubScene descriptionSubScene;
 
     public ItemIcon(double[] position, double[]size, Shape shape, ShopItems itemName) {

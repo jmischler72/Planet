@@ -14,7 +14,7 @@ public class Planet {
     private double size = 0;
     private PlanetType type;
     private File planet_file;
-    private ArrayList<Level> levels = new ArrayList<Level>();
+    private final ArrayList<Level> levels = new ArrayList<Level>();
 
     public Planet() {
         generatePlanetType(new ArrayList<PlanetType>(){{add(PlanetType.Galaxy);}});
@@ -38,12 +38,10 @@ public class Planet {
                     level = new LevelShop();
                     break;
                 case Enemy:
-                    Enemy enemy = new Enemy();
-                    level = new LevelEnemy(enemy);
+                    level = new LevelEnemy();
                     break;
                 default:
-                    Enemy defaultEnnemy = new Enemy();
-                    level = new LevelEnemy(defaultEnnemy);
+                    level = null;
                     System.out.println("Level type not found");
             }
 
@@ -66,7 +64,7 @@ public class Planet {
         if (type != null){
             File[] planets_files = new File[0];
             try {
-                planets_files = (new File(getClass().getResource("Planets/" + type.toString()).toURI())).listFiles();
+                planets_files = (new File(getClass().getResource("Planets/" + type).toURI())).listFiles();
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
@@ -94,17 +92,4 @@ public class Planet {
         this.size = size;
     }
 
-
-//    public void changeColor(){
-//        for (int col = 0; col <  width; col++) {
-//            for (int row = 0; row < height; row++) {
-//                Color color = picture.get(col, row);
-//                int r = color.getRed();
-//                int g = color.getGreen();
-//                int b = color.getBlue();
-//                pictureR.set(col, row, new Color(r, 0, 0));
-//
-//            }
-//        }
-//    }
 }

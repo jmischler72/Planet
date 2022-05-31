@@ -1,9 +1,10 @@
 package org.openjfx.Models.Enemy;
 
 public class Boss extends Enemy{
-    private String name;
+    private final String name;
 
     public Boss(){
+        super("Boss", EnemyType.boss);
         name = generateName();
     }
 

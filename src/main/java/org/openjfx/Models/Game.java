@@ -3,8 +3,8 @@ package org.openjfx.Models;
 import org.openjfx.Models.Level.Level;
 
 public class Game {
-    private Player player;
-    private Planet currentPlanet;
+    private final Player player;
+    private final Planet currentPlanet;
     private Level currentLevel = null;
 
     public Game() {

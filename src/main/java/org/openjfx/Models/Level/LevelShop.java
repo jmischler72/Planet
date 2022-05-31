@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class LevelShop extends Level {
 
-    private ArrayList<Item> items = new ArrayList<Item>();
+    private final ArrayList<Item> items = new ArrayList<Item>();
 
     public LevelShop() {
         super("Marchand", LevelType.Shop);
