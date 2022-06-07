@@ -1,4 +1,4 @@
-package org.openjfx.Models.Enemy;
+package org.openjfx.Models.Personage.Enemy;
 
 public class Enemy {
     private final String name;
