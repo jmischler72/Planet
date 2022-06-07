@@ -18,6 +18,7 @@ import org.openjfx.Models.Shop.Armor;
 import org.openjfx.Models.Shop.Item;
 import org.openjfx.Models.Shop.Weapon;
 import org.openjfx.ViewElements.LevelEnemy.ButtonMenu;
+import org.openjfx.ViewElements.LevelShop.EquipedItem;
 import org.openjfx.ViewElements.LevelShop.ItemIcon;
 import org.openjfx.ViewElements.LevelShop.Stat;
 
@@ -30,12 +31,14 @@ public class ViewLevelShop extends View {
     private final ArrayList<ItemIcon> icons = new ArrayList<>();
     private final LevelShop level;
     private ArrayList<Item> equipedItems = new ArrayList<>();
+    private ArrayList<EquipedItem> equipedItemsView = new ArrayList<>();
 
     public ViewLevelShop(Pane pane, ViewManager viewManager) {
         super(pane, viewManager);
         setBackground("shop_background.png");
         this.level = new LevelShop();
         fetchPlayerItems();
+        createItemEquipedRectangle();
         createIcons();
 
         ButtonMenu b2 = new ButtonMenu(new double[]{200, viewManager.getSize()[1] - 60}, new double[]{100, 50}, null, "quit");
@@ -64,13 +67,39 @@ public class ViewLevelShop extends View {
         addElement(b3);
 
         setIconAction();
-        createItemEquipedRectangle();
         createPlayerStatsRectangle();
         setItemToolTipData();
+        setEquipedItemsToolTipData();
     }
 
     protected void setItemToolTipData() {
         for(ItemIcon item : icons) {
+            String t = "";
+            switch (item.getItem().getType()) {
+                case Weapon:
+                    Weapon w = (Weapon) item.getItem();
+                    t = "Nom :" + w.getName() +
+                            "\nDegats :" + w.getDamage() +
+                            "\nPV :" + w.getPv() +
+                            "\nCritique :" + w.getCritique() +
+                            "\n\nCout : " + w.getCost();
+                    break;
+                case Armor:
+                    Armor a = (Armor) item.getItem();
+                    t = "Nom :" + a.getName() +
+                            "\nArmure :" + a.getArmor() +
+                            "\nPV :" + a.getPv() +
+                            "\nEsquive :" + a.getEsquive() +
+                            "\n\nCout : " + a.getCost();
+                    break;
+            }
+
+            item.getDescription().setText(t);
+        }
+    }
+
+    protected void setEquipedItemsToolTipData() {
+        for (EquipedItem item : equipedItemsView) {
             String t = "";
             switch (item.getItem().getType()) {
                 case Weapon:
@@ -104,25 +133,28 @@ public class ViewLevelShop extends View {
     }
 
     public void createItemEquipedRectangle() {
-        Rectangle s = new Rectangle(400, 500, Color.LIGHTGRAY);
-        StackPane stack = new StackPane();
-        stack.setLayoutX(viewManager.getSize()[0] - 500);
-        stack.setLayoutY(viewManager.getSize()[1] - 700);
+        BorderPane container = new BorderPane();
+        container.setBackground(
+                new Background(new BackgroundFill(Color.LIGHTGRAY, new CornerRadii(30), null))
+        );
+        container.setPrefSize(400, 500);
+        container.setLayoutX(viewManager.getSize()[0] - 500);
+        container.setLayoutY(viewManager.getSize()[1] - 700);
 
-        Text title = new Text("Equipement actuel : ");
+        Label title = new Label("Equipement actuel : ");
         title.setFont(new Font(30));
-        StackPane.setAlignment(title, Pos.TOP_CENTER);
+        title.setAlignment(Pos.BASELINE_CENTER);
+        container.setTop(title);
 
-        String t = "";
+        VBox itemsArea = new VBox();
+        container.setCenter(itemsArea);
         for (Item i : equipedItems) {
-            t += i.getName() + "\n";
+            EquipedItem ei = new EquipedItem(i);
+            equipedItemsView.add(ei);
+            itemsArea.getChildren().add(ei);
         }
 
-        Text text = new Text(t);
-        text.setFont(new Font(20));
-
-        stack.getChildren().addAll(s, title, text);
-        addElement(stack);
+        addElement(container);
     }
 
     public void createPlayerStatsRectangle() {
@@ -137,7 +169,6 @@ public class ViewLevelShop extends View {
 
         Text title = new Text("Statistiques actuelles : ");
         title.setFont(new Font(20));
-
 
         Player player = viewManager.getGame().getPlayer();
         Font statFont = new Font(15);
