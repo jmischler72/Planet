@@ -12,6 +12,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
+import org.openjfx.Models.Game;
 import org.openjfx.Models.Level.LevelShop;
 import org.openjfx.Models.Personage.Player;
 import org.openjfx.Models.Shop.Armor;
@@ -32,36 +33,36 @@ public class ViewLevelShop extends View {
     private final LevelShop level;
     private ArrayList<Item> equipedItems = new ArrayList<>();
     private ArrayList<EquipedItem> equipedItemsView = new ArrayList<>();
+    private Game game;
 
-    public ViewLevelShop(Pane pane, ViewManager viewManager) {
-        super(pane, viewManager);
+    public ViewLevelShop(Pane pane, Game game) {
+        super(pane);
+        this.game = game;
         setBackground("shop_background.png");
         this.level = new LevelShop();
         fetchPlayerItems();
         createItemEquipedRectangle();
         createIcons();
 
-        ButtonMenu b2 = new ButtonMenu(new double[]{200, viewManager.getSize()[1] - 60}, new double[]{100, 50}, null, "quit");
+        ButtonMenu b2 = new ButtonMenu(new double[]{200, HEIGHT - 60}, new double[]{100, 50}, null, "quit");
         b2.setOnAction((playEvent) -> {
-            viewManager.getGame().setCurrentLevel(null);
-            ViewLevelSelector levelView = new ViewLevelSelector(new AnchorPane(), viewManager);
-            ViewTransition viewTransition = new ViewTransition(new AnchorPane(), viewManager, levelView, "Select");
-            viewManager.renderView(viewTransition);
+            ViewLevelSelector levelView = new ViewLevelSelector(new AnchorPane(), game);
+            ViewTransition viewTransition = new ViewTransition(new AnchorPane(), this, levelView, "Select");
         });
         addElement(b2);
 
         StackPane goldsStack = new StackPane();
-        Label golds = new Label(String.valueOf(viewManager.getGame().getPlayer().getGold()));
+        Label golds = new Label(String.valueOf(game.getPlayer().getGold()));
         golds.setFont(new Font(30));
 
         goldsStack.getChildren().add(golds);
-        goldsStack.setLayoutX(viewManager.getSize()[0] - 200);
-        goldsStack.setLayoutY(viewManager.getSize()[1] - 60);
+        goldsStack.setLayoutX(WIDTH - 200);
+        goldsStack.setLayoutY(HEIGHT - 60);
         addElement(goldsStack);
 
-        ButtonMenu b3 = new ButtonMenu( new double[]{viewManager.getSize()[0] - 100,viewManager.getSize()[1]-60}, new double[]{100,50}, null, "+ 100 g");
+        ButtonMenu b3 = new ButtonMenu(new double[]{WIDTH - 100, HEIGHT - 60}, new double[]{100, 50}, null, "+ 100 g");
         b3.setOnAction((playEvent) -> {
-            viewManager.getGame().getPlayer().addGolds(100);
+            game.getPlayer().addGolds(100);
             refresh();
         });
         addElement(b3);
@@ -125,11 +126,11 @@ public class ViewLevelShop extends View {
     }
 
     public void fetchPlayerItems() {
-        equipedItems = viewManager.getGame().getPlayer().getItems();
+        equipedItems = game.getPlayer().getItems();
     }
 
     public void refresh() {
-        viewManager.renderView(new ViewLevelShop(new Pane(), viewManager));
+        renderView(new ViewLevelShop(new Pane(), game));
     }
 
     public void createItemEquipedRectangle() {
@@ -138,8 +139,8 @@ public class ViewLevelShop extends View {
                 new Background(new BackgroundFill(Color.LIGHTGRAY, new CornerRadii(30), null))
         );
         container.setPrefSize(400, 500);
-        container.setLayoutX(viewManager.getSize()[0] - 500);
-        container.setLayoutY(viewManager.getSize()[1] - 700);
+        container.setLayoutX(WIDTH - 500);
+        container.setLayoutY(HEIGHT - 700);
 
         Label title = new Label("Equipement actuel : ");
         title.setFont(new Font(30));
@@ -164,13 +165,13 @@ public class ViewLevelShop extends View {
         );
         container.setOrientation(Orientation.VERTICAL);
         container.setPrefSize(200, 150);
-        container.setLayoutX(viewManager.getSize()[0] - 500);
-        container.setLayoutY(viewManager.getSize()[1] - 160);
+        container.setLayoutX(WIDTH - 500);
+        container.setLayoutY(HEIGHT - 160);
 
         Text title = new Text("Statistiques actuelles : ");
         title.setFont(new Font(20));
 
-        Player player = viewManager.getGame().getPlayer();
+        Player player = game.getPlayer();
         Font statFont = new Font(15);
 
         Stat vie = new Stat("Vie : " + player.getVie(), statFont, Color.GREEN);
@@ -217,7 +218,7 @@ public class ViewLevelShop extends View {
     private void setIconAction() {
         for (ItemIcon item : icons) {
             item.setOnAction((event) -> {
-                Player player = viewManager.getGame().getPlayer();
+                Player player = game.getPlayer();
                 Boolean isSuccess = player.buy(item.getItem());
                 if(!isSuccess) {
                     Label label = new Label("Vous n'avez pas assez d'argent !");
@@ -229,7 +230,7 @@ public class ViewLevelShop extends View {
                     popup.getContent().add(label);
                     label.setMinWidth(97);
                     label.setMinHeight(63);
-                    popup.show(viewManager.getMainStage());
+                    popup.show(this.getWindow());
                     delay(1000, () -> {
                         popup.hide();
                     });

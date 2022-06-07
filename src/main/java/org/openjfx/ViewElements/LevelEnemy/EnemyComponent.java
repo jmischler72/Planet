@@ -6,7 +6,6 @@ import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;

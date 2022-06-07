@@ -1,9 +1,9 @@
 package org.openjfx.Models.Enemy;
 
-public class Octopus extends Enemy{
+public class Octopus extends Enemy {
 
-    public Octopus(){
-        super(EnemyName.getRandomName().name()+"us", EnemyType.octopus);
+    public Octopus() {
+        super(EnemyName.getRandomName().name() + "us", EnemyType.octopus);
 
     }
 }

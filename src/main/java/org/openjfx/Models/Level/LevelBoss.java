@@ -1,6 +1,6 @@
 package org.openjfx.Models.Level;
 
-import org.openjfx.Models.Personage.Enemy.Boss;
+import org.openjfx.Models.Enemy.Boss;
 
 public class LevelBoss extends Level{
 
