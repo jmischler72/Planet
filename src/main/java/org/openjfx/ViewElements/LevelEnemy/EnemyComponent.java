@@ -4,9 +4,12 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.*;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -32,6 +35,8 @@ public class EnemyComponent extends GridPane {
     private static final int WIDTH_ENEMY = 200;
     private static final int HEIGHT_ENEMY = 200;
 
+    private Rectangle healthbar;
+
     public EnemyComponent(Enemy enemy){
         super();
         this.enemy = enemy;
@@ -53,9 +58,19 @@ public class EnemyComponent extends GridPane {
         setRowIndex(text, 0);
         setColumnIndex(text, 0);
 
+        healthbar = new Rectangle(200.0, 50.0, Color.RED);
+        healthbar.setWidth(100);
+        setRowIndex(healthbar, 0);
+        setColumnIndex(healthbar, 0);
+
+        renderEnemyAnimation(healthbar);
         renderEnemyAnimation(rectangle);
         renderEnemyAnimation(text);
-        getChildren().addAll(rectangle, text);
+        getChildren().addAll(rectangle,healthbar, text);
+    }
+
+    public void updateHealth(){
+        healthbar.setWidth(100*enemy.getHealth()/enemy.getMaxHealth());
     }
 
     private void renderEnemyAnimation(Shape rectangle) {
@@ -68,9 +83,6 @@ public class EnemyComponent extends GridPane {
             public void handle(Event event) {
                 movingStep++;
                 double angleAlpha = movingStep * (Math.PI / 30);
-
-                // p(x) = x(0) + r * sin(a)
-                // p(y) = y(y) - r * cos(a)
 
                 TranslateTransition move = new TranslateTransition();
                 move.setNode(rectangle);
@@ -88,8 +100,6 @@ public class EnemyComponent extends GridPane {
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
         animations.add(timeline);
-
-//        addAnimation(timeline);
     }
 
     public ArrayList<Animation> getAnimations(){

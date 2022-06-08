@@ -35,7 +35,6 @@ public class LevelSelectorSubScene extends SubScene {
         this.setOpacity(0);
         this.setDisable(true);
 
-        System.out.println(level.getName());
         Text text = new Text(100, 50, level.getName());
         text.setFill(Color.WHITE);
         text.setFont(new Font(15));

@@ -4,6 +4,7 @@ public class Octopus extends Enemy{
 
     public Octopus(){
         super(EnemyName.getRandomName().name()+"us", EnemyType.octopus);
+        setHealth(200);
 
     }
 }

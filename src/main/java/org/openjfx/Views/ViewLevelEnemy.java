@@ -4,6 +4,9 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -26,37 +29,69 @@ import org.openjfx.Models.Planet;
 import org.openjfx.ViewElements.LevelEnemy.ButtonMenu;
 import org.openjfx.ViewElements.LevelEnemy.EnemyComponent;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import static javafx.util.Duration.millis;
 
 public class ViewLevelEnemy extends View{
     private static final int WIDTH_ENEMY = 200;
-    private static final int HEIGHT_ENEMY = 200;
 
     private final int X_ENEMY = WIDTH/2;
     private final int Y_ENEMY = HEIGHT/2-150;
+
+    private boolean canPlay = true;
+
+    private LevelEnemy levelEnemy;
+    private Game game;
 
 
     public ViewLevelEnemy(Pane pane, Game game) {
         super(pane);
 
-        LevelEnemy levelEnemy = (LevelEnemy) game.getCurrentLevel();
+        levelEnemy = (LevelEnemy) game.getCurrentLevel();
 
         setBackground("random_background.jpg");
 
+        this.game = game;
+
+        render();
+
+    }
+
+    private void render(){
+        ArrayList<EnemyComponent> enemies_components = new ArrayList<EnemyComponent>();
+
+        for (int i = 0; i < levelEnemy.getEnemies().size(); i++) {
+
+            EnemyComponent enemy = new EnemyComponent(levelEnemy.getEnemies().get(i));
+            enemy.setLayoutX(X_ENEMY+i*300);
+            enemy.setLayoutY(Y_ENEMY);
+            addElement(enemy);
+            enemies_components.add(enemy);
+            for(Animation animation: enemy.getAnimations()){
+                addAnimation(animation);
+            }
+
+        }
 
         ButtonMenu b = new ButtonMenu( new double[]{80,HEIGHT-60}, new double[]{100,50}, null, "test");
 
         b.setOnAction((playEvent) -> {
-            renderSandAnimation();
-            for (int i = 0; i < levelEnemy.getEnemies().size(); i++) {
-
-                ButtonMenu button_enemy = new ButtonMenu( new double[]{80+i*100,HEIGHT-120}, new double[]{100,50}, null, levelEnemy.getEnemies().get(i).getName());
+            int i = 0;
+            for (Enemy enemy : levelEnemy.getEnemies()) {
+                ButtonMenu button_enemy = new ButtonMenu( new double[]{80+i*100,HEIGHT-120}, new double[]{100,50}, null, enemy.getName());
                 int finalI = i;
-                button_enemy.setOnAction((f) -> { animationAttack(X_ENEMY-100*(levelEnemy.getEnemies().size()-1)+ finalI *(WIDTH_ENEMY+100));
+                button_enemy.setOnAction((f) -> {
+                    animationAttack((int)enemies_components.get(finalI).getLayoutX());
+                    enemy.getAttacked(game.getPlayer());
+                    enemies_components.get(finalI).updateHealth();
+                    if(enemy.getHealth()<=0){
+                        this.getPane().getChildren().remove(enemies_components.get(finalI));
+                    }
                 });
                 addElement(button_enemy);
+                i++;
             }
         });
         addElement(b);
@@ -70,20 +105,7 @@ public class ViewLevelEnemy extends View{
         addElement(b2);
 
 
-
-        for (int i = 0; i < levelEnemy.getEnemies().size(); i++) {
-            EnemyComponent enemy = new EnemyComponent(levelEnemy.getEnemies().get(i));
-            enemy.setLayoutX(X_ENEMY+i*300);
-            enemy.setLayoutY(Y_ENEMY);
-            addElement(enemy);
-            for(Animation animation: enemy.getAnimations()){
-                addAnimation(animation);
-            }
-
-        }
     }
-
-
     private void animationAttack(int x){
         SVGPath svg = new SVGPath();
         svg.setFill(Color.YELLOW);
@@ -94,14 +116,12 @@ public class ViewLevelEnemy extends View{
         move.setFromX(0);
         move.setFromY(HEIGHT);
         move.setToX(x);
-        move.setToY(Y_ENEMY);
+        move.setToY(Y_ENEMY+50);
         move.setDuration(millis(200));
         move.setOnFinished(e -> {
             delay(200,() ->{svg.setVisible(false);});
         });
         move.play();
-
-
     }
 
 

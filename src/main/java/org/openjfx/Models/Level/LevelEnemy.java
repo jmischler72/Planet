@@ -23,7 +23,6 @@ public class LevelEnemy extends Level{
     private void generateEnemies(){
         Random random = new Random();
         for(int i = 0; i< random.nextInt(3)+1; i++ ){
-            System.out.println(i);
             switch (random.nextInt(2)){
                 case 0:
                     enemies.add(new Alien());

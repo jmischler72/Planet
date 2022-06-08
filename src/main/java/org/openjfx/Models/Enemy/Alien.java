@@ -4,6 +4,7 @@ public class Alien extends Enemy{
 
     public Alien(){
         super(EnemyName.getRandomName().name()+"en", EnemyType.alien);
+        setHealth(150);
 
     }
 }

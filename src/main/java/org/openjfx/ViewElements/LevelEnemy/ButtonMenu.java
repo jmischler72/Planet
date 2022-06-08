@@ -16,8 +16,6 @@ import org.openjfx.Views.ViewTransition;
 
 public class ButtonMenu extends ButtonAnimation {
 
-    private final ColorAdjust colorAdjust = new ColorAdjust();
-
     public ButtonMenu(double[] position, double[]size, Shape shape, String text) {
         super(position,size,shape);
 

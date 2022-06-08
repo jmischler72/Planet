@@ -197,7 +197,6 @@ public class ViewLevelSelector extends View {
             double size_planet = 0.30 + (double)random.nextInt(40-27)/100;
             planet.setSize(size_planet);
         }
-        System.out.println(planet.getSize());
 
         circle.setRadius(getPane().getHeight() * planet.getSize());
         try {
