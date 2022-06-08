@@ -1,16 +1,12 @@
 package org.openjfx.Models.Level;
 
-import org.openjfx.Models.PlanetType;
-
-import java.util.Random;
-
-public class Level {
+public abstract class Level {
     protected String name;
     protected String description;
     private double[] position;
     protected LevelType type;
 
-    public Level(String name, LevelType type){
+    public Level(String name, LevelType type) {
         this.name = name;
         this.type = type;
     }

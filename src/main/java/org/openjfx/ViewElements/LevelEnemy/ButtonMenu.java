@@ -29,5 +29,4 @@ public class ButtonMenu extends ButtonAnimation {
 
         });
     }
-
 }

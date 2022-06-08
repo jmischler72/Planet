@@ -1,6 +1,7 @@
 package org.openjfx.Models;
 
 import org.openjfx.Models.Level.Level;
+import org.openjfx.Models.Personage.Player;
 
 public class Game {
     private final Player player;
@@ -8,7 +9,7 @@ public class Game {
     private Level currentLevel = null;
 
     public Game() {
-        player = new Player();
+        player = new Player("Moi");
         currentPlanet = new Planet();
     }
 

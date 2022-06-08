@@ -11,11 +11,11 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.shape.Shape;
 
-public class ButtonAnimation extends Button {
+public abstract class ButtonAnimation extends Button {
 
     private final ColorAdjust colorAdjust = new ColorAdjust();
 
-    public ButtonAnimation(double[] position, double[]size, Shape shape) {
+    public ButtonAnimation(double[] position, double[] size, Shape shape) {
         super();
         setShape(shape);
         setPrefWidth(size[0]);
@@ -49,5 +49,4 @@ public class ButtonAnimation extends Button {
             setEffect(null);
         });
     }
-
 }
