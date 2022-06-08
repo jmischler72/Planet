@@ -1,53 +1,69 @@
 package org.openjfx.Models.Character;
 
-public abstract class Personage {
-    private int vie;
-    private int armure;
-    private int degat;
-    private String nom;
-    private double esquive;
+public abstract class Character {
+    private int health;
+    private int shield;
+    private int damage;
+    private String name;
+    private double dodge;
+    private int maxHealth;
 
-    public Personage(int vie, int armure, int degat, String nom, double esquive) {
-        this.vie = vie;
-        this.armure = armure;
-        this.degat = degat;
-        this.nom = nom;
-        this.esquive = esquive;
+
+    public Character(String name, int health, int shield, int damage , double dodge) {
+        this.health = health;
+        this.maxHealth = health;
+        this.shield = shield;
+        this.damage = damage;
+        this.name = name;
+        this.dodge = dodge;
     }
 
-    public int getVie() {
-        return vie;
+    public int getHealth() {
+        return health;
     }
 
-    public void setVie(int vie) {
-        this.vie = vie;
+    public void setHealth(int health) {
+        this.health = health;
     }
 
-    public String getNom() {
-        return nom;
+
+    public double getDodge() {
+        return dodge;
     }
 
-    public double getEsquive() {
-        return esquive;
+    public void setDodge(double dodge) {
+        this.dodge = dodge;
     }
 
-    public void setEsquive(double esquive) {
-        this.esquive = esquive;
+    public int getShield() {
+        return shield;
+    }
+    public void setShield(int shield) {
+        this.shield = shield;
     }
 
-    public int getArmure() {
-        return armure;
+
+    public int getDamage() {
+        return damage;
+    }
+    public void setDamage(int damage) {
+        this.damage = damage;
     }
 
-    public int getDegat() {
-        return degat;
+
+    public String getName() {
+        return name;
     }
 
-    public void setArmure(int armure) {
-        this.armure = armure;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setDegat(int degat) {
-        this.degat = degat;
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
     }
 }

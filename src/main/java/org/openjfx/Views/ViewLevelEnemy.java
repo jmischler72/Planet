@@ -26,10 +26,10 @@ public class ViewLevelEnemy extends View{
     private final int X_ENEMY = WIDTH/2;
     private final int Y_ENEMY = HEIGHT/2-150;
 
-    private boolean canPlay = true;
+    private final boolean canPlay = true;
 
-    private LevelEnemy levelEnemy;
-    private Game game;
+    private final LevelEnemy levelEnemy;
+    private final Game game;
 
 
     public ViewLevelEnemy(Pane pane, Game game) {
@@ -70,7 +70,7 @@ public class ViewLevelEnemy extends View{
                 int finalI = i;
                 button_enemy.setOnAction((f) -> {
                     animationAttack((int)enemies_components.get(finalI).getLayoutX());
-                    enemy.getAttacked(game.getPlayer());
+                    game.getPlayer().attack(enemy);
                     enemies_components.get(finalI).updateHealth();
                     if(enemy.getHealth()<=0){
                         this.getPane().getChildren().remove(enemies_components.get(finalI));

@@ -26,7 +26,7 @@ public class EnemyComponent extends GridPane {
 
     private final Enemy enemy;
 
-    private ArrayList<Animation> animations = new ArrayList<Animation>();
+    private final ArrayList<Animation> animations = new ArrayList<Animation>();
 
     private static final int WIDTH_ENEMY = 200;
     private static final int HEIGHT_ENEMY = 200;

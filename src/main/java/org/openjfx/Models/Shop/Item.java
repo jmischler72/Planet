@@ -2,12 +2,12 @@ package org.openjfx.Models.Shop;
 
 public abstract class Item {
 
-    private long id;
-    private String name;
-    private long cost;
-    private ItemType type;
-    private long pv;
-    private long resource;
+    private final long id;
+    private final String name;
+    private final long cost;
+    private final ItemType type;
+    private final long pv;
+    private final long resource;
 
     public Item(String itemName, long cost, ItemType type, long id, long pv, long resource) {
         this.id = id;

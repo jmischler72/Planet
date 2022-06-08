@@ -13,8 +13,8 @@ import java.util.ArrayList;
 
 public class View extends Scene {
 
-    private ArrayList<Animation> animations = new ArrayList<Animation>();
-    private Pane pane;
+    private final ArrayList<Animation> animations = new ArrayList<Animation>();
+    private final Pane pane;
     protected static int HEIGHT = 900  ;
     protected static int WIDTH = 1500 ;
 

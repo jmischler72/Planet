@@ -1,8 +1,8 @@
 package org.openjfx.Models.Shop;
 
 public class Armor extends Item {
-    private long armor;
-    private long esquive;
+    private final long armor;
+    private final long esquive;
 
     public Armor(String itemName, long cost, long id, long pv, long armor, long esquive, long resource) {
         super(itemName, cost, ItemType.Armor, id, pv, resource);

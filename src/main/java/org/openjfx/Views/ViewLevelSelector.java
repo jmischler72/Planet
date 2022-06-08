@@ -28,10 +28,10 @@ import static javafx.util.Duration.millis;
 
 
 public class ViewLevelSelector extends View {
-    private Planet planet;
+    private final Planet planet;
 
-    private Game game;
-    private ArrayList<ButtonSelector> buttonList  = new ArrayList<ButtonSelector>();
+    private final Game game;
+    private final ArrayList<ButtonSelector> buttonList  = new ArrayList<ButtonSelector>();
 
     public ViewLevelSelector(Pane pane, Game game) {
         super(pane);

@@ -7,7 +7,7 @@ import org.openjfx.Models.Level.LevelBoss;
 
 public class ViewLevelBoss extends View {
     private final LevelBoss level;
-    private Game game;
+    private final Game game;
 
     public ViewLevelBoss(Pane pane, Game game) {
         super(pane);

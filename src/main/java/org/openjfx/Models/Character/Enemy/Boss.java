@@ -4,7 +4,7 @@ public class Boss extends Enemy{
     private final String name;
 
     public Boss(){
-        super("Boss", EnemyType.boss);
+        super("Boss", EnemyType.boss,100,10,10,10);
         name = generateName();
     }
 

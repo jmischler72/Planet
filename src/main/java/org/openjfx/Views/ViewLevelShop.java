@@ -14,7 +14,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import org.openjfx.Models.Game;
 import org.openjfx.Models.Level.LevelShop;
-import org.openjfx.Models.Personage.Player;
+import org.openjfx.Models.Character.Player;
 import org.openjfx.Models.Shop.Armor;
 import org.openjfx.Models.Shop.Item;
 import org.openjfx.Models.Shop.Weapon;
@@ -32,8 +32,8 @@ public class ViewLevelShop extends View {
     private final ArrayList<ItemIcon> icons = new ArrayList<>();
     private final LevelShop level;
     private ArrayList<Item> equipedItems = new ArrayList<>();
-    private ArrayList<EquipedItem> equipedItemsView = new ArrayList<>();
-    private Game game;
+    private final ArrayList<EquipedItem> equipedItemsView = new ArrayList<>();
+    private final Game game;
 
     public ViewLevelShop(Pane pane, Game game) {
         super(pane);
@@ -174,12 +174,12 @@ public class ViewLevelShop extends View {
         Player player = game.getPlayer();
         Font statFont = new Font(15);
 
-        Stat vie = new Stat("Vie : " + player.getVie(), statFont, Color.GREEN);
+        Stat vie = new Stat("Vie : " + player.getHealth(), statFont, Color.GREEN);
         Stat resource = new Stat("Ressource : " + player.getRessource(), statFont, Color.DARKORANGE);
-        Stat armor = new Stat("Armure : " + player.getArmure(), statFont, Color.BLUE);
-        Stat damage = new Stat("Dégats : " + player.getDegat(), statFont, Color.RED);
+        Stat armor = new Stat("Armure : " + player.getShield(), statFont, Color.BLUE);
+        Stat damage = new Stat("Dégats : " + player.getDamage(), statFont, Color.RED);
         Stat critique = new Stat("Critique : " + player.getCritique(), statFont, Color.BLUEVIOLET);
-        Stat esquive = new Stat("Esquive : " + player.getEsquive(), statFont, Color.FORESTGREEN);
+        Stat esquive = new Stat("Esquive : " + player.getDodge(), statFont, Color.FORESTGREEN);
 
         container.getChildren().addAll(title, vie, resource, armor, damage, critique, esquive);
         addElement(container);
