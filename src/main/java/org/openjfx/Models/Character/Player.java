@@ -1,4 +1,4 @@
-package org.openjfx.Models;
+package org.openjfx.Models.Character;
 
 public class Player {
     int damage = 0;

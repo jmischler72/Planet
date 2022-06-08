@@ -1,4 +1,4 @@
-package org.openjfx.Models.Enemy;
+package org.openjfx.Models.Character.Enemy;
 
 public class Alien extends Enemy {
 

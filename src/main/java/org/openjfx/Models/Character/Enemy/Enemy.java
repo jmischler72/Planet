@@ -1,9 +1,6 @@
-package org.openjfx.Models.Enemy;
+package org.openjfx.Models.Character.Enemy;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import org.openjfx.Models.Planet;
-import org.openjfx.Models.Player;
+import org.openjfx.Models.Character.Player;
 
 public class Enemy {
     private final String name;

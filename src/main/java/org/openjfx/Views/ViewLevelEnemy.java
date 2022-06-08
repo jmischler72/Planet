@@ -1,36 +1,22 @@
 package org.openjfx.Views;
 
 import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
-import javafx.beans.binding.DoubleBinding;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.concurrent.Task;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.util.Duration;
-import org.openjfx.Models.Enemy.Enemy;
+import org.openjfx.Models.Character.Enemy.Enemy;
 import org.openjfx.Models.Game;
-import org.openjfx.Models.Level.Level;
 import org.openjfx.Models.Level.LevelEnemy;
-import org.openjfx.Models.Planet;
 import org.openjfx.ViewElements.LevelEnemy.ButtonMenu;
 import org.openjfx.ViewElements.LevelEnemy.EnemyComponent;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import static javafx.util.Duration.millis;
 

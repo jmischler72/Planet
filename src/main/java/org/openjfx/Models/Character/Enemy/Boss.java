@@ -1,4 +1,4 @@
-package org.openjfx.Models.Enemy;
+package org.openjfx.Models.Character.Enemy;
 
 public class Boss extends Enemy{
     private final String name;

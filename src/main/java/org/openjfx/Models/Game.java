@@ -1,5 +1,6 @@
 package org.openjfx.Models;
 
+import org.openjfx.Models.Character.Player;
 import org.openjfx.Models.Level.Level;
 import org.openjfx.Models.Personage.Player;
 
