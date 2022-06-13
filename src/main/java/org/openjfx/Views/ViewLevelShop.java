@@ -20,7 +20,7 @@ import org.openjfx.Models.Shop.Item;
 import org.openjfx.Models.Shop.Weapon;
 import org.openjfx.ViewElements.LevelEnemy.ButtonMenu;
 import org.openjfx.ViewElements.LevelShop.EquipedItem;
-import org.openjfx.ViewElements.LevelShop.ItemIcon;
+import org.openjfx.ViewElements.LevelShop.ButtonItem;
 import org.openjfx.ViewElements.LevelShop.Stat;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class ViewLevelShop extends View {
 
     private static final int ITEM_AREA_SIZE = 640;
     private static final int ICON_SIZE = 140;
-    private final ArrayList<ItemIcon> icons = new ArrayList<>();
+    private final ArrayList<ButtonItem> icons = new ArrayList<>();
     private final LevelShop level;
     private ArrayList<Item> equipedItems = new ArrayList<>();
     private final ArrayList<EquipedItem> equipedItemsView = new ArrayList<>();
@@ -44,7 +44,9 @@ public class ViewLevelShop extends View {
         createItemEquipedRectangle();
         createIcons();
 
-        ButtonMenu b2 = new ButtonMenu(new double[]{200, HEIGHT - 60}, new double[]{100, 50}, null, "quit");
+        ButtonMenu b2 = new ButtonMenu(new double[]{100, 50}, "quit");
+        b2.setLayoutX(200);
+        b2.setLayoutY(HEIGHT-60);
         b2.setOnAction((playEvent) -> {
             ViewLevelSelector levelView = new ViewLevelSelector(new AnchorPane(), game);
             ViewTransition viewTransition = new ViewTransition(new AnchorPane(), this, levelView, "Select");
@@ -60,7 +62,9 @@ public class ViewLevelShop extends View {
         goldsStack.setLayoutY(HEIGHT - 60);
         addElement(goldsStack);
 
-        ButtonMenu b3 = new ButtonMenu(new double[]{WIDTH - 100, HEIGHT - 60}, new double[]{100, 50}, null, "+ 100 g");
+        ButtonMenu b3 = new ButtonMenu(new double[]{100, 50}, "+ 100 g");
+        b3.setLayoutX(WIDTH-100);
+        b3.setLayoutY(HEIGHT-60);
         b3.setOnAction((playEvent) -> {
             game.getPlayer().addGolds(100);
             refresh();
@@ -74,7 +78,7 @@ public class ViewLevelShop extends View {
     }
 
     protected void setItemToolTipData() {
-        for(ItemIcon item : icons) {
+        for(ButtonItem item : icons) {
             String t = "";
             switch (item.getItem().getType()) {
                 case Weapon:
@@ -201,7 +205,7 @@ public class ViewLevelShop extends View {
             if (equipedItems.stream().anyMatch(e -> e.getId() == item.getId())) continue;
 
             double[] position = new double[]{(214 + i * (ICON_SIZE + 46)), 214};
-            ItemIcon icon = new ItemIcon(position, new double[]{ICON_SIZE, ICON_SIZE}, new Rectangle(ICON_SIZE, ICON_SIZE), items.get(i));
+            ButtonItem icon = new ButtonItem(position, new double[]{ICON_SIZE, ICON_SIZE}, new Rectangle(ICON_SIZE, ICON_SIZE), items.get(i));
             icons.add(icon);
             container.getChildren().add(icon);
         }
@@ -216,7 +220,7 @@ public class ViewLevelShop extends View {
     }
 
     private void setIconAction() {
-        for (ItemIcon item : icons) {
+        for (ButtonItem item : icons) {
             item.setOnAction((event) -> {
                 Player player = game.getPlayer();
                 Boolean isSuccess = player.buy(item.getItem());

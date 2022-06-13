@@ -18,13 +18,21 @@ public class ButtonSelector extends ButtonAnimation {
     private final ColorAdjust colorAdjust = new ColorAdjust();
 
     public ButtonSelector(double[] position, double[]size, Shape shape, String imageName) {
-        super(position, size, shape);
+        super(size);
+        setShape(shape);
+        setLayoutX(position[0] - getPrefWidth() / 2);
+        setLayoutY(position[1] - getPrefHeight() / 2);
+
 
         createBackground(imageName);
     }
 
     public ButtonSelector(double[] position, double[]size, Shape shape, LevelType type) {
-        super(position, size, shape);
+        super(size);
+        setShape(shape);
+        setLayoutX(position[0] - getPrefWidth() / 2);
+        setLayoutY(position[1] - getPrefHeight() / 2);
+
 
         String imageName;
         switch (type) {

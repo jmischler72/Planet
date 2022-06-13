@@ -16,8 +16,8 @@ import org.openjfx.Views.ViewTransition;
 
 public class ButtonMenu extends ButtonAnimation {
 
-    public ButtonMenu(double[] position, double[]size, Shape shape, String text) {
-        super(position,size,shape);
+    public ButtonMenu( double[]size, String text) {
+        super(size);
 
         setText(text);
 

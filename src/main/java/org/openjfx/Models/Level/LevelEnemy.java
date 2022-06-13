@@ -11,6 +11,8 @@ public class LevelEnemy extends Level{
 
     private final ArrayList<Enemy> enemies;
 
+    private boolean done = false;
+
     public LevelEnemy() {
         super("Enemy", LevelType.Enemy);
         enemies = new ArrayList<Enemy>();
@@ -52,4 +54,10 @@ public class LevelEnemy extends Level{
         return enemies;
     }
 
+    public void setDone(boolean done) {
+        this.done = done;
+    }
+    public boolean isDone() {
+        return done;
+    }
 }

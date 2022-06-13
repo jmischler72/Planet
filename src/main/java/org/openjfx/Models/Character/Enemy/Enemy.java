@@ -1,12 +1,13 @@
 package org.openjfx.Models.Character.Enemy;
 
 import org.openjfx.Models.Character.Character;
+import org.openjfx.Models.Character.Player;
 
 public class Enemy extends Character {
 
     private final EnemyType type;
 
-    private int health = 0;
+    private final int health = 0;
 
 
     public Enemy(String name, EnemyType type, int health, int shield, int damage , double dodge){
@@ -17,7 +18,6 @@ public class Enemy extends Character {
     public EnemyType getType() {
         return type;
     }
-
 
 
 

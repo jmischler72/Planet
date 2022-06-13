@@ -62,10 +62,5 @@ public class Player extends Character {
         return critique;
     }
 
-    public void attack(Enemy enemy){
-        enemy.setHealth(enemy.getHealth()-this.getDamage());
-        System.out.println(enemy.getHealth());
-        System.out.println(this.getDamage());
 
-    }
 }

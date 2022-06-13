@@ -15,13 +15,10 @@ public abstract class ButtonAnimation extends Button {
 
     private final ColorAdjust colorAdjust = new ColorAdjust();
 
-    public ButtonAnimation(double[] position, double[] size, Shape shape) {
+    public ButtonAnimation(double[] size) {
         super();
-        setShape(shape);
         setPrefWidth(size[0]);
         setPrefHeight(size[1]);
-        setLayoutX(position[0] - getPrefWidth() / 2);
-        setLayoutY(position[1] - getPrefHeight() / 2);
 
         initButtonListeners();
     }

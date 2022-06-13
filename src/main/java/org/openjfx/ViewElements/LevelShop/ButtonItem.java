@@ -11,16 +11,19 @@ import javafx.util.Duration;
 import org.openjfx.Models.Shop.Item;
 import org.openjfx.ViewElements.ButtonAnimation;
 
-public class ItemIcon extends ButtonAnimation {
+public class ButtonItem extends ButtonAnimation {
 
     private final Item item;
     private Tooltip description;
 
-    public ItemIcon(double[] position, double[]size, Shape shape, Item item) {
-        super(position, size, shape);
+    public ButtonItem(double[] position, double[]size, Shape shape, Item item) {
+        super(size);
+        setShape(shape);
+        setLayoutX(position[0] - getPrefWidth() / 2);
+        setLayoutY(position[1] - getPrefHeight() / 2);
 
         this.item = item;
-        Image image = new Image(ItemIcon.class.getResource("item_border.png").toExternalForm());
+        Image image = new Image(ButtonItem.class.getResource("item_border.png").toExternalForm());
         BackgroundImage background = new BackgroundImage(
                 image,
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, null);

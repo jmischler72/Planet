@@ -1,5 +1,7 @@
 package org.openjfx.Models.Character;
 
+import org.openjfx.Models.Character.Enemy.Enemy;
+
 public abstract class Character {
     private int health;
     private int shield;
@@ -65,5 +67,12 @@ public abstract class Character {
 
     public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth;
+    }
+
+    public void attack(Character character){
+        character.setHealth(character.getHealth()-this.getDamage());
+//        System.out.println(enemy.getHealth());
+//        System.out.println(this.getDamage());
+
     }
 }
