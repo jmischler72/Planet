@@ -111,7 +111,7 @@ public class ViewLevelEnemy extends View{
     private void attackEnemy(EnemyComponent enemyComponent){
         animationAttack((int)enemyComponent.getLayoutX());
         game.getPlayer().attack(enemyComponent.getEnemy());
-        enemyComponent.updateHealth();
+        enemyComponent.setHealth(100*enemyComponent.getEnemy().getHealth()/enemyComponent.getEnemy().getMaxHealth());
         if(enemyComponent.getEnemy().getHealth()<=0){
             enemyComponent.setIsDead(true);
         }

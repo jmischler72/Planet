@@ -5,7 +5,9 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
@@ -33,7 +35,9 @@ public class EnemyComponent extends GridPane {
     private static final int WIDTH_ENEMY = 200;
     private static final int HEIGHT_ENEMY = 200;
 
-    private Rectangle healthbar;
+
+
+    private IntegerProperty health = new SimpleIntegerProperty();
 
     private BooleanProperty isDead = new SimpleBooleanProperty();
 
@@ -42,6 +46,7 @@ public class EnemyComponent extends GridPane {
         super();
         this.enemy = enemy;
         isDead.set(false);
+        health.set(100);
         render();
 
     }
@@ -59,8 +64,8 @@ public class EnemyComponent extends GridPane {
         setRowIndex(text, 0);
         setColumnIndex(text, 0);
 
-        healthbar = new Rectangle(200.0, 50.0, Color.RED);
-        healthbar.setWidth(100);
+        Rectangle healthbar = new Rectangle(200.0, 50.0, Color.RED);
+        healthbar.widthProperty().bind(health);
         setRowIndex(healthbar, 0);
         setColumnIndex(healthbar, 0);
 
@@ -68,10 +73,6 @@ public class EnemyComponent extends GridPane {
         renderEnemyAnimation(rectangle);
         renderEnemyAnimation(text);
         getChildren().addAll(rectangle,healthbar, text);
-    }
-
-    public void updateHealth(){
-        healthbar.setWidth(100*enemy.getHealth()/enemy.getMaxHealth());
     }
 
     public Enemy getEnemy(){
@@ -121,5 +122,9 @@ public class EnemyComponent extends GridPane {
 
     public void setIsDead(boolean isDead) {
         this.isDead.set(isDead);
+    }
+
+    public void setHealth(int health) {
+        this.health.set(health);
     }
 }
