@@ -36,7 +36,7 @@ public class ViewTransition extends View {
         levelName.setTextFill(Color.LIGHTYELLOW);
 
         try {
-            levelName.setFont(Font.loadFont(new FileInputStream("src/main/resources/org/openjfx/Views/Fonts/Frozito_font.ttf"), 64));
+            levelName.setFont(Font.loadFont(new FileInputStream("src/main/resources/org/openjfx/Views/Fonts/Frozito_font.ttf"), 100));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -44,6 +44,14 @@ public class ViewTransition extends View {
         addElement(levelName);
 
         lastView.renderView(this);
+//
+//        FadeTransition fadeUp = new FadeTransition();
+//        fadeUp.setNode(this.getPane());
+//        fadeUp.setDuration(Duration.seconds(1.5));
+//        fadeUp.setFromValue(0);
+//        fadeUp.setToValue(1);
+//        fadeUp.play();
+
 
         delay(1000, () -> {
             renderView(nextView);

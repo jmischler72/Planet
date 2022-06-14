@@ -15,8 +15,8 @@ public class View extends Scene {
 
     private final ArrayList<Animation> animations = new ArrayList<Animation>();
     private final Pane pane;
-    protected static int HEIGHT = 900  ;
-    protected static int WIDTH = 1500 ;
+    protected static int HEIGHT = 800;
+    protected static int WIDTH = 1500;
 
     public View(Pane pane) {
         super(pane, WIDTH, HEIGHT);

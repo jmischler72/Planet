@@ -1,8 +1,10 @@
 package org.openjfx.Views;
 
-import javafx.animation.*;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.animation.Animation;
+import javafx.animation.RotateTransition;
+import javafx.animation.SequentialTransition;
+import javafx.animation.TranslateTransition;
+import javafx.beans.property.*;
 import javafx.concurrent.Task;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
@@ -12,35 +14,74 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import org.openjfx.Models.Character.Enemy.Enemy;
 import org.openjfx.Models.Game;
 import org.openjfx.Models.Level.LevelEnemy;
 import org.openjfx.ViewElements.LevelEnemy.ButtonMenu;
 import org.openjfx.ViewElements.LevelEnemy.EnemyComponent;
+import org.openjfx.ViewElements.LevelEnemy.FinalVue;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import static javafx.util.Duration.millis;
 
 public class ViewLevelEnemy extends View{
     private static final int WIDTH_ENEMY = 200;
+    private static final int PLAYER_HEALTH_BAR_WIDTH = 600;
 
-    private final int X_ENEMY = WIDTH/2;
-    private final int Y_ENEMY = HEIGHT/2-150;
+    private final int X_ENEMY = WIDTH / 2 - 150;
+    private final int Y_ENEMY = HEIGHT / 2 - 150;
 
-    private final BooleanProperty canPlay = new SimpleBooleanProperty();
+    private BooleanProperty canPlay = new SimpleBooleanProperty();
+    private IntegerProperty playerHealth = new SimpleIntegerProperty();
+    private StringProperty textPlayerHealth = new SimpleStringProperty();
+
     private final LevelEnemy levelEnemy;
     private final Game game;
 
 
     public ViewLevelEnemy(Game game) {
         super(new AnchorPane());
+
+        levelEnemy = (LevelEnemy) game.getCurrentLevel();
+
         setBackground("random_background.jpg");
 
-        this.levelEnemy = (LevelEnemy) game.getCurrentLevel();
         this.game = game;
+        game.getPlayer().setHealth(game.getPlayer().getMaxHealth());
 
         canPlay.set(true);
+        playerHealth.set(game.getPlayer().getHealth() / game.getPlayer().getMaxHealth() * PLAYER_HEALTH_BAR_WIDTH);
+        textPlayerHealth.set(String.valueOf(game.getPlayer().getHealth()));
+
+        playerHealth.addListener((observable, oldValue, newValue) -> {
+            if (!game.getPlayer().isAlive()) {
+                FinalVue vue = new FinalVue(false, WIDTH, HEIGHT);
+                vue.getQuitButton().setOnAction((playEvent) -> {
+                    ViewLevelSelector levelView = new ViewLevelSelector( game);
+                    ViewTransition viewTransition = new ViewTransition(this, levelView, "Select");
+                    viewTransition.render();
+                });
+                addElement(vue);
+            }
+
+            if (levelEnemy.isDone()) {
+                FinalVue vue = new FinalVue(true, WIDTH, HEIGHT);
+                vue.getQuitButton().setOnAction((playEvent) -> {
+                    ViewLevelSelector levelView = new ViewLevelSelector( game);
+                    ViewTransition viewTransition = new ViewTransition(this, levelView, "Select");
+                    viewTransition.render();
+                });
+
+                game.getCurrentPlanet().addDoneLevel(this.levelEnemy);
+                game.getPlayer().addGolds(500);
+                addElement(vue);
+            }
+        });
 
         render();
 
@@ -62,6 +103,27 @@ public class ViewLevelEnemy extends View{
             i++;
         }
         renderPlayerButtons(enemies_components);
+        renderPlayerHealthBar();
+    }
+
+    private void renderPlayerHealthBar() {
+        StackPane pane = new StackPane();
+        pane.setLayoutX(500);
+        pane.setLayoutY(HEIGHT - 80);
+
+        Rectangle bar = new Rectangle(PLAYER_HEALTH_BAR_WIDTH, 60, Color.RED);
+        bar.widthProperty().bind(playerHealth);
+
+        Text health = new Text(String.valueOf(game.getPlayer().getHealth()));
+        try {
+            health.setFont(Font.loadFont(new FileInputStream("src/main/resources/org/openjfx/Views/Fonts/main_font.ttf"), 40));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        health.textProperty().bind(textPlayerHealth);
+
+        pane.getChildren().addAll(bar, health);
+        addElement(pane);
     }
 
     private void renderPlayerButtons(ArrayList<EnemyComponent> enemies_components){
@@ -74,6 +136,7 @@ public class ViewLevelEnemy extends View{
         b.setOnAction((playEvent) -> {
             int i = 0;
             for (Enemy enemy : levelEnemy.getEnemies()) {
+                System.out.println("f");
                 int finalI = i;
                 EnemyComponent enemy_component = enemies_components.get(finalI);
 
@@ -87,6 +150,7 @@ public class ViewLevelEnemy extends View{
                     enemy_component.setHealth(100*enemy.getHealth()/enemy.getMaxHealth());
                     if(enemy.getHealth()<=0){
                         enemy_component.setIsDead(true);
+                        levelEnemy.remove(enemy);
                     }
                     TranslateTransition attack = animationAttack((int) enemy_component.getLayoutX());
                     RotateTransition attacked = animationAttacked(enemy_component);
@@ -95,6 +159,8 @@ public class ViewLevelEnemy extends View{
                     SequentialTransition seqT = new SequentialTransition(attack, attacked);
                     seqT.play();
                     enemy.attack(game.getPlayer());
+                    playerHealth.set(PLAYER_HEALTH_BAR_WIDTH * game.getPlayer().getHealth() / game.getPlayer().getMaxHealth());
+                    textPlayerHealth.set(String.valueOf(game.getPlayer().getHealth()));
                     canPlay.set(true);
 
                 });
@@ -143,7 +209,6 @@ public class ViewLevelEnemy extends View{
         });
         return move;
     }
-
 
     private void renderSandAnimation() {
         Rectangle rectangle = new Rectangle(WIDTH*1.6,HEIGHT);

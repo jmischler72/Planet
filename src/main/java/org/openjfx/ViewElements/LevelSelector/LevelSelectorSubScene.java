@@ -1,7 +1,6 @@
 package org.openjfx.ViewElements.LevelSelector;
 
 import javafx.animation.FadeTransition;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.SubScene;
 import javafx.scene.control.Button;
@@ -15,6 +14,9 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.openjfx.Models.Level.Level;
 import org.openjfx.Models.Level.LevelType;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class LevelSelectorSubScene extends SubScene {
 
@@ -36,14 +38,18 @@ public class LevelSelectorSubScene extends SubScene {
         this.setDisable(true);
 
         Text text = new Text(100, 50, level.getName());
+        try {
+            text.setFont(Font.loadFont(new FileInputStream("src/main/resources/org/openjfx/Views/Fonts/main_font.ttf"), 12));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         text.setFill(Color.WHITE);
-        text.setFont(new Font(15));
 
-        Rectangle cadre = new Rectangle(200,20);
+        Rectangle cadre = new Rectangle(200, 20);
 
         StackPane stack = new StackPane();
         stack.getChildren().addAll(cadre, text);
-        stack.setLayoutX(WIDTH/2-cadre.getWidth()/2);
+        stack.setLayoutX(WIDTH / 2 - cadre.getWidth() / 2);
         stack.setLayoutY(23);
 
         BackgroundImage background = new BackgroundImage(
@@ -65,7 +71,7 @@ public class LevelSelectorSubScene extends SubScene {
     private ButtonSelector createButton(Level level, double[] buttonPosition) {
 
         if(level.getType() == LevelType.Shop) {
-            ButtonSelector b = new ButtonSelector(buttonPosition, new double[]{80,40}, null, "Infos_subscene_assets/shop_button_close.png");
+            ButtonSelector b = new ButtonSelector(level, buttonPosition, new double[]{80, 40}, null, "Infos_subscene_assets/shop_button_close.png");
 
             b.setOnMouseEntered(event -> {
                 b.setEffect(new DropShadow());
@@ -88,7 +94,7 @@ public class LevelSelectorSubScene extends SubScene {
             return b;
         }
 
-        return new ButtonSelector(buttonPosition, new double[]{80,40}, null, "Infos_subscene_assets/fight_button.png");
+        return new ButtonSelector(level, buttonPosition, new double[]{80, 40}, null, "Infos_subscene_assets/fight_button.png");
     }
 
     public Button getButton() {

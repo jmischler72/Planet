@@ -13,9 +13,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 import org.openjfx.Models.Game;
 import org.openjfx.Models.Level.Level;
+import org.openjfx.ViewElements.LevelEnemy.ButtonMenu;
 import org.openjfx.ViewElements.LevelSelector.*;
 import org.openjfx.Models.Planet;
 
@@ -47,6 +49,7 @@ public class ViewLevelSelector extends View {
         addElement(shadow);
         addElement(circlePlanet);
         createButtons(circlePlanet);
+        createNextButton();
     }
 
     private void createButtons(Circle circlePlanet) {
@@ -74,7 +77,7 @@ public class ViewLevelSelector extends View {
                 positions.add(position);
             }
 
-            ButtonSelector levelButton = new ButtonSelector(level.getPosition(),new double[]{56,56}, new Circle(10), level.getType());
+            ButtonSelector levelButton = new ButtonSelector(level,new double[]{56,56}, new Circle(10));
             LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene((int) levelButton.getPrefWidth(), level.getPosition(), level);
 
             levelButton.setOnAction((event) -> {    // lambda expression
@@ -103,10 +106,40 @@ public class ViewLevelSelector extends View {
 
             });
 
+            if (planet.getDoneLevels().contains(level)) {
+                levelButton.setDisable(true);
+            }
+
             addElement(levelSelectorSubScene);
             addElement(levelButton);
             buttonList.add(levelButton);
         }
+    }
+
+    private void createNextButton() {
+        ButtonMenu button = new ButtonMenu(new double[]{180, 50}, "Next planet");
+        button.setLayoutX(WIDTH - 250);
+        button.setLayoutY(HEIGHT / 2);
+        try {
+            button.setFont(Font.loadFont(new FileInputStream("src/main/resources/org/openjfx/Views/Fonts/main_font.ttf"), 15));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        boolean nextPlanet = false;
+        if (planet.getDoneLevels().size() >= planet.getLevels().size() - 1) {
+            nextPlanet = true;
+        }
+        button.setVisible(nextPlanet);
+
+        button.setOnAction((event) -> {
+            game.setCurrentPlanet(new Planet());
+            ViewLevelSelector levelView = new ViewLevelSelector( game);
+            ViewTransition viewTransition = new ViewTransition(this, levelView, "Select");
+            viewTransition.render();
+        });
+
+        addElement(button);
     }
 
     private void animationButtons(ButtonSelector activeButton, boolean opened) {
@@ -115,6 +148,11 @@ public class ViewLevelSelector extends View {
             FadeTransition fade = new FadeTransition();
             fade.setDuration(Duration.seconds(0.1));
             fade.setAutoReverse(true);
+            if (planet.getDoneLevels().contains(button.getLevel())) {
+                button.setDisable(true);
+                continue;
+            }
+
             if (button != activeButton) {
                 if(!opened){
                     fade.setFromValue(1);

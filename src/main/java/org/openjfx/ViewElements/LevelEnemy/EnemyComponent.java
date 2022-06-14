@@ -4,7 +4,6 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -13,7 +12,6 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -22,8 +20,11 @@ import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import org.openjfx.Models.Character.Enemy.Enemy;
 import org.openjfx.Models.Character.Enemy.EnemyType;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -33,6 +34,7 @@ public class EnemyComponent extends GridPane {
 
     private final EnemyType type;
     private final String name;
+    private static final int ENEMY_HEALTHBAR_WIDTH = 200;
 
     private final ArrayList<Animation> animations = new ArrayList<Animation>();
 
@@ -81,14 +83,16 @@ public class EnemyComponent extends GridPane {
         setColumnIndex(enemy_rectangle, 0);
 
         Text text = new Text(100, 50, name);
-        text.setFill(Color.WHITE);
-        text.setFont(new Font(15));
+        try {
+            text.setFont(Font.loadFont(new FileInputStream("src/main/resources/org/openjfx/Views/Fonts/main_font.ttf"), 13));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         setRowIndex(text, 0);
         setColumnIndex(text, 0);
 
-        Rectangle healthbar = new Rectangle(200.0, 50.0, Color.RED);
+        Rectangle healthbar = new Rectangle(ENEMY_HEALTHBAR_WIDTH, 15, Color.RED);
         healthbar.widthProperty().bind(health);
-        healthbar.setHeight(15);
         setRowIndex(healthbar, 0);
         setColumnIndex(healthbar, 0);
 
@@ -97,6 +101,8 @@ public class EnemyComponent extends GridPane {
         renderEnemyAnimation(text);
         getChildren().addAll(enemy_rectangle,healthbar, text);
     }
+
+
 
     private void renderEnemyAnimation(Shape rectangle) {
         final Timeline timeline = new Timeline(new KeyFrame(Duration.ZERO, new EventHandler() {

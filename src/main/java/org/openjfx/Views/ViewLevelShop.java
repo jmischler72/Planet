@@ -23,6 +23,8 @@ import org.openjfx.ViewElements.LevelShop.EquipedItem;
 import org.openjfx.ViewElements.LevelShop.ButtonItem;
 import org.openjfx.ViewElements.LevelShop.Stat;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class ViewLevelShop extends View {
@@ -56,7 +58,11 @@ public class ViewLevelShop extends View {
 
         StackPane goldsStack = new StackPane();
         Label golds = new Label(String.valueOf(game.getPlayer().getGold()));
-        golds.setFont(new Font(30));
+        try {
+            golds.setFont(Font.loadFont(new FileInputStream("src/main/resources/org/openjfx/Views/Fonts/main_font.ttf"), 20));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         goldsStack.getChildren().add(golds);
         goldsStack.setLayoutX(WIDTH - 200);
@@ -64,8 +70,8 @@ public class ViewLevelShop extends View {
         addElement(goldsStack);
 
         ButtonMenu b3 = new ButtonMenu(new double[]{100, 50}, "+ 100 g");
-        b3.setLayoutX(WIDTH-100);
-        b3.setLayoutY(HEIGHT-60);
+        b3.setLayoutX(WIDTH - 100);
+        b3.setLayoutY(HEIGHT - 60);
         b3.setOnAction((playEvent) -> {
             game.getPlayer().addGolds(100);
             refresh();
@@ -148,7 +154,11 @@ public class ViewLevelShop extends View {
         container.setLayoutY(HEIGHT - 700);
 
         Label title = new Label("Equipement actuel : ");
-        title.setFont(new Font(30));
+        try {
+            title.setFont(Font.loadFont(new FileInputStream("src/main/resources/org/openjfx/Views/Fonts/main_font.ttf"), 20));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         title.setAlignment(Pos.BASELINE_CENTER);
         container.setTop(title);
 
@@ -173,8 +183,12 @@ public class ViewLevelShop extends View {
         container.setLayoutX(WIDTH - 500);
         container.setLayoutY(HEIGHT - 160);
 
-        Text title = new Text("Statistiques actuelles : ");
-        title.setFont(new Font(20));
+        Text title = new Text("Statistiques : ");
+        try {
+            title.setFont(Font.loadFont(new FileInputStream("src/main/resources/org/openjfx/Views/Fonts/main_font.ttf"), 20));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         Player player = game.getPlayer();
         Font statFont = new Font(15);
@@ -227,7 +241,11 @@ public class ViewLevelShop extends View {
                 Boolean isSuccess = player.buy(item.getItem());
                 if(!isSuccess) {
                     Label label = new Label("Vous n'avez pas assez d'argent !");
-                    label.setFont(new Font(15));
+                    try {
+                        label.setFont(Font.loadFont(new FileInputStream("src/main/resources/org/openjfx/Views/Fonts/main_font.ttf"), 20));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                     Popup popup = new Popup();
                     label.setBackground(new Background(
                             new BackgroundFill(Color.RED, new CornerRadii(20), Insets.EMPTY)
