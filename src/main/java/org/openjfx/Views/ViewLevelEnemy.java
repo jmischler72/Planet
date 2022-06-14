@@ -1,8 +1,6 @@
 package org.openjfx.Views;
 
-import javafx.animation.Animation;
-import javafx.animation.RotateTransition;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Task;
@@ -29,7 +27,7 @@ public class ViewLevelEnemy extends View{
     private final int X_ENEMY = WIDTH/2;
     private final int Y_ENEMY = HEIGHT/2-150;
 
-    private BooleanProperty canPlay = new SimpleBooleanProperty();
+    private final BooleanProperty canPlay = new SimpleBooleanProperty();
     private final LevelEnemy levelEnemy;
     private final Game game;
 
@@ -50,17 +48,18 @@ public class ViewLevelEnemy extends View{
 
     private void render(){
         ArrayList<EnemyComponent> enemies_components = new ArrayList<EnemyComponent>();
-
-        for (int i = 0; i < levelEnemy.getEnemies().size(); i++) {
-            EnemyComponent enemy = new EnemyComponent(levelEnemy.getEnemies().get(i));
-            enemy.visibleProperty().bind(enemy.isDeadProperty().not());
-            enemy.setLayoutX(X_ENEMY+i*300);
-            enemy.setLayoutY(Y_ENEMY);
-            addElement(enemy);
-            enemies_components.add(enemy);
-            for(Animation animation: enemy.getAnimations()){
+        int i =0;
+        for (Enemy enemy : levelEnemy.getEnemies()) {
+            EnemyComponent enemy_component= new EnemyComponent(enemy.getType(),enemy.getName());
+            enemy_component.visibleProperty().bind(enemy_component.isDeadProperty().not());
+            enemy_component.setLayoutX(X_ENEMY+i*300);
+            enemy_component.setLayoutY(Y_ENEMY);
+            addElement(enemy_component);
+            enemies_components.add(enemy_component);
+            for(Animation animation: enemy_component.getAnimations()){
                 addAnimation(animation);
             }
+            i++;
         }
         renderPlayerButtons(enemies_components);
     }
@@ -75,17 +74,27 @@ public class ViewLevelEnemy extends View{
         b.setOnAction((playEvent) -> {
             int i = 0;
             for (Enemy enemy : levelEnemy.getEnemies()) {
-                System.out.println("f");
                 int finalI = i;
+                EnemyComponent enemy_component = enemies_components.get(finalI);
 
                 ButtonMenu button_enemy = new ButtonMenu(new double[]{100,50}, enemy.getName());
                 button_enemy.setLayoutX(80+i*100);
                 button_enemy.setLayoutY(HEIGHT-120);
-                button_enemy.visibleProperty().bind(enemies_components.get(finalI).isDeadProperty().not());
+                button_enemy.visibleProperty().bind(enemy_component.isDeadProperty().not());
                 button_enemy.setOnAction((f) -> {
-                    attackEnemy(enemies_components.get(finalI));
+
+                    game.getPlayer().attack(enemy);
+                    enemy_component.setHealth(100*enemy.getHealth()/enemy.getMaxHealth());
+                    if(enemy.getHealth()<=0){
+                        enemy_component.setIsDead(true);
+                    }
+                    TranslateTransition attack = animationAttack((int) enemy_component.getLayoutX());
+                    RotateTransition attacked = animationAttacked(enemy_component);
                     canPlay.set(false);
-                    attackedByEnemy(enemies_components.get(finalI));
+
+                    SequentialTransition seqT = new SequentialTransition(attack, attacked);
+                    seqT.play();
+                    enemy.attack(game.getPlayer());
                     canPlay.set(true);
 
                 });
@@ -108,26 +117,15 @@ public class ViewLevelEnemy extends View{
 
     }
 
-    private void attackEnemy(EnemyComponent enemyComponent){
-        animationAttack((int)enemyComponent.getLayoutX());
-        game.getPlayer().attack(enemyComponent.getEnemy());
-        enemyComponent.setHealth(100*enemyComponent.getEnemy().getHealth()/enemyComponent.getEnemy().getMaxHealth());
-        if(enemyComponent.getEnemy().getHealth()<=0){
-            enemyComponent.setIsDead(true);
-        }
-
-    }
-
-    private void attackedByEnemy(EnemyComponent enemyComponent){
+    private RotateTransition animationAttacked(EnemyComponent enemy){
         RotateTransition rotateTransition = new RotateTransition(millis(200));
         rotateTransition.setFromAngle(0);
         rotateTransition.setToAngle(360);
-        rotateTransition.setNode(enemyComponent);
-        rotateTransition.play();
-        enemyComponent.getEnemy().attack(game.getPlayer());
+        rotateTransition.setNode(enemy);
+        return rotateTransition;
     }
 
-    private void animationAttack(int x){
+    private TranslateTransition animationAttack(int x){
         SVGPath svg = new SVGPath();
         svg.setFill(Color.YELLOW);
         svg.setContent("m 0 59.82677 l 27.527777 -8.654488 l -19.512508 -21.258898 l 28.167 6.268881 l -6.268881 -28.167 l 21.258898 19.512508 l 8.654488 -27.527777 l 8.654491 27.527777 l 21.258896 -19.512508 l -6.2688828 28.167 l 28.167 -6.268881 l -19.512512 21.258898 l 27.527779 8.654488 l -27.527779 8.654491 l 19.512512 21.258896 l -28.167 -6.2688828 l 6.2688828 28.167 l -21.258896 -19.512512 l -8.654491 27.527779 l -8.654488 -27.527779 l -21.258898 19.512512 l 6.268881 -28.167 l -28.167 6.2688828 l 19.512508 -21.258896 z");
@@ -142,8 +140,9 @@ public class ViewLevelEnemy extends View{
         move.setOnFinished(e -> {
             delay(200,() ->{svg.setVisible(false);});
         });
-        move.play();
+        return move;
     }
+
 
     private void renderSandAnimation() {
         Rectangle rectangle = new Rectangle(WIDTH*1.6,HEIGHT);

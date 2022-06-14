@@ -4,13 +4,16 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -19,7 +22,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import org.openjfx.Models.Character.Enemy.Enemy;
+import org.openjfx.Models.Character.Enemy.EnemyType;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -28,37 +31,56 @@ import static javafx.util.Duration.millis;
 
 public class EnemyComponent extends GridPane {
 
-    private final Enemy enemy;
+    private final EnemyType type;
+    private final String name;
 
     private final ArrayList<Animation> animations = new ArrayList<Animation>();
 
     private static final int WIDTH_ENEMY = 200;
     private static final int HEIGHT_ENEMY = 200;
 
+    private final IntegerProperty health = new SimpleIntegerProperty();
+
+    private final BooleanProperty isDead = new SimpleBooleanProperty();
+    private final BooleanProperty isSelected = new SimpleBooleanProperty();
 
 
-    private IntegerProperty health = new SimpleIntegerProperty();
-
-    private BooleanProperty isDead = new SimpleBooleanProperty();
-
-
-    public EnemyComponent(Enemy enemy){
+    public EnemyComponent(EnemyType type, String name){
         super();
-        this.enemy = enemy;
+        this.type = type;
+        this.name = name;
         isDead.set(false);
         health.set(100);
+        isSelected.set(false);
         render();
 
     }
     private void render(){
 
         Rectangle rectangle = new Rectangle(WIDTH_ENEMY,HEIGHT_ENEMY);
-        Image image = new Image(getClass().getResource(enemy.getType()+".png").toExternalForm());
+        Image image = new Image(getClass().getResource(type+".png").toExternalForm());
         rectangle.setFill(new ImagePattern(image, 0, 0, 1, 1, true));
+
+        ColorAdjust colorAdjust = new ColorAdjust();
+
+        colorAdjust.setBrightness(-0.5);
+        isSelected.addListener((observable, oldValue, newValue) -> {
+            if(isSelected.get()){
+                this.setEffect(colorAdjust);
+            }else {
+                this.setEffect(null);
+            }
+        }
+        );
+        setOnMousePressed(event -> {
+                    isSelected.set(!isSelected.get());
+                }
+            );
         setRowIndex(rectangle, 1);
+        setRowSpan(rectangle,2);
         setColumnIndex(rectangle, 0);
 
-        Text text = new Text(100, 50, enemy.getName());
+        Text text = new Text(100, 50, name);
         text.setFill(Color.WHITE);
         text.setFont(new Font(15));
         setRowIndex(text, 0);
@@ -73,14 +95,6 @@ public class EnemyComponent extends GridPane {
         renderEnemyAnimation(rectangle);
         renderEnemyAnimation(text);
         getChildren().addAll(rectangle,healthbar, text);
-    }
-
-    public Enemy getEnemy(){
-        return enemy;
-    }
-
-    public void removeEnemy(){
-        this.getChildren().remove(this);
     }
 
     private void renderEnemyAnimation(Shape rectangle) {
