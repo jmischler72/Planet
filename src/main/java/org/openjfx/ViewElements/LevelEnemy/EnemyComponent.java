@@ -19,6 +19,8 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.openjfx.Models.Character.Enemy.Enemy;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -26,6 +28,7 @@ import static javafx.util.Duration.millis;
 
 public class EnemyComponent extends GridPane {
 
+    private static final int ENEMY_HEALTHBAR_WIDTH = 200;
     private final Enemy enemy;
 
     private final ArrayList<Animation> animations = new ArrayList<Animation>();
@@ -45,22 +48,24 @@ public class EnemyComponent extends GridPane {
         render();
 
     }
-    private void render(){
+    private void render() {
 
-        Rectangle rectangle = new Rectangle(WIDTH_ENEMY,HEIGHT_ENEMY);
-        Image image = new Image(getClass().getResource(enemy.getType()+".png").toExternalForm());
+        Rectangle rectangle = new Rectangle(WIDTH_ENEMY, HEIGHT_ENEMY);
+        Image image = new Image(getClass().getResource(enemy.getType() + ".png").toExternalForm());
         rectangle.setFill(new ImagePattern(image, 0, 0, 1, 1, true));
         setRowIndex(rectangle, 1);
         setColumnIndex(rectangle, 0);
 
         Text text = new Text(100, 50, enemy.getName());
-        text.setFill(Color.WHITE);
-        text.setFont(new Font(15));
+        try {
+            text.setFont(Font.loadFont(new FileInputStream("src/main/resources/org/openjfx/Views/Fonts/main_font.ttf"), 13));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         setRowIndex(text, 0);
         setColumnIndex(text, 0);
 
-        healthbar = new Rectangle(200.0, 50.0, Color.RED);
-        healthbar.setWidth(100);
+        healthbar = new Rectangle(ENEMY_HEALTHBAR_WIDTH, 50.0, Color.RED);
         setRowIndex(healthbar, 0);
         setColumnIndex(healthbar, 0);
 
@@ -71,7 +76,7 @@ public class EnemyComponent extends GridPane {
     }
 
     public void updateHealth(){
-        healthbar.setWidth(100*enemy.getHealth()/enemy.getMaxHealth());
+        healthbar.setWidth(ENEMY_HEALTHBAR_WIDTH * enemy.getHealth() / enemy.getMaxHealth());
     }
 
     public Enemy getEnemy(){

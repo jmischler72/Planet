@@ -1,6 +1,9 @@
 package org.openjfx.Views;
 
-import javafx.animation.*;
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.CacheHint;
@@ -8,16 +11,19 @@ import javafx.scene.control.Button;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.Shadow;
 import javafx.scene.image.Image;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
-
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 import org.openjfx.Models.Game;
 import org.openjfx.Models.Level.Level;
-import org.openjfx.ViewElements.LevelSelector.*;
 import org.openjfx.Models.Planet;
+import org.openjfx.ViewElements.LevelEnemy.ButtonMenu;
+import org.openjfx.ViewElements.LevelSelector.ButtonSelector;
+import org.openjfx.ViewElements.LevelSelector.LevelSelectorSubScene;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -43,17 +49,16 @@ public class ViewLevelSelector extends View {
         Circle shadow = renderCircleShadow(circlePlanet, 80, new int[]{0, 0});
         renderShadowAnimation(shadow);
 
-
         addElement(shadow);
         addElement(circlePlanet);
         createButtons(circlePlanet);
+        createNextButton();
     }
 
     private void createButtons(Circle circlePlanet) {
         ArrayList<double[]> positions = new ArrayList<double[]>();
 
         for (Level level : planet.getLevels()) {
-
             Circle circleMarkers = new Circle(circlePlanet.getCenterX(), circlePlanet.getCenterY(), circlePlanet.getRadius() - 80);
             if (level.getPosition() ==null){
                 double[] position = getRandomPositionInCircle(circleMarkers);
@@ -74,7 +79,7 @@ public class ViewLevelSelector extends View {
                 positions.add(position);
             }
 
-            ButtonSelector levelButton = new ButtonSelector(level.getPosition(),new double[]{56,56}, new Circle(10), level.getType());
+            ButtonSelector levelButton = new ButtonSelector(level, level.getPosition(), new double[]{56, 56}, new Circle(10), level.getType());
             LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene((int) levelButton.getPrefWidth(), level.getPosition(), level);
 
             levelButton.setOnAction((event) -> {    // lambda expression
@@ -88,7 +93,7 @@ public class ViewLevelSelector extends View {
                 View levelView = null;
                 switch (level.getType()) {
                     case Boss:
-                        levelView = new ViewLevelBoss(new AnchorPane(), game);
+                        levelView = new ViewLevelEnemy(new AnchorPane(), game);
                         break;
                     case Shop:
                         levelView = new ViewLevelShop(new AnchorPane(), game);
@@ -98,14 +103,45 @@ public class ViewLevelSelector extends View {
                         break;
                 }
 
-                ViewTransition viewTransition = new ViewTransition(new AnchorPane(),this, levelView, level.getName());
+                ViewTransition viewTransition = new ViewTransition(new AnchorPane(), this, levelView, level.getName());
+                viewTransition.render();
 
             });
+
+            if (planet.getDoneLevels().contains(level)) {
+                levelButton.setDisable(true);
+            }
 
             addElement(levelSelectorSubScene);
             addElement(levelButton);
             buttonList.add(levelButton);
         }
+    }
+
+    private void createNextButton() {
+        ButtonMenu button = new ButtonMenu(new double[]{180, 50}, "Next planet");
+        button.setLayoutX(WIDTH - 250);
+        button.setLayoutY(HEIGHT / 2);
+        try {
+            button.setFont(Font.loadFont(new FileInputStream("src/main/resources/org/openjfx/Views/Fonts/main_font.ttf"), 15));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        boolean nextPlanet = false;
+        if (planet.getDoneLevels().size() >= planet.getLevels().size() - 1) {
+            nextPlanet = true;
+        }
+        button.setVisible(nextPlanet);
+
+        button.setOnAction((event) -> {
+            game.setCurrentPlanet(new Planet());
+            ViewLevelSelector levelView = new ViewLevelSelector(new AnchorPane(), game);
+            ViewTransition viewTransition = new ViewTransition(new AnchorPane(), this, levelView, "Select");
+            viewTransition.render();
+        });
+
+        addElement(button);
     }
 
     private void animationButtons(ButtonSelector activeButton, boolean opened) {
@@ -114,12 +150,17 @@ public class ViewLevelSelector extends View {
             FadeTransition fade = new FadeTransition();
             fade.setDuration(Duration.seconds(0.1));
             fade.setAutoReverse(true);
+            if (planet.getDoneLevels().contains(button.getLevel())) {
+                button.setDisable(true);
+                continue;
+            }
+
             if (button != activeButton) {
-                if(!opened){
+                if (!opened) {
                     fade.setFromValue(1);
                     fade.setToValue(0);
                     button.setDisable(true);
-                }else{
+                } else {
                     fade.setFromValue(0);
                     fade.setToValue(1);
                     button.setDisable(false);

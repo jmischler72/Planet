@@ -1,11 +1,11 @@
 package org.openjfx.Models;
 
-import org.openjfx.Models.Level.Level;
 import org.openjfx.Models.Character.Player;
+import org.openjfx.Models.Level.Level;
 
 public class Game {
     private final Player player;
-    private final Planet currentPlanet;
+    private Planet currentPlanet;
     private Level currentLevel = null;
 
     public Game() {
@@ -21,13 +21,15 @@ public class Game {
         return currentPlanet;
     }
 
-    public Level getCurrentLevel(){
+    public Level getCurrentLevel() {
         return currentLevel;
     }
 
-    public void setCurrentLevel(Level level){
+    public void setCurrentLevel(Level level) {
         this.currentLevel = level;
     }
 
-
+    public void setCurrentPlanet(Planet currentPlanet) {
+        this.currentPlanet = currentPlanet;
+    }
 }

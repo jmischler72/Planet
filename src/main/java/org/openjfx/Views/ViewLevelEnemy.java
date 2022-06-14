@@ -3,36 +3,44 @@ package org.openjfx.Views;
 import javafx.animation.Animation;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.*;
 import javafx.concurrent.Task;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import org.openjfx.Models.Character.Enemy.Enemy;
 import org.openjfx.Models.Game;
 import org.openjfx.Models.Level.LevelEnemy;
 import org.openjfx.ViewElements.LevelEnemy.ButtonMenu;
 import org.openjfx.ViewElements.LevelEnemy.EnemyComponent;
+import org.openjfx.ViewElements.LevelEnemy.FinalVue;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import static javafx.util.Duration.millis;
 
-public class ViewLevelEnemy extends View{
+public class ViewLevelEnemy extends View {
     private static final int WIDTH_ENEMY = 200;
+    private static final int PLAYER_HEALTH_BAR_WIDTH = 600;
 
-    private final int X_ENEMY = WIDTH/2;
-    private final int Y_ENEMY = HEIGHT/2-150;
+    private final int X_ENEMY = WIDTH / 2 - 150;
+    private final int Y_ENEMY = HEIGHT / 2 - 150;
 
     private BooleanProperty canPlay = new SimpleBooleanProperty();
+    private IntegerProperty playerHealth = new SimpleIntegerProperty();
+    private StringProperty textPlayerHealth = new SimpleStringProperty();
+
     private final LevelEnemy levelEnemy;
     private final Game game;
-
 
     public ViewLevelEnemy(Pane pane, Game game) {
         super(pane);
@@ -42,10 +50,37 @@ public class ViewLevelEnemy extends View{
         setBackground("random_background.jpg");
 
         this.game = game;
+        game.getPlayer().setHealth(game.getPlayer().getMaxHealth());
         canPlay.set(true);
+        playerHealth.set(game.getPlayer().getHealth() / game.getPlayer().getMaxHealth() * PLAYER_HEALTH_BAR_WIDTH);
+        textPlayerHealth.set(String.valueOf(game.getPlayer().getHealth()));
+
+        playerHealth.addListener((observable, oldValue, newValue) -> {
+            if (!game.getPlayer().isAlive()) {
+                FinalVue vue = new FinalVue(false, WIDTH, HEIGHT);
+                vue.getQuitButton().setOnAction((playEvent) -> {
+                    ViewLevelSelector levelView = new ViewLevelSelector(new AnchorPane(), game);
+                    ViewTransition viewTransition = new ViewTransition(new AnchorPane(), this, levelView, "Select");
+                    viewTransition.render();
+                });
+                addElement(vue);
+            }
+
+            if (levelEnemy.isDone()) {
+                FinalVue vue = new FinalVue(true, WIDTH, HEIGHT);
+                vue.getQuitButton().setOnAction((playEvent) -> {
+                    ViewLevelSelector levelView = new ViewLevelSelector(new AnchorPane(), game);
+                    ViewTransition viewTransition = new ViewTransition(new AnchorPane(), this, levelView, "Select");
+                    viewTransition.render();
+                });
+
+                game.getCurrentPlanet().addDoneLevel(this.levelEnemy);
+                game.getPlayer().addGolds(500);
+                addElement(vue);
+            }
+        });
 
         render();
-
     }
 
     private void render(){
@@ -54,28 +89,48 @@ public class ViewLevelEnemy extends View{
         for (int i = 0; i < levelEnemy.getEnemies().size(); i++) {
             EnemyComponent enemy = new EnemyComponent(levelEnemy.getEnemies().get(i));
             enemy.visibleProperty().bind(enemy.isDeadProperty().not());
-            enemy.setLayoutX(X_ENEMY+i*300);
+            enemy.setLayoutX(X_ENEMY + i * 300);
             enemy.setLayoutY(Y_ENEMY);
             addElement(enemy);
             enemies_components.add(enemy);
-            for(Animation animation: enemy.getAnimations()){
+            for (Animation animation : enemy.getAnimations()) {
                 addAnimation(animation);
             }
         }
         renderPlayerButtons(enemies_components);
+        renderPlayerHealthBar();
     }
 
-    private void renderPlayerButtons(ArrayList<EnemyComponent> enemies_components){
-        ButtonMenu b = new ButtonMenu(new double[]{100,50}, "test");
+    private void renderPlayerHealthBar() {
+        StackPane pane = new StackPane();
+        pane.setLayoutX(500);
+        pane.setLayoutY(HEIGHT - 80);
+
+        Rectangle bar = new Rectangle(PLAYER_HEALTH_BAR_WIDTH, 60, Color.RED);
+        bar.widthProperty().bind(playerHealth);
+
+        Text health = new Text(String.valueOf(game.getPlayer().getHealth()));
+        try {
+            health.setFont(Font.loadFont(new FileInputStream("src/main/resources/org/openjfx/Views/Fonts/main_font.ttf"), 40));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        health.textProperty().bind(textPlayerHealth);
+
+        pane.getChildren().addAll(bar, health);
+        addElement(pane);
+    }
+
+    private void renderPlayerButtons(ArrayList<EnemyComponent> enemies_components) {
+        ButtonMenu b = new ButtonMenu(new double[]{100, 50}, "test");
         b.setLayoutX(80);
-        b.setLayoutY(HEIGHT-60);
+        b.setLayoutY(HEIGHT - 60);
 
         b.visibleProperty().bind(canPlay);
 
         b.setOnAction((playEvent) -> {
             int i = 0;
             for (Enemy enemy : levelEnemy.getEnemies()) {
-                System.out.println("f");
                 int finalI = i;
 
                 ButtonMenu button_enemy = new ButtonMenu(new double[]{100,50}, enemy.getName());
@@ -101,30 +156,32 @@ public class ViewLevelEnemy extends View{
         b2.setOnAction((playEvent) -> {
             ViewLevelSelector levelView = new ViewLevelSelector(new AnchorPane(), game);
             ViewTransition viewTransition = new ViewTransition(new AnchorPane(),this, levelView, "Select");
+            viewTransition.render();
         });
 
         addElement(b);
         addElement(b2);
-
     }
 
     private void attackEnemy(EnemyComponent enemyComponent){
         animationAttack((int)enemyComponent.getLayoutX());
         game.getPlayer().attack(enemyComponent.getEnemy());
         enemyComponent.updateHealth();
-        if(enemyComponent.getEnemy().getHealth()<=0){
+        if (!enemyComponent.getEnemy().isAlive()) {
             enemyComponent.setIsDead(true);
+            levelEnemy.remove(enemyComponent.getEnemy());
         }
-
     }
 
-    private void attackedByEnemy(EnemyComponent enemyComponent){
+    private void attackedByEnemy(EnemyComponent enemyComponent) {
         RotateTransition rotateTransition = new RotateTransition(millis(200));
         rotateTransition.setFromAngle(0);
         rotateTransition.setToAngle(360);
         rotateTransition.setNode(enemyComponent);
         rotateTransition.play();
         enemyComponent.getEnemy().attack(game.getPlayer());
+        playerHealth.set(PLAYER_HEALTH_BAR_WIDTH * game.getPlayer().getHealth() / game.getPlayer().getMaxHealth());
+        textPlayerHealth.set(String.valueOf(game.getPlayer().getHealth()));
     }
 
     private void animationAttack(int x){

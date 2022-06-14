@@ -1,7 +1,10 @@
 package org.openjfx.Models;
 
 import org.openjfx.Models.Character.Enemy.Boss;
-import org.openjfx.Models.Level.*;
+import org.openjfx.Models.Level.Level;
+import org.openjfx.Models.Level.LevelEnemy;
+import org.openjfx.Models.Level.LevelShop;
+import org.openjfx.Models.Level.LevelType;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -14,6 +17,7 @@ public class Planet {
     private PlanetType type;
     private File planet_file;
     private final ArrayList<Level> levels = new ArrayList<Level>();
+    private ArrayList<Level> doneLevels = new ArrayList<Level>();
 
     public Planet() {
         generatePlanetType(new ArrayList<PlanetType>(){{add(PlanetType.Galaxy);}});
@@ -31,7 +35,7 @@ public class Planet {
             switch (levelType) {
                 case Boss:
                     Boss boss = new Boss();
-                    level = new LevelBoss(boss);
+                    level = new LevelEnemy();
                     break;
                 case Shop:
                     level = new LevelShop();
@@ -49,13 +53,21 @@ public class Planet {
 
     }
 
+    public ArrayList<Level> getDoneLevels() {
+        return doneLevels;
+    }
+
+    public void addDoneLevel(Level level) {
+        doneLevels.add(level);
+    }
+
     private void generatePlanetType(ArrayList<PlanetType> excludedTypes) {
         PlanetType[] planetTypes = PlanetType.values();
 
         Random rand = new Random();
-        do{
+        do {
             type = planetTypes[rand.nextInt(planetTypes.length)];
-        }while(excludedTypes.contains(type));
+        } while (excludedTypes.contains(type));
     }
 
     private void fetchPlanetImage(){

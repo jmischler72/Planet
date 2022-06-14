@@ -1,6 +1,5 @@
 package org.openjfx.Models.Character;
 
-import org.openjfx.Models.Character.Enemy.Enemy;
 import org.openjfx.Models.Shop.Armor;
 import org.openjfx.Models.Shop.Item;
 import org.openjfx.Models.Shop.ItemType;
@@ -17,7 +16,7 @@ public class Player extends Character {
     private int ressource;
 
     public Player(String nom) {
-        super(nom, 100, 10, 10, 0);
+        super(nom, 100, 10, 20, 5);
         this.critique = 0;
         this.ressource = 100;
         this.gold = 0;
@@ -29,7 +28,7 @@ public class Player extends Character {
         this.gold -= item.getCost();
         this.items.add(item);
 
-        this.setHealth(this.getHealth() + (int) item.getPv());
+        this.setMaxHealth(this.getMaxHealth() + (int) item.getPv());
         this.ressource += (int) item.getResource();
 
         if (item.getType() == ItemType.Weapon) {
@@ -61,6 +60,4 @@ public class Player extends Character {
     public double getCritique() {
         return critique;
     }
-
-
 }

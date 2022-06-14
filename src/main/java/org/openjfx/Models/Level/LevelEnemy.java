@@ -10,7 +10,6 @@ import java.util.Random;
 public class LevelEnemy extends Level{
 
     private final ArrayList<Enemy> enemies;
-
     private boolean done = false;
 
     public LevelEnemy() {
@@ -18,7 +17,6 @@ public class LevelEnemy extends Level{
         enemies = new ArrayList<Enemy>();
         generateEnemies();
         this.setName(generateName());
-
     }
 
     private void generateEnemies(){
@@ -40,23 +38,27 @@ public class LevelEnemy extends Level{
             return enemies.get(0).getName();
         }
 
-        if(enemies.size() ==2){
+        if (enemies.size() == 2) {
             return enemies.get(0).getName() + " et " + enemies.get(1).getName();
         }
-        if(enemies.size()>2){
+        if (enemies.size() > 2) {
             return enemies.get(0).getName() + " et autres";
         }
 
         return null;
     }
 
-    public ArrayList<Enemy> getEnemies(){
+    public void remove(Enemy e) {
+        this.enemies.remove(e);
+        if (this.enemies.size() < 1) {
+            this.done = true;
+        }
+    }
+
+    public ArrayList<Enemy> getEnemies() {
         return enemies;
     }
 
-    public void setDone(boolean done) {
-        this.done = done;
-    }
     public boolean isDone() {
         return done;
     }

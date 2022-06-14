@@ -7,16 +7,20 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 import org.openjfx.Models.Shop.Item;
 import org.openjfx.ViewElements.ButtonAnimation;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class ButtonItem extends ButtonAnimation {
 
     private final Item item;
     private Tooltip description;
 
-    public ButtonItem(double[] position, double[]size, Shape shape, Item item) {
+    public ButtonItem(double[] position, double[] size, Shape shape, Item item) {
         super(size);
         setShape(shape);
         setLayoutX(position[0] - getPrefWidth() / 2);
@@ -29,6 +33,11 @@ public class ButtonItem extends ButtonAnimation {
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, null);
         setBackground(new Background(background));
         setText(item.getName());
+        try {
+            setFont(Font.loadFont(new FileInputStream("src/main/resources/org/openjfx/Views/Fonts/main_font.ttf"), 10));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         createTooltip();
     }

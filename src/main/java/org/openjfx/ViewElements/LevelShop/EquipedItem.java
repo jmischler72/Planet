@@ -10,19 +10,26 @@ import javafx.scene.text.Font;
 import javafx.util.Duration;
 import org.openjfx.Models.Shop.Item;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 public class EquipedItem extends Button {
     private final Item item;
     private Tooltip description;
 
     public EquipedItem(Item item) {
         this.item = item;
-        setFont(new Font(13));
+        try {
+            setFont(Font.loadFont(new FileInputStream("src/main/resources/org/openjfx/Views/Fonts/main_font.ttf"), 15));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         setText(item.getName());
         setBackground(null);
         setBorder(new Border(new BorderStroke(Color.BLACK, new BorderStrokeStyle(StrokeType.CENTERED, null, null, 4, 4, null), new CornerRadii(10), new BorderWidths(2))));
         setPadding(new Insets(10));
         setLineSpacing(20);
-        
+
         createTooltip();
     }
 

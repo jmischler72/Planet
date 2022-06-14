@@ -2,18 +2,11 @@ package org.openjfx.Views;
 
 import javafx.animation.FadeTransition;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
-import org.openjfx.Models.Level.Level;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,26 +16,23 @@ public class ViewTransition extends View {
     View nextView;
     View lastView;
 
-    String text;
+    Label levelName;
 
-    public ViewTransition(Pane pane,View lastView, View nextView, String text) {
+    public ViewTransition(Pane pane, View lastView, View nextView, String text) {
         super(pane);
         this.nextView = nextView;
         this.lastView = lastView;
-        this.text = text;
-        render();
+        this.levelName = new Label(text);
+        levelName.setTextFill(Color.LIGHTYELLOW);
+        this.setBackgroundColor(Color.BLACK);
     }
 
-    private void render() {
-
-
-        this.setBackgroundColor(Color.BLACK);
-
-        Label levelName = new Label(text);
-        levelName.setTextFill(Color.LIGHTYELLOW);
+    public void render() {
+        levelName.setLayoutX(WIDTH / 2 - levelName.getWidth() / 2);
+        levelName.setLayoutY(HEIGHT / 2 - levelName.getHeight() / 2);
 
         try {
-            levelName.setFont(Font.loadFont(new FileInputStream("src/main/resources/org/openjfx/Views/Fonts/Frozito_font.ttf"), 64));
+            levelName.setFont(Font.loadFont(new FileInputStream("src/main/resources/org/openjfx/Views/Fonts/Frozito_font.ttf"), 100));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
