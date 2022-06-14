@@ -98,7 +98,7 @@ public class ViewLevelSelector extends View {
                         break;
                 }
 
-                ViewTransition viewTransition = new ViewTransition(new AnchorPane(),this, levelView, level.getName());
+                ViewTransition viewTransition = new ViewTransition(new StackPane(),this, levelView, level.getName());
 
             });
 

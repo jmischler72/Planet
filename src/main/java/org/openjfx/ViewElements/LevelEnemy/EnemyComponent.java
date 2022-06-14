@@ -45,21 +45,21 @@ public class EnemyComponent extends GridPane {
     private final BooleanProperty isSelected = new SimpleBooleanProperty();
 
 
-    public EnemyComponent(EnemyType type, String name){
+    public EnemyComponent(EnemyType type, String name, int healthRatio){
         super();
         this.type = type;
         this.name = name;
         isDead.set(false);
-        health.set(100);
+        health.set(100*healthRatio);
         isSelected.set(false);
         render();
 
     }
     private void render(){
 
-        Rectangle rectangle = new Rectangle(WIDTH_ENEMY,HEIGHT_ENEMY);
+        Rectangle enemy_rectangle = new Rectangle(WIDTH_ENEMY,HEIGHT_ENEMY);
         Image image = new Image(getClass().getResource(type+".png").toExternalForm());
-        rectangle.setFill(new ImagePattern(image, 0, 0, 1, 1, true));
+        enemy_rectangle.setFill(new ImagePattern(image, 0, 0, 1, 1, true));
 
         ColorAdjust colorAdjust = new ColorAdjust();
 
@@ -76,9 +76,9 @@ public class EnemyComponent extends GridPane {
                     isSelected.set(!isSelected.get());
                 }
             );
-        setRowIndex(rectangle, 1);
-        setRowSpan(rectangle,2);
-        setColumnIndex(rectangle, 0);
+        setRowIndex(enemy_rectangle, 1);
+        setRowSpan(enemy_rectangle,2);
+        setColumnIndex(enemy_rectangle, 0);
 
         Text text = new Text(100, 50, name);
         text.setFill(Color.WHITE);
@@ -88,13 +88,14 @@ public class EnemyComponent extends GridPane {
 
         Rectangle healthbar = new Rectangle(200.0, 50.0, Color.RED);
         healthbar.widthProperty().bind(health);
+        healthbar.setHeight(15);
         setRowIndex(healthbar, 0);
         setColumnIndex(healthbar, 0);
 
         renderEnemyAnimation(healthbar);
-        renderEnemyAnimation(rectangle);
+        renderEnemyAnimation(enemy_rectangle);
         renderEnemyAnimation(text);
-        getChildren().addAll(rectangle,healthbar, text);
+        getChildren().addAll(enemy_rectangle,healthbar, text);
     }
 
     private void renderEnemyAnimation(Shape rectangle) {

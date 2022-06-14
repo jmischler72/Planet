@@ -7,6 +7,7 @@ import javafx.concurrent.Task;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
@@ -50,7 +51,7 @@ public class ViewLevelEnemy extends View{
         ArrayList<EnemyComponent> enemies_components = new ArrayList<EnemyComponent>();
         int i =0;
         for (Enemy enemy : levelEnemy.getEnemies()) {
-            EnemyComponent enemy_component= new EnemyComponent(enemy.getType(),enemy.getName());
+            EnemyComponent enemy_component= new EnemyComponent(enemy.getType(),enemy.getName(),enemy.getHealth()/enemy.getMaxHealth());
             enemy_component.visibleProperty().bind(enemy_component.isDeadProperty().not());
             enemy_component.setLayoutX(X_ENEMY+i*300);
             enemy_component.setLayoutY(Y_ENEMY);
@@ -109,7 +110,7 @@ public class ViewLevelEnemy extends View{
 
         b2.setOnAction((playEvent) -> {
             ViewLevelSelector levelView = new ViewLevelSelector(new AnchorPane(), game);
-            ViewTransition viewTransition = new ViewTransition(new AnchorPane(),this, levelView, "Select");
+            ViewTransition viewTransition = new ViewTransition(new StackPane(),this, levelView, "Select");
         });
 
         addElement(b);

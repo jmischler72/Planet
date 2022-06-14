@@ -49,7 +49,7 @@ public class ViewLevelShop extends View {
         b2.setLayoutY(HEIGHT-60);
         b2.setOnAction((playEvent) -> {
             ViewLevelSelector levelView = new ViewLevelSelector(new AnchorPane(), game);
-            ViewTransition viewTransition = new ViewTransition(new AnchorPane(), this, levelView, "Select");
+            ViewTransition viewTransition = new ViewTransition(new StackPane(), this, levelView, "Select");
         });
         addElement(b2);
 
