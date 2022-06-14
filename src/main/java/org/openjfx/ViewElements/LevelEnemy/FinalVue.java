@@ -18,8 +18,7 @@ public class FinalVue extends StackPane {
 
     public FinalVue(boolean isWin, double width, double height) {
         setPrefSize(width, height);
-        setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
-        setOpacity(0.6);
+        setBackground(new Background(new BackgroundFill(new Color(0,0,0,0.6), null, null)));
 
         Label text;
         if (isWin) {

@@ -51,6 +51,7 @@ public class ViewLevelEnemy extends View {
 
         this.game = game;
         game.getPlayer().setHealth(game.getPlayer().getMaxHealth());
+
         canPlay.set(true);
         playerHealth.set(game.getPlayer().getHealth() / game.getPlayer().getMaxHealth() * PLAYER_HEALTH_BAR_WIDTH);
         textPlayerHealth.set(String.valueOf(game.getPlayer().getHealth()));
