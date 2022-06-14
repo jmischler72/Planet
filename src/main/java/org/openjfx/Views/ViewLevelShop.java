@@ -35,8 +35,8 @@ public class ViewLevelShop extends View {
     private final ArrayList<EquipedItem> equipedItemsView = new ArrayList<>();
     private final Game game;
 
-    public ViewLevelShop(Pane pane, Game game) {
-        super(pane);
+    public ViewLevelShop(Game game) {
+        super(new AnchorPane());
         this.game = game;
         setBackground("shop_background.png");
         this.level = new LevelShop();
@@ -48,8 +48,9 @@ public class ViewLevelShop extends View {
         b2.setLayoutX(200);
         b2.setLayoutY(HEIGHT-60);
         b2.setOnAction((playEvent) -> {
-            ViewLevelSelector levelView = new ViewLevelSelector(new AnchorPane(), game);
-            ViewTransition viewTransition = new ViewTransition(new StackPane(), this, levelView, "Select");
+            ViewLevelSelector levelView = new ViewLevelSelector(game);
+            ViewTransition viewTransition = new ViewTransition(this, levelView, "Select");
+            viewTransition.render();
         });
         addElement(b2);
 
@@ -134,7 +135,7 @@ public class ViewLevelShop extends View {
     }
 
     public void refresh() {
-        renderView(new ViewLevelShop(new Pane(), game));
+        renderView(new ViewLevelShop(game));
     }
 
     public void createItemEquipedRectangle() {

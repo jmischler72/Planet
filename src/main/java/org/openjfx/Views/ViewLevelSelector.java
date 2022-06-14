@@ -33,8 +33,8 @@ public class ViewLevelSelector extends View {
     private final Game game;
     private final ArrayList<ButtonSelector> buttonList  = new ArrayList<ButtonSelector>();
 
-    public ViewLevelSelector(Pane pane, Game game) {
-        super(pane);
+    public ViewLevelSelector(Game game) {
+        super(new Pane());
         setBackground("space.jpg");
         this.game = game;
         this.planet = game.getCurrentPlanet();
@@ -88,17 +88,18 @@ public class ViewLevelSelector extends View {
                 View levelView = null;
                 switch (level.getType()) {
                     case Boss:
-                        levelView = new ViewLevelBoss(new AnchorPane(), game);
+                        levelView = new ViewLevelBoss(game);
                         break;
                     case Shop:
-                        levelView = new ViewLevelShop(new AnchorPane(), game);
+                        levelView = new ViewLevelShop(game);
                         break;
                     case Enemy:
-                        levelView = new ViewLevelEnemy(new AnchorPane(), game);
+                        levelView = new ViewLevelEnemy(game);
                         break;
                 }
 
-                ViewTransition viewTransition = new ViewTransition(new StackPane(),this, levelView, level.getName());
+                ViewTransition viewTransition = new ViewTransition(this, levelView, level.getName());
+                viewTransition.render();
 
             });
 

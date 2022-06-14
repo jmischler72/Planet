@@ -33,14 +33,13 @@ public class ViewLevelEnemy extends View{
     private final Game game;
 
 
-    public ViewLevelEnemy(Pane pane, Game game) {
-        super(pane);
-
-        levelEnemy = (LevelEnemy) game.getCurrentLevel();
-
+    public ViewLevelEnemy(Game game) {
+        super(new AnchorPane());
         setBackground("random_background.jpg");
 
+        this.levelEnemy = (LevelEnemy) game.getCurrentLevel();
         this.game = game;
+
         canPlay.set(true);
 
         render();
@@ -109,8 +108,9 @@ public class ViewLevelEnemy extends View{
         b2.setLayoutY(HEIGHT-60);
 
         b2.setOnAction((playEvent) -> {
-            ViewLevelSelector levelView = new ViewLevelSelector(new AnchorPane(), game);
-            ViewTransition viewTransition = new ViewTransition(new StackPane(),this, levelView, "Select");
+            ViewLevelSelector levelView = new ViewLevelSelector(game);
+            ViewTransition viewTransition = new ViewTransition(this, levelView, "Select");
+            viewTransition.render();
         });
 
         addElement(b);

@@ -10,10 +10,17 @@ import javafx.scene.paint.Color;
 import org.openjfx.Models.Game;
 
 public class ViewHome extends View{
+    Game game;
 
     public ViewHome(Pane pane, Game game) {
         super(pane);
         setBackgroundColor(Color.BLACK);
+
+        this.game = game;
+
+        render();
+    }
+    public void render(){
         MediaPlayer player = new MediaPlayer( new Media(getClass().getResource("planet_animation.avi").toExternalForm()));
         MediaView mediaView = new MediaView(player);
         mediaView.setFitHeight(HEIGHT);
@@ -22,9 +29,9 @@ public class ViewHome extends View{
         player.play();
         addElement(mediaView);
         player.setOnEndOfMedia(()->{
-            ViewTransition transition = new ViewTransition(new StackPane(),this, new ViewLevelSelector(new Pane(), game),game.getCurrentPlanet().getType().name());
+            ViewTransition transition = new ViewTransition(this, new ViewLevelSelector(game),game.getCurrentPlanet().getType().name());
+            transition.render();
         });
-
     }
 
 }

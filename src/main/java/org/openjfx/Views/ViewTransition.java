@@ -6,10 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
@@ -25,17 +22,14 @@ public class ViewTransition extends View {
 
     String text;
 
-    public ViewTransition(Pane pane,View lastView, View nextView, String text) {
-        super(pane);
+    public ViewTransition(View lastView, View nextView, String text) {
+        super(new StackPane());
         this.nextView = nextView;
         this.lastView = lastView;
         this.text = text;
-        render();
     }
 
-    private void render() {
-
-
+    public void render() {
         this.setBackgroundColor(Color.BLACK);
 
         Label levelName = new Label(text);
@@ -50,14 +44,6 @@ public class ViewTransition extends View {
         addElement(levelName);
 
         lastView.renderView(this);
-//
-//        FadeTransition fadeUp = new FadeTransition();
-//        fadeUp.setNode(this.getPane());
-//        fadeUp.setDuration(Duration.seconds(1.5));
-//        fadeUp.setFromValue(0);
-//        fadeUp.setToValue(1);
-//        fadeUp.play();
-
 
         delay(1000, () -> {
             renderView(nextView);

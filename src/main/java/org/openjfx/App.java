@@ -20,7 +20,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Game game = new Game();
-        ViewLevelSelector view = new ViewLevelSelector(new Pane(), game);
+        ViewLevelSelector view = new ViewLevelSelector(game);
 //        ViewHome view = new ViewHome(new Pane(), game);
         stage.setScene(view);
         stage.show();
