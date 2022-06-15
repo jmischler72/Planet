@@ -52,7 +52,6 @@ public class ViewLevelEnemy extends View{
         setBackground("random_background.jpg");
 
         this.game = game;
-        game.getPlayer().setHealth(game.getPlayer().getMaxHealth());
 
         canPlay.set(true);
         playerHealth.set(game.getPlayer().getHealth() / game.getPlayer().getMaxHealth() * PLAYER_HEALTH_BAR_WIDTH);
@@ -70,6 +69,8 @@ public class ViewLevelEnemy extends View{
             }
 
             if (levelEnemy.isDone()) {
+                game.getPlayer().setHealth(game.getPlayer().getMaxHealth());
+
                 FinalVue vue = new FinalVue(true, WIDTH, HEIGHT);
                 vue.getQuitButton().setOnAction((playEvent) -> {
                     ViewLevelSelector levelView = new ViewLevelSelector( game);

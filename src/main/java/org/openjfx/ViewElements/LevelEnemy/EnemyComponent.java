@@ -75,8 +75,8 @@ public class EnemyComponent extends GridPane {
         }
         );
         setOnMousePressed(event -> {
-                    isSelected.set(!isSelected.get());
-                }
+            isSelected.set(!isSelected.get());
+        }
             );
         setRowIndex(enemy_rectangle, 1);
         setRowSpan(enemy_rectangle,2);
@@ -106,8 +106,7 @@ public class EnemyComponent extends GridPane {
 
     private void renderEnemyAnimation(Shape rectangle) {
         final Timeline timeline = new Timeline(new KeyFrame(Duration.ZERO, new EventHandler() {
-            final Random random = new Random();
-//            int movingStep = (0+i*20)%60;
+
             int movingStep = 0;
 
             @Override

@@ -1,6 +1,5 @@
 package org.openjfx.Models;
 
-import org.openjfx.Models.Character.Enemy.Boss;
 import org.openjfx.Models.Level.*;
 
 import java.io.File;

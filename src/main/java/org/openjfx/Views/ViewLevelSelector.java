@@ -52,9 +52,7 @@ public class ViewLevelSelector extends View {
 
 
         createButtons(circlePlanet);
-//        if (planet.getDoneLevels().size() >= planet.getLevels().size() - 1) {
-//            nextPlanet = true;
-//        }
+
         if(game.getCurrentPlanet().getDoneLevels().size() == game.getCurrentPlanet().getLevels().size()-1){
             addElement(ElementNextButton());
 
@@ -101,9 +99,6 @@ public class ViewLevelSelector extends View {
                 game.setCurrentLevel(level);
                 View levelView = null;
                 switch (level.getType()) {
-                    case Boss:
-                        levelView = new ViewLevelBoss(game);
-                        break;
                     case Shop:
                         levelView = new ViewLevelShop(game);
                         break;
@@ -119,6 +114,7 @@ public class ViewLevelSelector extends View {
 
             if (planet.getDoneLevels().contains(level)) {
                 levelButton.setDisable(true);
+                levelButton.setOpacity(0.5);
             }
 
             addElement(levelSelectorSubScene);
@@ -271,14 +267,22 @@ public class ViewLevelSelector extends View {
 
             if (button != activeButton) {
                 if (!opened) {
-                    fade.setFromValue(1);
+                    if (planet.getDoneLevels().contains(button.getLevel())) {
+                        fade.setFromValue(0.5);
+                    }else{
+                        fade.setFromValue(1);
+                    }
                     fade.setToValue(0);
                     button.setDisable(true);
                 } else {
                     fade.setFromValue(0);
-                    fade.setToValue(1);
+
                     if (!planet.getDoneLevels().contains(button.getLevel())) {
+                        fade.setToValue(1);
                         button.setDisable(false);
+                    }else{
+
+                        fade.setToValue(0.5);
                     }
                 }
                 fade.setNode(button);
