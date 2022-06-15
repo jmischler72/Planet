@@ -16,9 +16,15 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+
+        /* TODO et fixes
+        - on recup de la vie chaque fois quon revient dans le level
+        - bug bizarre ou jai pas eu lecran win
+        - les boutons disable( quon a win ) restent affiches quand on click sur un autre level
+         */
         Game game = new Game();
-        ViewLevelSelector view = new ViewLevelSelector(game);
 //        ViewHome view = new ViewHome(new Pane(), game);
+        ViewLevelSelector view = new ViewLevelSelector(game);
         stage.setScene(view);
         stage.show();
     }

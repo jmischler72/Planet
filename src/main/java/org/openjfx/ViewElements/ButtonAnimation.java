@@ -45,5 +45,6 @@ public abstract class ButtonAnimation extends Button {
         setOnMouseExited(event -> {
             setEffect(null);
         });
+
     }
 }

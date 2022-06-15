@@ -1,10 +1,7 @@
 package org.openjfx.Models;
 
 import org.openjfx.Models.Character.Enemy.Boss;
-import org.openjfx.Models.Level.Level;
-import org.openjfx.Models.Level.LevelEnemy;
-import org.openjfx.Models.Level.LevelShop;
-import org.openjfx.Models.Level.LevelType;
+import org.openjfx.Models.Level.*;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -19,36 +16,20 @@ public class Planet {
     private final ArrayList<Level> levels = new ArrayList<Level>();
     private ArrayList<Level> doneLevels = new ArrayList<Level>();
 
-    public Planet() {
-        generatePlanetType(new ArrayList<PlanetType>(){{add(PlanetType.Galaxy);}});
+    public Planet(ArrayList<PlanetType> desiredTypes) {
+
+        generatePlanetType(desiredTypes);
         fetchPlanetImage();
 
         for(int i=0; i< 6; i++){
-
-            LevelType levelType;
-            Level level;
-
-            if((i+1)%5 == 0) levelType = LevelType.Shop;
-            else if((i+1)%6 == 0) levelType = LevelType.Boss;
-            else levelType = LevelType.Enemy;
-
-            switch (levelType) {
-                case Boss:
-                    Boss boss = new Boss();
-                    level = new LevelEnemy();
-                    break;
-                case Shop:
-                    level = new LevelShop();
-                    break;
-                case Enemy:
-                    level = new LevelEnemy();
-                    break;
-                default:
-                    level = null;
-                    System.out.println("Level type not found");
+            if((i+1)%5 == 0){
+                levels.add(new LevelShop());
+            }else if((i+1)%6 == 0) {
+                levels.add(new LevelEnemy());
             }
-
-            levels.add(level);
+            else {
+                levels.add(new LevelEnemy());
+            }
         }
 
     }
@@ -61,13 +42,13 @@ public class Planet {
         doneLevels.add(level);
     }
 
-    private void generatePlanetType(ArrayList<PlanetType> excludedTypes) {
+    private void generatePlanetType(ArrayList<PlanetType> desiredTypes) {
         PlanetType[] planetTypes = PlanetType.values();
 
         Random rand = new Random();
         do {
             type = planetTypes[rand.nextInt(planetTypes.length)];
-        } while (excludedTypes.contains(type));
+        } while (!desiredTypes.contains(type));
     }
 
     private void fetchPlanetImage(){

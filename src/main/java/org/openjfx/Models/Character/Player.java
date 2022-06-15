@@ -16,7 +16,7 @@ public class Player extends Character {
     private int ressource;
 
     public Player(String nom) {
-        super(nom, 100, 10, 20, 5);
+        super(nom, 100, 10, 200, 5);
         this.critique = 0;
         this.ressource = 100;
         this.gold = 0;

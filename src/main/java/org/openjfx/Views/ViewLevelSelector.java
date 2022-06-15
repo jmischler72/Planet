@@ -17,6 +17,7 @@ import javafx.scene.text.Font;
 import javafx.util.Duration;
 import org.openjfx.Models.Game;
 import org.openjfx.Models.Level.Level;
+import org.openjfx.Models.PlanetType;
 import org.openjfx.ViewElements.LevelEnemy.ButtonMenu;
 import org.openjfx.ViewElements.LevelSelector.*;
 import org.openjfx.Models.Planet;
@@ -33,7 +34,7 @@ public class ViewLevelSelector extends View {
     private final Planet planet;
 
     private final Game game;
-    private final ArrayList<ButtonSelector> buttonList  = new ArrayList<ButtonSelector>();
+    private final ArrayList<ButtonSelector> buttonList = new ArrayList<ButtonSelector>();
 
     public ViewLevelSelector(Game game) {
         super(new Pane());
@@ -41,32 +42,42 @@ public class ViewLevelSelector extends View {
         this.game = game;
         this.planet = game.getCurrentPlanet();
 
-        Circle circlePlanet = renderCirclePlanet(planet);
-        Circle shadow = renderCircleShadow(circlePlanet, 80, new int[]{0, 0});
-        renderShadowAnimation(shadow);
 
+        Circle circlePlanet = ElementPlanet(planet);
+        Circle shadow = ElementPlanetShadow(circlePlanet, 80, new int[]{0, 0});
+        AnimationShadow(shadow);
 
         addElement(shadow);
         addElement(circlePlanet);
+
+
         createButtons(circlePlanet);
-        createNextButton();
+//        if (planet.getDoneLevels().size() >= planet.getLevels().size() - 1) {
+//            nextPlanet = true;
+//        }
+        if(game.getCurrentPlanet().getDoneLevels().size() == game.getCurrentPlanet().getLevels().size()-1){
+            addElement(ElementNextButton());
+
+        }
+        if(game.getPlanets().indexOf(game.getCurrentPlanet())>=1){
+            addElement(ElementPreviousButton());
+        }
     }
 
     private void createButtons(Circle circlePlanet) {
         ArrayList<double[]> positions = new ArrayList<double[]>();
 
         for (Level level : planet.getLevels()) {
-
-            Circle circleMarkers = new Circle(circlePlanet.getCenterX(), circlePlanet.getCenterY(), circlePlanet.getRadius() - 80);
-            if (level.getPosition() ==null){
-                double[] position = getRandomPositionInCircle(circleMarkers);
+            if (level.getPosition() == null) {
 
                 boolean close = true;
+                double[] position;
                 do {
                     close = false;
+                    position = getRandomPositionInCircle(new double[]{circlePlanet.getCenterX(), circlePlanet.getCenterY()}, circlePlanet.getRadius() - 80);
+
                     for (double[] pos : positions) {
                         if (arePositionsClose(pos, position, 40)) {
-                            position = getRandomPositionInCircle(circleMarkers);
                             close = true;
                         }
                     }
@@ -77,11 +88,11 @@ public class ViewLevelSelector extends View {
                 positions.add(position);
             }
 
-            ButtonSelector levelButton = new ButtonSelector(level,new double[]{56,56}, new Circle(10));
-            LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene((int) levelButton.getPrefWidth(), level.getPosition(), level);
+            ButtonSelector levelButton = new ButtonSelector(level, new double[]{56, 56}, new Circle(10));
+            LevelSelectorSubScene levelSelectorSubScene = new LevelSelectorSubScene(level.getPosition(), level);
 
             levelButton.setOnAction((event) -> {    // lambda expression
-                animationButtons(levelButton, !levelSelectorSubScene.isDisable());
+                AnimationButtons(levelButton, !levelSelectorSubScene.isDisable());
                 levelSelectorSubScene.moveSubScene();
             });
 
@@ -116,59 +127,6 @@ public class ViewLevelSelector extends View {
         }
     }
 
-    private void createNextButton() {
-        ButtonMenu button = new ButtonMenu(new double[]{180, 50}, "Next planet");
-        button.setLayoutX(WIDTH - 250);
-        button.setLayoutY(HEIGHT / 2);
-        try {
-            button.setFont(Font.loadFont(new FileInputStream("src/main/resources/org/openjfx/Views/Fonts/main_font.ttf"), 15));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        boolean nextPlanet = false;
-        if (planet.getDoneLevels().size() >= planet.getLevels().size() - 1) {
-            nextPlanet = true;
-        }
-        button.setVisible(nextPlanet);
-
-        button.setOnAction((event) -> {
-            game.setCurrentPlanet(new Planet());
-            ViewLevelSelector levelView = new ViewLevelSelector( game);
-            ViewTransition viewTransition = new ViewTransition(this, levelView, "Select");
-            viewTransition.render();
-        });
-
-        addElement(button);
-    }
-
-    private void animationButtons(ButtonSelector activeButton, boolean opened) {
-
-        for (ButtonSelector button : buttonList) {
-            FadeTransition fade = new FadeTransition();
-            fade.setDuration(Duration.seconds(0.1));
-            fade.setAutoReverse(true);
-            if (planet.getDoneLevels().contains(button.getLevel())) {
-                button.setDisable(true);
-                continue;
-            }
-
-            if (button != activeButton) {
-                if(!opened){
-                    fade.setFromValue(1);
-                    fade.setToValue(0);
-                    button.setDisable(true);
-                }else{
-                    fade.setFromValue(0);
-                    fade.setToValue(1);
-                    button.setDisable(false);
-                }
-                fade.setNode(button);
-                fade.play();
-            }
-        }
-
-    }
 
     private boolean arePositionsClose(double[] position1, double[] position2, int radius) {
         if (Math.abs(position1[0] - position2[0]) < radius) {
@@ -178,9 +136,102 @@ public class ViewLevelSelector extends View {
 
     }
 
-    /* Animation lag sur certains pc donc a voir pour l'ajouter */
+    private double[] getRandomPositionInCircle(double[] center, double radius) {
+        Random rand = new Random();
+        double[] position = new double[2];
 
-    private void renderShadowAnimation(Circle shadow) {
+        double randomX = (rand.nextInt((int) (radius * 2)) - radius);
+        position[0] = center[0] + randomX;
+
+        double cosX = (randomX / (radius));
+        double boundY = Math.round(Math.sin(Math.acos(cosX)) * radius);
+
+        double randomY = (rand.nextInt((int) (boundY) * 2 + 1) - boundY);
+        position[1] = center[1] + randomY;
+
+        return position;
+    }
+
+    private Circle ElementPlanet(Planet planet) {
+        Circle circle = new Circle();
+        circle.setCenterX(WIDTH / 2);
+        circle.setCenterY(HEIGHT / 2);
+        if (planet.getSize() == 0) {
+            Random random = new Random();
+            double size_planet = 0.30 + (double) random.nextInt(40 - 27) / 100;
+            planet.setSize(size_planet);
+        }
+
+        circle.setRadius(HEIGHT * planet.getSize());
+        try {
+            circle.setFill(new ImagePattern(
+                    new Image(new FileInputStream(planet.getPlanet_file())), 0, 0, 1, 1, true
+
+            ));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return circle;
+    }
+
+    private Circle ElementPlanetShadow(Circle circle_to_shadow, int amount, int[] offset) {
+        Shadow shadow = new Shadow(BlurType.GAUSSIAN, Color.WHITE, 10);
+        shadow.setHeight(amount);
+        shadow.setWidth(amount);
+        Circle circle = new Circle();
+        circle.setCenterX(circle_to_shadow.getCenterX() + offset[0]);
+        circle.setCenterY(circle_to_shadow.getCenterY() + offset[1]);
+        circle.setRadius(circle_to_shadow.getRadius());
+        circle.setEffect(shadow);
+        circle.setCache(true);
+        circle.setCacheHint(CacheHint.SPEED);
+        return circle;
+    }
+
+    private Button ElementNextButton() {
+        ButtonMenu button = new ButtonMenu(new double[]{180, 50}, "Next planet");
+        button.setLayoutX(WIDTH - 250);
+        button.setLayoutY(HEIGHT / 2);
+        try {
+            button.setFont(Font.loadFont(new FileInputStream("src/main/resources/org/openjfx/Views/Fonts/main_font.ttf"), 15));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        button.setOnAction((event) -> {
+            if(game.getPlanets().indexOf(game.getCurrentPlanet())== game.getPlanets().size()-1){
+                game.setCurrentPlanet(new Planet(new ArrayList<PlanetType>(){{add(PlanetType.DryTerran);}}));
+                game.addPlanet(game.getCurrentPlanet());
+            }else {
+                game.setCurrentPlanet(game.getPlanets().get(game.getPlanets().indexOf(planet)+1));
+            }
+
+            ViewLevelSelector levelView = new ViewLevelSelector(game);
+            ViewTransition viewTransition = new ViewTransition(this, levelView, planet.getType().name() + " " + planet.getSize());
+            viewTransition.render();
+        });
+
+        return button;
+    }
+    private Button ElementPreviousButton() {
+        ButtonMenu button = new ButtonMenu(new double[]{180, 50}, "prev planet");
+        button.setLayoutX(WIDTH - 250);
+        button.setLayoutY(HEIGHT / 2-100);
+        try {
+            button.setFont(Font.loadFont(new FileInputStream("src/main/resources/org/openjfx/Views/Fonts/main_font.ttf"), 15));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        button.setOnAction((event) -> {
+            game.setCurrentPlanet(game.getPlanets().get(game.getPlanets().indexOf(game.getCurrentPlanet())-1));
+            ViewLevelSelector levelView = new ViewLevelSelector(game);
+            ViewTransition viewTransition = new ViewTransition(this, levelView, planet.getType().name() + " " + planet.getSize());
+            viewTransition.render();
+        });
+
+        return button;
+    }
+
+    private void AnimationShadow(Circle shadow) {
         final Timeline timeline = new Timeline(new KeyFrame(Duration.ZERO, new EventHandler() {
             int movingStep = 0;
 
@@ -211,55 +262,29 @@ public class ViewLevelSelector extends View {
 
     }
 
-    private double[] getRandomPositionInCircle(Circle circle) {
-        Random rand = new Random();
-        double[] position = new double[2];
+    private void AnimationButtons(ButtonSelector activeButton, boolean opened) {
 
-        double randomX = (rand.nextInt((int) (circle.getRadius() * 2)) - circle.getRadius());
-        position[0] = circle.getCenterX() + randomX;
+        for (ButtonSelector button : buttonList) {
+            FadeTransition fade = new FadeTransition();
+            fade.setDuration(Duration.seconds(0.1));
+            fade.setAutoReverse(true);
 
-        double cosX = (randomX / (circle.getRadius()));
-        double boundY = Math.round(Math.sin(Math.acos(cosX)) * circle.getRadius());
-
-        double randomY = (rand.nextInt((int) (boundY) * 2 + 1) - boundY);
-        position[1] = circle.getCenterY() + randomY;
-
-        return position;
-    }
-
-    private Circle renderCirclePlanet(Planet planet) {
-        Circle circle = new Circle();
-        circle.setCenterX(getPane().getWidth() / 2);
-        circle.setCenterY(getPane().getHeight() / 2);
-        if(planet.getSize() == 0){
-            Random random = new Random();
-            double size_planet = 0.30 + (double)random.nextInt(40-27)/100;
-            planet.setSize(size_planet);
+            if (button != activeButton) {
+                if (!opened) {
+                    fade.setFromValue(1);
+                    fade.setToValue(0);
+                    button.setDisable(true);
+                } else {
+                    fade.setFromValue(0);
+                    fade.setToValue(1);
+                    if (!planet.getDoneLevels().contains(button.getLevel())) {
+                        button.setDisable(false);
+                    }
+                }
+                fade.setNode(button);
+                fade.play();
+            }
         }
 
-        circle.setRadius(getPane().getHeight() * planet.getSize());
-        try {
-            circle.setFill(new ImagePattern(
-                    new Image(new FileInputStream(planet.getPlanet_file())), 0, 0, 1, 1, true
-
-            ));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return circle;
-    }
-
-    private Circle renderCircleShadow(Circle circle_to_shadow, int amount, int[] offset) {
-        Shadow shadow = new Shadow(BlurType.GAUSSIAN, Color.WHITE, 10);
-        shadow.setHeight(amount);
-        shadow.setWidth(amount);
-        Circle circle = new Circle();
-        circle.setCenterX(circle_to_shadow.getCenterX() + offset[0]);
-        circle.setCenterY(circle_to_shadow.getCenterY() + offset[1]);
-        circle.setRadius(circle_to_shadow.getRadius());
-        circle.setEffect(shadow);
-        circle.setCache(true);
-        circle.setCacheHint(CacheHint.SPEED);
-        return circle;
     }
 }

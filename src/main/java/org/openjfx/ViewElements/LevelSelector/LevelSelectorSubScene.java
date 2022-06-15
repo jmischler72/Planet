@@ -26,7 +26,7 @@ public class LevelSelectorSubScene extends SubScene {
     private final Button button;
 
 
-    public LevelSelectorSubScene(int buttonSize, double[] position, Level level) {
+    public LevelSelectorSubScene(double[] position, Level level) {
         /*size*/
         super(new AnchorPane(), WIDTH, HEIGHT);
 

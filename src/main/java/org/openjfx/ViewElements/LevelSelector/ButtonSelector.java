@@ -1,5 +1,6 @@
 package org.openjfx.ViewElements.LevelSelector;
 
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -13,6 +14,8 @@ import org.openjfx.ViewElements.ButtonAnimation;
 public class ButtonSelector extends ButtonAnimation {
 
     private Level level;
+
+    private boolean isDone = false;
 
     public ButtonSelector(Level level, double[] position, double[] size, Shape shape, String imageName) {
         super(size);
@@ -61,4 +64,11 @@ public class ButtonSelector extends ButtonAnimation {
     public Level getLevel() {
         return level;
     }
+
+    public void setDone() {
+        ColorAdjust colorAdjust = new ColorAdjust();
+        colorAdjust.setHue(0.5);
+        setEffect(colorAdjust);
+    }
+
 }
