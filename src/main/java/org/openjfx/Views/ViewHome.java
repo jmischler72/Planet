@@ -12,8 +12,8 @@ import org.openjfx.Models.Game;
 public class ViewHome extends View{
     Game game;
 
-    public ViewHome(Pane pane, Game game) {
-        super(pane);
+    public ViewHome( Game game) {
+        super(new Pane());
         setBackgroundColor(Color.BLACK);
 
         this.game = game;

@@ -195,14 +195,19 @@ public class ViewLevelSelector extends View {
         }
         button.setOnAction((event) -> {
             if(game.getPlanets().indexOf(game.getCurrentPlanet())== game.getPlanets().size()-1){
-                game.setCurrentPlanet(new Planet(new ArrayList<PlanetType>(){{add(PlanetType.DryTerran);}}));
+                game.setCurrentPlanet(new Planet(new ArrayList<PlanetType>(){{
+                    add(PlanetType.DryTerran);
+                    add(PlanetType.NoAtmosphere);
+                    add(PlanetType.Galaxy);
+                    add(PlanetType.Islands);
+                }}));
                 game.addPlanet(game.getCurrentPlanet());
             }else {
                 game.setCurrentPlanet(game.getPlanets().get(game.getPlanets().indexOf(planet)+1));
             }
 
             ViewLevelSelector levelView = new ViewLevelSelector(game);
-            ViewTransition viewTransition = new ViewTransition(this, levelView, planet.getType().name() + " " + planet.getSize());
+            ViewTransition viewTransition = new ViewTransition(this, levelView, game.getCurrentPlanet().getType().name());
             viewTransition.render();
         });
 
@@ -220,7 +225,7 @@ public class ViewLevelSelector extends View {
         button.setOnAction((event) -> {
             game.setCurrentPlanet(game.getPlanets().get(game.getPlanets().indexOf(game.getCurrentPlanet())-1));
             ViewLevelSelector levelView = new ViewLevelSelector(game);
-            ViewTransition viewTransition = new ViewTransition(this, levelView, planet.getType().name() + " " + planet.getSize());
+            ViewTransition viewTransition = new ViewTransition(this, levelView, game.getCurrentPlanet().getType().name());
             viewTransition.render();
         });
 

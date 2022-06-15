@@ -3,6 +3,7 @@ package org.openjfx;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.openjfx.Models.Game;
+import org.openjfx.Views.ViewHome;
 import org.openjfx.Views.ViewLevelSelector;
 
 import java.io.IOException;
@@ -21,8 +22,8 @@ public class App extends Application {
         - les boutons disable( quon a win ) restent affiches quand on click sur un autre level
          */
         Game game = new Game();
-//        ViewHome view = new ViewHome(new Pane(), game);
-        ViewLevelSelector view = new ViewLevelSelector(game);
+        ViewHome view = new ViewHome( game);
+//        ViewLevelSelector view = new ViewLevelSelector(game);
         stage.setScene(view);
         stage.show();
     }

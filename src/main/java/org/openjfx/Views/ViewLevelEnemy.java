@@ -58,7 +58,9 @@ public class ViewLevelEnemy extends View{
         textPlayerHealth.set(String.valueOf(game.getPlayer().getHealth()));
 
         playerHealth.addListener((observable, oldValue, newValue) -> {
+
             if (!game.getPlayer().isAlive()) {
+                game.getPlayer().setHealth(game.getPlayer().getMaxHealth());
                 FinalVue vue = new FinalVue(false, WIDTH, HEIGHT);
                 vue.getQuitButton().setOnAction((playEvent) -> {
                     ViewLevelSelector levelView = new ViewLevelSelector( game);
@@ -70,7 +72,6 @@ public class ViewLevelEnemy extends View{
 
             if (levelEnemy.isDone()) {
                 game.getPlayer().setHealth(game.getPlayer().getMaxHealth());
-
                 FinalVue vue = new FinalVue(true, WIDTH, HEIGHT);
                 vue.getQuitButton().setOnAction((playEvent) -> {
                     ViewLevelSelector levelView = new ViewLevelSelector( game);
