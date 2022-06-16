@@ -129,7 +129,7 @@ public class ViewLevelEnemy extends View{
     }
 
     private void renderPlayerButtons(ArrayList<EnemyComponent> enemies_components){
-        ButtonMenu b = new ButtonMenu(new double[]{100,50}, "test");
+        ButtonMenu b = new ButtonMenu(new double[]{100,50}, "attack");
         b.setLayoutX(80);
         b.setLayoutY(HEIGHT-60);
 
